@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Cascade Style Sheets -->
+    <!-- <link rel="stylesheet" href="assests/css/bootstrap.css"> -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.1/css/bootstrap-slider.css" />
+    <link rel="stylesheet" type="text/css" href="assests/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="assests/css/style.css">
+
+    <!-- Main Angular Files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-animate.min.js"></script>
+
+    <!-- Angular config/Routes -->
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+
+    <!-- Angular Controllers -->
+    <script src="app/controllers/userCtrl.js"></script>
+    <script src="app/controllers/searchCtrl.js"></script>
+    <script src="app/controllers/mainCtrl.js"></script>
+
+    <!-- Angular Services -->
+    <script src="app/services/userServices.js"></script>
+    <script src="app/services/authServices.js"></script>
+
+    <title>LegalX</title>
+  </head>
+
+  <body ng-app='userApp' ng-controller="mainCtrl as main" ng-show="main.loadme" ng-clock>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <a class="navbar-brand" href="/">LegalX</a>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/search">Search<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/register" ng-show="!main.isLoggedIn">Register<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/login" ng-show="!main.isLoggedIn">Login<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#" ng-click="main.logout();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/profile"> {{ main.username }}<span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Spacing for logo -->
+    <div class="col-xs-12" style="height:100px;"></div>
+    <div class="row">
+      <div class="col-5"></div>
+      <div class="col-4"> LegalX Logo </div>
+      <div class="col-4"></div>
+    </div>
+    <div class="col-xs-12" style="height:100px;"></div>
+
+    <div ng-view></div>
+
+    <script src="assests/js/jquery-3.3.1.js"></script>
+    <script src="assests/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.1/bootstrap-slider.js"></script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<!-- Search bar -->
+<div class="container">
+  <div  class="row">
+    <div class="col-1"></div>
+    <div class="col-8">
+      <form ng-submit="search.searchData(data);">
+        <input class="form-control" type="search" ng-model="search.data.query">
+      </form>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-dark" type="submit">Search</button>
+    </div>
+  </div>
+</div>
+
+<!-- dynamic divs to display query result documents -->
+<div ng-repeat="x in results">
+  <br>
+  <h5>
+    <a href="/displaycase" ng-click="sendCaseData(x.casename, x.documenttext, x.docid)">{{ x.casename }}</a>
+  </h5>
+  <p>Document Id: {{ x.docid }} Court: {{ x.court }}</p>
+</div>
