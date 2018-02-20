@@ -103,7 +103,7 @@ module.exports = function(router) {
 
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     // \\App\\Routes\\my_python.py
-    PythonShell.run('ML_Model.py', options, function (err, results) {
+    PythonShell.run('\\App\\Routes\\my_python.py', options, function (err, results) {
       if (err) throw err;
       console.log(results[0]);
 
