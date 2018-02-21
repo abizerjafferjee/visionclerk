@@ -98,18 +98,24 @@ module.exports = function(router) {
   router.post('/search', function(req, res){
     var options = {
       mode: 'text',
-      pythonPath: '/home/bitnami/anaconda3/bin/python3',
+      pythonPath: '/home/bitnami/anaconda3/bin/python',
+      pythonOptions: ['-u'],
       scriptPath: '/home/bitnami/projects/legalx/App/Routes',
       args: [req.body.query]
     };
 
     // Triggers Python model to retrieve db table containing relevant documents to the user query
-    // \\App\\Routes\\my_python.py
     console.log('BEFORE PYTHON SHELL');
-    //PythonShell.run('my_python.py', options, function (err, results) {
-      console.log('INSIDE PYTHONSHELL');
-      //if (err) throw err;
-      //console.log(results[0]);
+    var spawn = require('child_process').spawn;
+    var proc = spawn('python');
+    //proc.stdout.on('data', function(data){console.log(data)});
+    console.log(proc);
+    proc.stderr.on('data', function(data){
+      var buff = new Buffer(data);
+      console.log(buff.toString('utf8'));
+    });
+    console.log('AFTER PYTHON SHELL');
+      
 
       // Connecting to the PSQL DB to retrieve results table
       var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
