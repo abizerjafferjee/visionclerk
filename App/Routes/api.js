@@ -1,8 +1,9 @@
-var User        = require('../Models/User.js')
-var pg          = require('pg');
-var PythonShell = require('python-shell');
-var jwt         = require('jsonwebtoken');
-var secret      = 'mySecret';
+var User          = require('../Models/User.js')
+var pg            = require('pg');
+var PythonShell   = require('python-shell');
+var jwt           = require('jsonwebtoken');
+var secret        = 'mySecret';
+var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
 
 module.exports = function(router) {
   // USER REGISTRATION ROUTE
@@ -105,33 +106,29 @@ module.exports = function(router) {
     };
 
     // Triggers Python model to retrieve db table containing relevant documents to the user query
-    console.log('BEFORE PYTHON SHELL');
     var spawn = require('child_process').spawn;
-    var proc = spawn('python');
-    //proc.stdout.on('data', function(data){console.log(data)});
-    console.log(proc);
-    proc.stderr.on('data', function(data){
-      var buff = new Buffer(data);
-      console.log(buff.toString('utf8'));
-    });
-    console.log('AFTER PYTHON SHELL');
-      
+    var proc = spawn('python', [ml_model, req.body.query]);
+    proc.stdout.on('data', function(data){
+      // data holds the psql table name that contains all documents related to the user's query
+      var results_table = data.toString('utf8');
 
-      // Connecting to the PSQL DB to retrieve results table
+      // Connecting to the PSQL DB
       var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
       var client = new pg.Client(connectionString);
-      //client.connect();
       client.connect(err => {
-        if (err) {
-          throw err;
-        }});
-      var query = client.query('set search_path to legalx_schema')
-      // *** NEED TO USE VARIABLES FOR THIS QUERY ***
-      var query2 = client.query('SELECT docid, casename, court, documenttext FROM documents LIMIT 10')
+        if (err) { throw err; }
+      });
+      var query = client.query('set search_path to legalx_schema');
+      var query2 = client.query('SELECT docid, casename, court, documenttext FROM ' + results_table + ' LIMIT 10');
       query2.then((result) =>
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
         res.json(JSON.parse(JSON.stringify(result.rows))));
-    //});
+    });
+    proc.stderr.on('data', function(data){
+      var buff = new Buffer(data);
+      console.log('******* THERE WAS AN ERROR EXECUTING PYTHON: ');
+      console.log(buff.toString('utf8'));
+    });
   });
 
   return router;
