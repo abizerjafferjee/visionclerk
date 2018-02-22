@@ -35,6 +35,12 @@ appRoutes.config(function($routeProvider, $locationProvider){
     controllerAs : 'search'
   })
 
+  .when('/activate/:token', {
+    templateUrl : 'app/views/pages/users/activation/activate.html',
+    controller : 'emailCtrl',
+    controllerAs : 'email'
+  })
+
   .otherwise({
     redirectTo: '/'
   });

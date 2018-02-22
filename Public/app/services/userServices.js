@@ -7,5 +7,11 @@ userServices.factory('User', function($http) {
   userFactory.create = function(regData) {
     return $http.post('/api/users', regData);
   }
+
+  // User.activateAccount(token);
+  userFactory.activateAccount = function(token) {
+    return $http.put('/api/activate/' + token);
+  }
+  
   return userFactory;
 });

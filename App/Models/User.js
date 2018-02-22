@@ -45,7 +45,9 @@ var passwordValidator = [
 var UserSchema = new Schema({
   email: { type: String, required: true, unique: true, lowercase: true, validate: emailValidator },
   username: { type: String, required: true, unique: true, lowercase: true, validate: usernameValidator },
-  password: { type: String, required: true, validate: passwordValidator }
+  password: { type: String, required: true, validate: passwordValidator },
+  active: { type: Boolean, required: true, default: false },
+  temporarytoken: { type: String, required: true}
 });
 
 UserSchema.pre('save', function(next) {

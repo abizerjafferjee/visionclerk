@@ -4,8 +4,20 @@ var PythonShell   = require('python-shell');
 var jwt           = require('jsonwebtoken');
 var secret        = 'mySecret';
 var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
+var nodemailer    = require('nodemailer');
+var sgTransport   = require('nodemailer-sendgrid-transport');
 
 module.exports = function(router) {
+
+  var options = {
+    auth: {
+      api_user: 'legalx',
+      api_key: 'legalx1234'
+    }
+  }
+
+  var client = nodemailer.createTransport(sgTransport(options));
+
   // USER REGISTRATION ROUTE
   //http://localhost:8080/api/users
   router.post('/users', function(req, res){
@@ -13,6 +25,7 @@ module.exports = function(router) {
     user.username = req.body.username;
     user.password = req.body.password;
     user.email = req.body.email;
+    user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
     if (user.username == null || user.username == ''){
       res.json({ success: false, message:'Please provide an Username'});
     } else if (user.password == null || user.password == '') {
@@ -41,7 +54,23 @@ module.exports = function(router) {
             }
           }
         } else {
-          res.json({ success: true, message:'User created' });
+          var email = {
+            from: 'Legalx Staff, legalxstartup@outlook.com',
+            to: user.email,
+            subject: 'Legalx Account Activation link',
+            text: 'Hello' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
+            html: 'Hello<strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
+          };
+
+          client.sendMail(email, function(err, info){
+              if (err ){
+                console.log(error);
+              }
+              else {
+                console.log('Message sent: ' + info.response);
+              }
+          });
+          res.json({ success: true, message:'Account registered! Please check your email for activation link.' });
         }
       });
     }
@@ -69,6 +98,47 @@ module.exports = function(router) {
           res.json({ success: true, message: 'User authenticated!', token: token });
         }
       }
+    });
+  });
+
+  router.put('/activate/:token', function(req, res) {
+    User.findOne({ temporarytoken: req.params.token }, function(err, user) {
+      if (err) throw err;
+      var token = req.params.token;
+      jwt.verify(token, secret, function(err, decoded){
+        if (err) {
+          console.log(err);
+          res.json({ success: false, message: 'Activation link has expired.'});
+        } else if (!user) {
+          res.json({ success: false, message: 'Activation link has expired.'});
+        } else {
+          user.temporarytoken = false;
+          user.active = true;
+          user.save(function(err) {
+            if (err) {
+              console.log(err);
+            } else {
+              var email = {
+                from: 'Legalx Staff, legalxstartup@outlook.com',
+                to: user.email,
+                subject: 'Legalx Account Activated',
+                text: 'Hello' + user.username + ', Your account has been successfully activated!',
+                html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your account has been successfully activated!'
+              };
+
+              client.sendMail(email, function(err, info){
+                  if (err ){
+                    console.log(error);
+                  }
+                  else {
+                    console.log('Message sent: ' + info.response);
+                  }
+              });
+              res.json({ success: true, message: 'Account activated!'});
+            }
+          });
+        }
+      });
     });
   });
 
