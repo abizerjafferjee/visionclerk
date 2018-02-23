@@ -58,8 +58,8 @@ module.exports = function(router) {
             from: 'Legalx Staff <legalxstartup@gmail.com>',
             to: user.email,
             subject: 'Legalx Account Activation link',
-            text: 'Hello' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
-            //html: 'Hello<strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
+            //text: 'Hello ' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
+            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
           };
 
           transporter.sendMail(mailOptions, function(err, info){
@@ -117,21 +117,22 @@ module.exports = function(router) {
             if (err) {
               console.log(err);
             } else {
-              var email = {
-                from: 'Legalx Staff, legalxstartup@outlook.com',
+
+
+              var mailOptions = {
+                from: 'Legalx Staff <legalxstartup@gmail.com>',
                 to: user.email,
-                subject: 'Legalx Account Activated',
+                subject: 'Legalx Account Activation link',
                 text: 'Hello' + user.username + ', Your account has been successfully activated!',
                 html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your account has been successfully activated!'
               };
 
-              client.sendMail(email, function(err, info){
-                  if (err ){
-                    console.log(error);
-                  }
-                  else {
-                    console.log('Message sent: ' + info.response);
-                  }
+              transporter.sendMail(mailOptions, function(err, info){
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log('Email sent');
+                }
               });
               res.json({ success: true, message: 'Account activated!'});
             }
