@@ -5,26 +5,16 @@ var jwt           = require('jsonwebtoken');
 var secret        = 'mySecret';
 var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
 var nodemailer    = require('nodemailer');
-var xoauth2       = require('xoauth2');
 
 module.exports = function(router) {
 
-  var options = {
-    auth: {
-      api_user: 'legalx',
-      api_key: 'legalx1234'
-    }
-  }
-
   var transporter = nodemailer.createTransport({
     service: 'gmail',
+    secure: false,
+    port: 25,
     auth: {
-      xoauth2: xoauth2.createXOAuth2Generator({
-        user: 'legalxstartup@gmail.com',
-        clientID: '640423338566-l6ms229cnaci7k3ppeo7sjanbq3rnpji.apps.googleusercontent.com',
-        clientSecret: '7boyk9aD0TLREMWMthW5vlRr',
-        refreshToken: '1/hTMe50M0kXMunsHUEqGvOPf2rDjw0jsadlN9U2mV5j00Mgsj4THJNxNYpoLWl3Yx'
-      })
+      user: 'legalxstartup@gmail.com',
+      pass: 'legalx1234'
     }
   });
 
@@ -72,14 +62,14 @@ module.exports = function(router) {
             //html: 'Hello<strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
           };
 
-          transporter.sendMail(mailOptions, function(err, res){
+          transporter.sendMail(mailOptions, function(err, info){
             if (err) {
               console.log(err);
             } else {
               console.log('Email sent');
-              res.json({ success: true, message:'Account registered! Please check your email for activation link.' });
             }
           })
+          res.json({ success: true, message:'Account registered! Please check your email for activation link.' });
         }
       });
     }
