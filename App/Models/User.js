@@ -45,13 +45,17 @@ var passwordValidator = [
 var UserSchema = new Schema({
   email: { type: String, required: true, unique: true, lowercase: true, validate: emailValidator },
   username: { type: String, required: true, unique: true, lowercase: true, validate: usernameValidator },
-  password: { type: String, required: true, validate: passwordValidator },
+  password: { type: String, required: true, validate: passwordValidator, select: false },
   active: { type: Boolean, required: true, default: false },
   temporarytoken: { type: String, required: true}
 });
 
 UserSchema.pre('save', function(next) {
   var user = this;
+
+  // if password has not changed, then move on
+  if (!user.isModified('password')) return next();
+
   bcrypt.hash(user.password, 10, function(err, hash) {
     if (err) return next(err);
     user.password = hash;

@@ -58,7 +58,7 @@ module.exports = function(router) {
             from: 'Legalx Staff <legalxstartup@gmail.com>',
             to: user.email,
             subject: 'Legalx Account Activation link',
-            //text: 'Hello ' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
+            text: 'Hello ' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
             html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
           };
 
@@ -79,7 +79,7 @@ module.exports = function(router) {
   // http://localhost:8080/api/authenticate
   router.post('/authenticate', function(req, res){
     User.findOne({ email: req.body.email })
-    .select('email username password')
+    .select('email username password active')
     .exec(function(err, user){
       if (err) throw err;
       if (!user) {
@@ -92,6 +92,8 @@ module.exports = function(router) {
         }
         if (!validPassword) {
           res.json({ success: false, message: 'Could not authenticate password'});
+        } else if (!user.active) {
+          res.json({ success: false, message: 'Account is not yet activated. Please check your email for activation link.'});
         } else {
           var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
           res.json({ success: true, message: 'User authenticated!', token: token });
@@ -124,7 +126,7 @@ module.exports = function(router) {
                 to: user.email,
                 subject: 'Legalx Account Activation link',
                 text: 'Hello' + user.username + ', Your account has been successfully activated!',
-                html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your account has been successfully activated!'
+                html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your LegalX account has been successfully activated!'
               };
 
               transporter.sendMail(mailOptions, function(err, info){

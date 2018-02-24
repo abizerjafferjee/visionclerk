@@ -1,7 +1,17 @@
-var emailController = angular.module('emailController', []);
+var emailController = angular.module('emailController', ['userServices']);
 
-emailController.controller('emailCtrl', function($routeParams) {
-  console.log($routeParams.token);
+emailController.controller('emailCtrl', function($routeParams, User) {
 
-  //User.activateAccount(token);
+  app = this;
+
+  User.activateAccount($routeParams.token).then(function(data) {
+    app.successMsg = false;
+    app.errorMsg = false;
+
+    if (data.data.success) {
+      app.successMsg = data.data.message;
+    } else {
+      app.errorMsg = data.data.message;
+    }
+  });
 });
