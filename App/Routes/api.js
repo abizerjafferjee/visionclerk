@@ -58,8 +58,8 @@ module.exports = function(router) {
             from: 'Legalx Staff <legalxstartup@gmail.com>',
             to: user.email,
             subject: 'Legalx Account Activation link',
-            text: 'Hello ' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
-            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
+            text: 'Hello ' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
+            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://35.183.35.209:8080/activate/' + user.temporarytoken + '">http://35.183.35.209:8080/activate/</a>'
           };
 
           transporter.sendMail(mailOptions, function(err, info){
@@ -182,8 +182,8 @@ module.exports = function(router) {
             from: 'Legalx Staff <legalxstartup@gmail.com>',
             to: user.email,
             subject: 'Legalx Account Activation link Request',
-            text: 'Hello ' + user.username + ', you recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
-            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
+            text: 'Hello ' + user.username + ', you recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
+            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://35.183.35.209:8080/activate/' + user.temporarytoken + '">http://35.183.35.209:8080/activate/</a>'
           };
 
           transporter.sendMail(mailOptions, function(err, info){
