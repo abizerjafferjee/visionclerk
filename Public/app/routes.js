@@ -41,6 +41,12 @@ appRoutes.config(function($routeProvider, $locationProvider){
     controllerAs : 'email'
   })
 
+  .when('/resend', {
+    templateUrl : 'app/views/pages/users/activation/resend.html',
+    controller : 'resendCtrl',
+    controllerAs : 'resend'
+  })
+
   .otherwise({
     redirectTo: '/'
   });

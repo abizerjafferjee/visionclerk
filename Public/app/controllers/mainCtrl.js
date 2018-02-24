@@ -23,6 +23,7 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
   this.doLogin = function(loginData){
     app.loading = true;
     app.errorMsg = false;
+    app.expired = false;
 
     Auth.login(app.loginData).then(function(data){
       if (data.data.success) {
@@ -36,9 +37,14 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
           app.successMsg = false;
         }, 1000);
       } else {
-        app.loading = false;
-        //Create an error message
-        app.errorMsg = data.data.message;
+        if (data.data.expired) {
+          app.expired = true;
+          app.loading = false;
+          app.errorMsg = data.data.message;
+        } else {
+          app.loading = false;
+          app.errorMsg = data.data.message;
+        }
       }
     });
   };

@@ -24,5 +24,9 @@
 </div>
 <br>
 <div class="row show-hide-message" ng-show="main.errorMsg">
-  <div class="alert alert-danger">{{ main.errorMsg }}</div>
+  <div class="alert alert-danger">{{ main.errorMsg }} &nbsp
+    <a ng-show="main.expired" href="/resend">
+      <button class="btn btn-success">Resend Activation Email</button>
+    </a>
+  </div>
 </div>

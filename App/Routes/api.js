@@ -68,7 +68,7 @@ module.exports = function(router) {
             } else {
               console.log('Email sent');
             }
-          })
+          });
           res.json({ success: true, message:'Account registered! Please check your email for activation link.' });
         }
       });
@@ -93,7 +93,7 @@ module.exports = function(router) {
         if (!validPassword) {
           res.json({ success: false, message: 'Could not authenticate password'});
         } else if (!user.active) {
-          res.json({ success: false, message: 'Account is not yet activated. Please check your email for activation link.'});
+          res.json({ success: false, message: 'Account is not yet activated. Please check your email for activation link.', expired: true });
         } else {
           var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
           res.json({ success: true, message: 'User authenticated!', token: token });
@@ -142,6 +142,61 @@ module.exports = function(router) {
         }
       });
     });
+  });
+
+  router.post('/resend', function(req, res){
+    User.findOne({ email: req.body.email })
+    .select('email password active')
+    .exec(function(err, user){
+      if (err) throw err;
+      if (!user) {
+        res.json({ success: false, message: 'Could not authenticate user'});
+      } else if (user) {
+        if (req.body.password) {
+          var validPassword = user.comparePassword(req.body.password);
+        } else {
+          res.json({ success: false, message: 'No password provided'});
+        }
+        if (!validPassword) {
+          res.json({ success: false, message: 'Could not authenticate password'});
+        } else if (user.active) {
+          res.json({ success: false, message: 'Account is already activated.' });
+        } else {
+          res.json({ success: true, user: user });
+        }
+      }
+    });
+  });
+
+  router.put('/resend', function(req, res) {
+    User.findOne({ email: req.body.email })
+    .select('username email temporarytoken')
+    .exec(function(err, user) {
+      if (err) throw err;
+      user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
+      user.save(function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          var mailOptions = {
+            from: 'Legalx Staff <legalxstartup@gmail.com>',
+            to: user.email,
+            subject: 'Legalx Account Activation link Request',
+            text: 'Hello ' + user.username + ', you recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
+            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
+          };
+
+          transporter.sendMail(mailOptions, function(err, info){
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('Email sent');
+            }
+          });
+          res.json({ success: true, message: 'Activation link has been sent to: ' + user.email + '!'});
+        }
+      })
+    })
   });
 
   router.use(function(req, res, next){
