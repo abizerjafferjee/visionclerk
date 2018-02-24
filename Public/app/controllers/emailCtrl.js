@@ -26,6 +26,7 @@ emailController.controller('emailCtrl', function($routeParams, User, $timeout, $
   app = this;
 
   app.checkCredentials = function (loginData) {
+    app.disabled = true;
     app.errorMsg = false;
     app.successMsg = false;
     User.checkCredentials(app.loginData).then(function (data){
@@ -36,6 +37,7 @@ emailController.controller('emailCtrl', function($routeParams, User, $timeout, $
           }
         });
       } else {
+        app.disabled = false;
         app.errorMsg = data.data.message;
       }
     })

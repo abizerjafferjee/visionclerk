@@ -4,12 +4,12 @@
 
 <form ng-submit="resend.checkCredentials(loginData);">
   <label>Email:</label>
-  <input class="form-control" type="text" name="email" value="" placeholder="Please enter Email" ng-model="resend.loginData.email">
+  <input ng-disabled="resend.disabled" class="form-control" type="text" name="email" value="" placeholder="Please enter Email" ng-model="resend.loginData.email">
   <br>
   <label>Password:</label>
-  <input class="form-control" type="password" name="password" value="" placeholder="Please enter Password" ng-model="resend.loginData.password">
+  <input ng-disabled="resend.disabled" class="form-control" type="password" name="password" value="" placeholder="Please enter Password" ng-model="resend.loginData.password">
   <br>
-  <button class="btn btn-primary" type="submit">Resend</button>
+  <button ng-disabled="resend.disabled" class="btn btn-primary" type="submit">Resend</button>
 </form>
 <br>
 

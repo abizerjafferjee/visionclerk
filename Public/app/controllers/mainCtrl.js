@@ -24,6 +24,7 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
     app.loading = true;
     app.errorMsg = false;
     app.expired = false;
+    app.disabled = true;
 
     Auth.login(app.loginData).then(function(data){
       if (data.data.success) {
@@ -37,11 +38,13 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
           app.successMsg = false;
         }, 1000);
       } else {
+        // token expired
         if (data.data.expired) {
           app.expired = true;
           app.loading = false;
           app.errorMsg = data.data.message;
         } else {
+          app.disabled = false;
           app.loading = false;
           app.errorMsg = data.data.message;
         }

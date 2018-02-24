@@ -5,6 +5,7 @@ uc.controller('regCtrl', function($http, $location, $timeout, User){
   var app = this;
 
   this.regUser = function(regData){
+    app.disabled = true;
     app.loading = true;
     app.errorMsg = false;
 
@@ -18,6 +19,7 @@ uc.controller('regCtrl', function($http, $location, $timeout, User){
           $location.path('/login');
         }, 1000);
       } else {
+        app.disabled = false;
         app.loading = false;
         //Create an error message
         app.errorMsg = data.data.message;
