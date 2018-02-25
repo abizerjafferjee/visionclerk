@@ -10,6 +10,16 @@
   <input ng-disabled="main.disabled" class="form-control" type="password" name="password" value="" placeholder="Please enter Password" ng-model="main.loginData.password">
   <br>
   <button ng-disabled="main.disabled" class="btn btn-primary" type="submit">Login</button>
+
+  <!-- Reset password/ Forgot username -->
+  <div class="reset">
+    <a href="/resetpassword" >
+      <button ng-disabled="main.disabled" class="btn btn-danger" type="button">Forgot Password</button>
+    </a>
+    <a href="/resetusername" >
+      <button ng-disabled="main.disabled" class="btn btn-success" type="button">Forgot Username</button>
+    </a>
+  </div>
 </form>
 <br>
 

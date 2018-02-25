@@ -199,10 +199,101 @@ module.exports = function(router) {
     })
   });
 
+  router.get('/resetusername/:email', function(req, res) {
+    User.findOne({ email: req.params.email }).select('email username').exec(function(err, user) {
+      if (err) {
+        res.json({ success: false, message: err });
+      } else {
+        if (!req.params.email) {
+          res.json({ success: false, message: 'No Email was provided' });
+        } else {
+          if (!user){
+            res.json({ success: false, message: 'E-mail was not found!' });
+          } else {
+            var mailOptions = {
+              from: 'Legalx Staff <legalxstartup@gmail.com>',
+              to: user.email,
+              subject: 'Legalx Username Request',
+              text: 'Hello ' + user.username + ', you recently requested your username! Your username is: ' + user.username,
+              html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested your username! Your username is: ' + user.username
+            };
+
+            transporter.sendMail(mailOptions, function(err, info){
+              if (err) {
+                console.log(err);
+              } else {
+                console.log('Email sent');
+              }
+            });
+
+            res.json({ success: true, message: 'Username has been sent to Email!' });
+          }
+        }
+      }
+    });
+  });
+
+  router.put('/resetpassword', function(req, res) {
+    User.findOne({ email: req.body.email })
+    .select('username active email resettoken')
+    .exec(function(err, user) {
+      if (err) throw err;
+      if (!user) {
+        res.json({ success: false, message: 'Email was not found!'})
+      } else if (!user.active) {
+        res.json({ success: false, message: 'Account has not yet been activated, Please check your Email!' })
+      } else {
+        user.resettoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
+        user.save(function(err) {
+          if (err) {
+            res.json({ success: false, message: err });
+          } else {
+            var mailOptions = {
+              from: 'Legalx Staff <legalxstartup@gmail.com>',
+              to: user.email,
+              subject: 'Legalx Reset Password Request',
+              text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://localhost:8080/newpassword/' + user.resettoken,
+              html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a password reset link. Please click on the link below to reset your password:<br><br><a href="http://localhost:8080/newpassword/' + user.resettoken + '">http://localhost:8080/newpassword/</a>'
+            };
+
+            transporter.sendMail(mailOptions, function(err, info){
+              if (err) {
+                console.log(err);
+              } else {
+                console.log('Email sent');
+              }
+            });
+
+            res.json({ success: true, message: 'Please check your Email for the password reset link.' })
+          }
+        });
+      }
+    });
+  });
+
+  router.get('/resetpassword/:token', function(req, res) {
+    User.findOne({ resettoken: req.params.token })
+    .select()
+    .exec(function(err, user) {
+      if (err) throw err;
+      var token = req.params.token;
+      // function to verify token
+      jwt.verify(token, secret, function(err, decoded){
+        if (err) {
+          console.log(err);
+          res.json({ success: false, message: 'Reset Password link has expired!' });
+        } else {
+          res.json({ success: true, user: user });
+        }
+      });
+    });
+  });
+
   router.use(function(req, res, next){
     var token = req.body.token || req.headers['x-access-token'];
 
     if (token){
+      // function to verify token
       jwt.verify(token, secret, function(err, decoded){
         if (err) {
           console.log(err);

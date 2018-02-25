@@ -38,13 +38,36 @@ appRoutes.config(function($routeProvider, $locationProvider){
   .when('/activate/:token', {
     templateUrl : 'app/views/pages/users/activation/activate.html',
     controller : 'emailCtrl',
-    controllerAs : 'email'
+    controllerAs : 'email',
+    authenticate : false
   })
 
   .when('/resend', {
     templateUrl : 'app/views/pages/users/activation/resend.html',
     controller : 'resendCtrl',
-    controllerAs : 'resend'
+    controllerAs : 'resend',
+    authenticate : false
+  })
+
+  .when('/resetusername', {
+    templateUrl : 'app/views/pages/users/reset/reset_username.html',
+    controller : 'resetusernameCtrl',
+    controllerAs : 'resetusername',
+    authenticated : false
+  })
+
+  .when('/resetpassword', {
+    templateUrl : 'app/views/pages/users/reset/reset_password.html',
+    controller : 'resetpasswordCtrl',
+    controllerAs : 'resetpassword',
+    authenticate : false
+  })
+
+  .when('/newpassword/:token', {
+    templateUrl : 'app/views/pages/users/reset/newpassword.html',
+    controller : 'newpasswordCtrl',
+    controllerAs : 'newpassword',
+    authenticate : false
   })
 
   .otherwise({

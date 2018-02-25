@@ -6,6 +6,10 @@ header.navbar {
   border-radius:0;
 }
 
+.reset {
+  float: right;
+}
+
 .show-hide-message.ng-hide-remove {
   -webkit-animation:zoomIn 0.3s both ease;
   -moz-animation: zoomIn 0.3s both ease;
