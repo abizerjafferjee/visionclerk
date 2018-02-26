@@ -252,8 +252,8 @@ module.exports = function(router) {
               from: 'Legalx Staff <legalxstartup@gmail.com>',
               to: user.email,
               subject: 'Legalx Reset Password Request',
-              text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://localhost:8080/newpassword/' + user.resettoken,
-              html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a password reset link. Please click on the link below to reset your password:<br><br><a href="http://localhost:8080/newpassword/' + user.resettoken + '">http://localhost:8080/newpassword/</a>'
+              text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://35.183.35.209:8080/newpassword/' + user.resettoken,
+              html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a password reset link. Please click on the link below to reset your password:<br><br><a href="http://35.183.35.209:8080/newpassword/' + user.resettoken + '">http://35.183.35.209:8080/newpassword/</a>'
             };
 
             transporter.sendMail(mailOptions, function(err, info){
