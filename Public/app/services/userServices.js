@@ -40,7 +40,12 @@ userServices.factory('User', function($http) {
 
   // User.savePassword(regData);
   userFactory.savePassword = function(regData) {
-    return $http.put('/api/savepassword', regData)
+    return $http.put('/api/savepassword', regData);
+  };
+
+  // User.deleteAccount();
+  userFactory.deleteAccount = function(userEmail) {
+    return $http.delete('/api/deleteaccount/'+ userEmail);
   };
 
   return userFactory;

@@ -1,6 +1,20 @@
 <div class="page-header">
   <h1>User Registration</h1>
 </div>
+<br>
+
+<div class="row show-hide-message" ng-show="register.successMsg">
+  <div class="alert alert-success">{{ register.successMsg }}</div>
+</div>
+<br>
+<div class="row show-hide-message" ng-show="register.errorMsg">
+  <div class="alert alert-danger">{{ register.errorMsg }}</div>
+</div>
+<div class="jumbotron text-center" ng-show="register.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading...</p>
+</div>
+<br>
 
 <form name="regForm" ng-submit="register.regUser(regData);" novalidate>
   <div ng-class="{ 'has-success': (regForm.email.$valid && !regForm.email.$pristine), 'has-danger': (!regForm.email.$valid && !regForm.email$pristine) || (!regForm.email.$valid && regForm.$submitted) }">
@@ -39,18 +53,3 @@
   <br>
   <button ng-disabled="register.disabled" class="btn btn-primary" type="submit">Register</button>
 </form>
-<br>
-
-<div class="jumbotron text-center" ng-show="register.loading">
-  <span class="glyphicon glyphicon-repeat spinner"></span>
-  <p>Loading...</p>
-</div>
-
-<br>
-<div class="row show-hide-message" ng-show="register.successMsg">
-  <div class="alert alert-success">{{ register.successMsg }}</div>
-</div>
-<br>
-<div class="row show-hide-message" ng-show="register.errorMsg">
-  <div class="alert alert-danger">{{ register.errorMsg }}</div>
-</div>

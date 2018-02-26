@@ -56,7 +56,7 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
     Auth.logout();
     $location.path('/logout');
     $timeout(function(){
-      $location.path('/search')
+      $location.path('/')
     }, 1000);
   };
 });

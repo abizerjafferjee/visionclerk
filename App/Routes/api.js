@@ -322,11 +322,22 @@ module.exports = function(router) {
                 console.log('Email sent');
               }
             });
-            res.json({ success: true, message: 'Password has been reset!' })
+            res.json({ success: true, message: 'Password has been reset!' });
           }
         });
       }
     });
+  });
+
+  router.delete('/deleteaccount/:email', function(req, res) {
+     User.findOneAndRemove({ email: req.params.email })
+     .exec(function(err, info) {
+       if (err) {
+         res.json({ success: false, message: 'Something went wrong, account could NOT be deleted!' });
+       } else {
+         res.json({ success: true, message: 'Account successfully deleted!' });
+       }
+     });
   });
 
   router.use(function(req, res, next){

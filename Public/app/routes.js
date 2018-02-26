@@ -70,6 +70,13 @@ appRoutes.config(function($routeProvider, $locationProvider){
     authenticate : false
   })
 
+  .when('/deleteaccount', {
+    templateUrl : 'app/views/pages/users/activation/delete_account.html',
+    controller : 'deleteaccountCtrl',
+    controllerAs : 'deleteaccount',
+    authenticate : false
+  })
+
   .otherwise({
     redirectTo: '/'
   });

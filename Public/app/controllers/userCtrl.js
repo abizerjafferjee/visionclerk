@@ -1,6 +1,6 @@
-var uc = angular.module('userControllers', ['userServices', ]);
+var userControllers = angular.module('userControllers', ['userServices']);
 
-uc.controller('regCtrl', function($http, $location, $timeout, User){
+userControllers.controller('regCtrl', function($http, $location, $timeout, User){
 
   var app = this;
 
@@ -17,7 +17,7 @@ uc.controller('regCtrl', function($http, $location, $timeout, User){
         // redirect to home page
         $timeout(function(){
           $location.path('/login');
-        }, 1000);
+        }, 2000);
       } else {
         app.disabled = false;
         app.loading = false;
@@ -26,4 +26,26 @@ uc.controller('regCtrl', function($http, $location, $timeout, User){
       }
     });
   };
+})
+
+.controller('deleteaccountCtrl', function(User, $routeParams){
+
+  app = this;
+
+  app.deleteAccount = function(email) {
+    app.errorMsg = false;
+    app.loading = true;
+    app.disabled = true;
+
+    User.deleteAccount(email).then(function(data) {
+      app.loading = false;
+      if (data.data.success) {
+        app.disabled = true;
+        app.successMsg = data.data.message;
+      } else {
+        app.disabled = false;
+        app.errorMsg = data.data.message;
+      }
+    });
+  }
 });

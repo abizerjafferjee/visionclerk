@@ -42,9 +42,9 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
       <a class="navbar-brand" href="/">LegalX</a>
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <!-- <li class="nav-item active">
           <a class="nav-link" href="/search">Search<span class="sr-only">(current)</span></a>
-        </li>
+        </li> -->
         <li class="nav-item active">
           <a class="nav-link" href="/register" ng-show="!main.isLoggedIn">Register<span class="sr-only">(current)</span></a>
         </li>
@@ -68,6 +68,21 @@
       <div class="col-4"></div>
     </div>
     <div class="col-xs-12" style="height:100px;"></div>
+
+    <!-- Search bar Incase we change our mind for landing page -->
+    <!-- <div ng-show="!main.isLoggedIn" class="container">
+      <div  class="row">
+        <div class="col-1"></div>
+        <div class="col-8">
+          <form ng-submit="search.searchData(data);">
+            <input class="form-control" type="search" ng-model="search.data.query">
+          </form>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-dark" type="submit">Search</button>
+        </div>
+      </div>
+    </div> -->
 
     <div ng-view></div>
 
