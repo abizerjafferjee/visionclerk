@@ -36,7 +36,12 @@ userServices.factory('User', function($http) {
   // User.resetUserPassword(token);
   userFactory.resetUserPassword = function(token) {
     return $http.get('/api/resetpassword/' + token);
-  }
+  };
+
+  // User.savePassword(regData);
+  userFactory.savePassword = function(regData) {
+    return $http.put('/api/savepassword', regData)
+  };
 
   return userFactory;
 });

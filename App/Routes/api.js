@@ -283,9 +283,49 @@ module.exports = function(router) {
           console.log(err);
           res.json({ success: false, message: 'Reset Password link has expired!' });
         } else {
-          res.json({ success: true, user: user });
+          if (!user) {
+            res.json({ success:false, message: 'Password link has expired!' });
+          } else {
+            res.json({ success: true, user: user });
+          }
         }
       });
+    });
+  });
+
+  router.put('/savepassword', function(req, res) {
+    User.findOne({ email: req.body.email })
+    .select('username email password resettoken')
+    .exec(function(err, user) {
+      if (err) throw err;
+      if (req.body.password == null || req.body.password == '') {
+        res.json({ success: false, message: 'Password not provided' });
+      } else {
+        user.password = req.body.password;
+        user.resettoken = false;
+        user.save(function(err) {
+          if (err) {
+            res.json({ success: false, message: err});
+          } else {
+            var mailOptions = {
+              from: 'Legalx Staff <legalxstartup@gmail.com>',
+              to: user.email,
+              subject: 'Legalx Reset Password',
+              text: 'Hello ' + user.username + ', this Email is to notify you that your password was recently reset at legalx.com',
+              html: 'Hello <strong> ' + user.username + '</strong>,<br><br> This Email is to notify you that your password was recently reset at legalx.com'
+            };
+
+            transporter.sendMail(mailOptions, function(err, info){
+              if (err) {
+                console.log(err);
+              } else {
+                console.log('Email sent');
+              }
+            });
+            res.json({ success: true, message: 'Password has been reset!' })
+          }
+        });
+      }
     });
   });
 

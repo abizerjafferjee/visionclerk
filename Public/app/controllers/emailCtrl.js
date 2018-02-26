@@ -97,7 +97,7 @@ emailController.controller('emailCtrl', function($routeParams, User, $timeout, $
   }
 })
 
-.controller('newpasswordCtrl', function(User, $routeParams) {
+.controller('newpasswordCtrl', function(User, $routeParams, $scope, $timeout, $location) {
 
   app = this;
   app.hide = true;
@@ -105,9 +105,37 @@ emailController.controller('emailCtrl', function($routeParams, User, $timeout, $
   User.resetUserPassword($routeParams.token).then(function(data) {
     if (data.data.success) {
       app.hide = false;
-      app.successMsg = 'Please enter a new password';
+      //app.successMsg = 'Please enter a new password';
+      $scope.email = data.data.user.email;
     } else {
       app.errorMsg = data.data.message;
     }
   });
+
+  app.savePassword = function(regData, valid) {
+    app.errorMsg = false;
+    app.disabled = true;
+    app.loading = true;
+
+    if (valid) {
+      app.regData.email = $scope.email;
+      User.savePassword(app.regData).then(function(data) {
+        app.loading = false;
+        if (data.data.success) {
+          app.successMsg = data.data.message + '... Redirecting';
+          $timeout(function() {
+            $location.path('/login');
+          }, 1000);
+        } else {
+          app.loading = false;
+          app.disabled = false;
+          app.errorMsg = data.data.message;
+        }
+      });
+    } else {
+      app.loading = false;
+      app.disabled = false;
+      app.errorMsg = 'Please ensure form is filled out properly.';
+    }
+  }
 });
