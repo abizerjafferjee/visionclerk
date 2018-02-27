@@ -1,0 +1,36 @@
+{
+  "name": "legalx",
+  "version": "1.0.0",
+  "description": "Legal research engine to enable users to input plain text queries and questions and retrieve case law documents which are contextually relevant to the queries",
+  "main": "Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "Legal",
+    "Law",
+    "documents"
+  ],
+  "author": "Abizer Jafferjee and Brydon Parker",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.8",
+    "bcrypt": "^1.0.3",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "bootstrap": "^4.0.0",
+    "bootstrap-slider": "^10.0.0",
+    "express": "^4.16.2",
+    "jquery": "^3.3.1",
+    "jsonwebtoken": "^8.1.1",
+    "mongoose": "^5.0.2",
+    "mongoose-validator": "^2.0.1",
+    "morgan": "^1.9.0",
+    "node-pre-gyp": "^0.6.39",
+    "pg": "^7.4.1",
+    "pg-promise": "^7.4.1",
+    "pg-query": "^0.11.0",
+    "python-shell": "^0.4.0"
+  }
+}

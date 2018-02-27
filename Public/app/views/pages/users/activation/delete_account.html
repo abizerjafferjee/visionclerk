@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h1>Are you sure you want to delete your account?</h1>
+</div>
+
+<br>
+<button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-success" type="button">Yes, delete account</button>
+<a href="/profile" >
+  <button ng-disabled="deleteaccount.disabled" class="btn btn-danger" type="button">No, do NOT delete account</button>
+</a>
+
+<br>
+<div class="jumbotron text-center" ng-show="deleteaccount.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading...</p>
+</div>
+<div class="row show-hide-message" ng-show="deleteaccount.successMsg">
+  <div class="alert alert-success">{{ deleteaccount.successMsg }}</div>
+</div>
+<br>
+<div class="row show-hide-message" ng-show="deleteaccount.errorMsg">
+  <div class="alert alert-danger">{{ deleteaccount.errorMsg }}</div>
+</div>

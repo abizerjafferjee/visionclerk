@@ -1,0 +1,32 @@
+<div ng-controller="search.displayCase">
+  <h2>{{ search.casename }}</h2>
+  <p>{{ search.doctext }}</p>
+</div>
+
+<!-- User Feedback -->
+<div class="container">
+  <div  class="row">
+    <div class="col-1"></div>
+    <div class="col-6"></div>
+    <div class="col-4">
+      <form ng-submit="search.userFeedback(relevance);">
+        How relevant do you think this document is, based on your query:
+        <input class="form-control" type="range" min="0" max="1" ng-model="search.relevance.score">
+        Left -Not relevant Right -relevant
+        <button class="btn btn-primary" type="submit" ng-click="search.getDateTimeLocation();">Submit</button>
+      </form>
+      <!-- <form ng-submit="search.searchData(data);">
+        <input class="form-control" type="search" ng-model="search.data.query">-->
+      </form>
+    </div>
+  </div>
+</div>
+
+<p>Doc_ID: {{ search.caseid }}</p>
+<p>Relevance: {{ search.rel_score }}</p>
+<p>Query: {{ search.userquery }}</p>
+<p>date_time: {{ search.timestamp }}</p>
+<p>User_ID: {{ main.username }}</p>
+<p>Location: Latitude: {{ search.latitude }} Longitude: {{ search.longitude }}</p>
+
+<!-- docID, relevance/label, query_raw_text, date_time, user_id, location -->
