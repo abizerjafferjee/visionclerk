@@ -6,9 +6,26 @@ header.navbar {
   border-radius:0;
 }
 
+li {
+  display: inline;
+  padding: 0px 20px 0px 20px;
+}
+
+a {
+  color: white;
+  font-size: 25px;
+}
+
+a:hover {
+  color: white;
+  text-decoration: none;
+}
+
 .reset {
   float: right;
 }
+
+
 
 .show-hide-message.ng-hide-remove {
   -webkit-animation:zoomIn 0.3s both ease;
@@ -35,4 +52,8 @@ header.navbar {
 @-moz-keyframes spin {
   from {-moz-transform:rotate(0deg);}
   to {-moz-transform:rotate(360deg);}
+}
+
+@user_options {
+  float: right; !important;
 }

@@ -34,17 +34,36 @@
     <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
 
-    <title>LegalX</title>
+    <title>VisionClerk</title>
   </head>
 
   <body ng-app='userApp' ng-controller="mainCtrl as main" ng-show="main.loadme" ng-clock>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">LegalX</a>
-      <ul class="navbar-nav mr-auto">
-        <!-- <li class="nav-item active">
+    <nav style="background-color: #3498DB;">
+      <ul style="padding:20px">
+        <li><a href="/">VisionClerk</a></li>
+        <!-- <li>
+          <form ng-submit="search.searchData(data);" style="width: 220px;">
+            <input class="form-control" type="search" ng-model="search.data.query" style="width: 220px;">
+          </form>
+        </li>-->
+        <div class="reset">
+          <li><a href="/profile"> {{ main.username }}<span class="sr-only">(current)</span></a></li>
+          <li><a href="/register" ng-show="!main.isLoggedIn">Register<span class="sr-only">(current)</span></a></li>
+          <li><a href="/login" ng-show="!main.isLoggedIn">Login<span class="sr-only">(current)</span></a></li>
+          <li><a href="#" ng-click="main.logout();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a></li>
+        </div>
+      </ul>
+    </nav>
+    <!-- bootstrap Fixed navbar -->
+    <!-- <nav class="navbar navbar-expand-md navbar-dark" style="background-color:#3498DB">
+      <a class="navbar-brand" href="/">VisionClerk</a>
+      <ul class="navbar-nav mr-auto" style="float: right">
+        <li class="nav-item active">
+          <a class="nav-link" href="/profile"> {{ main.username }}<span class="sr-only">(current)</span></a>
+        </li>
+         <li class="nav-item active">
           <a class="nav-link" href="/search">Search<span class="sr-only">(current)</span></a>
-        </li> -->
+        </li>
         <li class="nav-item active">
           <a class="nav-link" href="/register" ng-show="!main.isLoggedIn">Register<span class="sr-only">(current)</span></a>
         </li>
@@ -54,20 +73,17 @@
         <li class="nav-item active">
           <a class="nav-link" href="#" ng-click="main.logout();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="/profile"> {{ main.username }}<span class="sr-only">(current)</span></a>
-        </li>
       </ul>
-    </nav>
+    </nav> -->
 
     <!-- Spacing for logo -->
-    <div class="col-xs-12" style="height:100px;"></div>
+    <!-- <div class="col-xs-12" style="height:100px;"></div>
     <div class="row">
       <div class="col-5"></div>
-      <div class="col-4"> LegalX Logo </div>
+      <div class="col-4"> VisionClerk Logo </div>
       <div class="col-4"></div>
     </div>
-    <div class="col-xs-12" style="height:100px;"></div>
+    <div class="col-xs-12" style="height:100px;"></div> -->
 
     <!-- Search bar Incase we change our mind for landing page -->
     <!-- <div ng-show="!main.isLoggedIn" class="container">
