@@ -53,6 +53,7 @@ searchControllers
   var searchTable = this;
 
   this.searchData = function(data) {
+    console.log(data);
     $http.post('/api/search', this.data).then(function(query_results){
       $scope.results = query_results.data;
       myService.setUserQuery($scope.search.data.query);
