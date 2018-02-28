@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Cascade Style Sheets -->
+    <!-- <link rel="stylesheet" href="assests/css/bootstrap.css"> -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.1/css/bootstrap-slider.css" />
+    <link rel="stylesheet" type="text/css" href="assests/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="assests/css/style.css">
+
+    <!-- Main Angular Files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-animate.min.js"></script>
+
+    <!-- Angular config/Routes -->
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+
+    <!-- Angular Controllers -->
+    <script src="app/controllers/userCtrl.js"></script>
+    <script src="app/controllers/searchCtrl.js"></script>
+    <script src="app/controllers/mainCtrl.js"></script>
+    <script src="app/controllers/emailCtrl.js"></script>
+
+    <!-- Angular Services -->
+    <script src="app/services/userServices.js"></script>
+    <script src="app/services/authServices.js"></script>
+
+    <title>VisionClerk</title>
+  </head>
+
+  <body ng-app='userApp' ng-controller="mainCtrl as main" ng-show="main.loadme" ng-clock>
+
+    <!-- NAVIGATION BAR -->
+    <nav style="background-color: #e6e6e6; margin-top: 20px;">
+      <ul style="padding:20px">
+        <li style="margin: 20px 10px 10px 120px;">
+          <a href="/" ng-click="main.showLanding();"><img src="assests/images/visionclerk-logo.png" alt="VisionClerk Logo" width="400" height="70"></a>
+        </li>
+        <li><a href="/search" ng-show="main.isLoggedIn">Search<span class="sr-only">(current)</span></a></li>
+        <!-- <li>
+          <form ng-submit="search.searchData(data);" style="width: 220px;">
+            <input class="form-control" type="search" ng-model="search.data.query" style="width: 220px;">
+          </form>
+        </li>-->
+        <div class="reset">
+          <li><a href="/profile" ng-click="main.doNOTshowLanding();"> {{ main.username }}<span class="sr-only">(current)</span></a></li>
+          <li><a href="/register" ng-click="main.doNOTshowLanding();" ng-show="!main.isLoggedIn">Register<span class="sr-only">(current)</span></a></li>
+          <li><a href="/login" ng-show="!main.isLoggedIn" ng-click="main.doNOTshowLanding();">Login<span class="sr-only">(current)</span></a></li>
+          <li><a href="#" ng-click="main.logout(); main.showLanding();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a></li>
+        </div>
+      </ul>
+    </nav>
+
+    <br>
+    <br>
+    <div ng-show="main.registering">
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-4">
+          <h2>Powered by Kanonick AI</h2>
+          <p>VisionClerk is a search engine for Canadian Caselaw which uses the power of AI to make search more intuitive and make search results most relevant. We are currently in beta. You may use our search engine for free.</p>
+          <br>
+          <a href="/register" ng-click="main.doNOTshowLanding();">
+            <button id="landing_resgister" style="background-color:#6b61f4; border-radius: 12px; border: 2px solid #6b61f4; color: white; padding: 10px 15px 10px 15px;" type="button">Register to Begin</button>
+          </a>
+        </div>
+        <div id="vertical_line" class="col-4">
+          <!-- <hr width="1" size="500"> -->
+          <h2>Easy Query</h2>
+          <p>Search using plain language. You can ask questions, state specific fact patterns, search up on how a particular rule or principle of law is applied, and so much more...</p>
+          <br>
+          <h2>Intelligent Search</h2>
+          <p>Our AI compares features of the query and documents by examining multiple dimensions. We retrieve documents with the strongest correlations and the greatest contextual relevance.</p>
+          <br><br>
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </div>
+
+    <!-- Search bar Incase we change our mind for landing page -->
+    <!-- <div ng-show="!main.isLoggedIn" class="container">
+      <div  class="row">
+        <div class="col-1"></div>
+        <div class="col-8">
+          <form ng-submit="search.searchData(data);">
+            <input class="form-control" type="search" ng-model="search.data.query">
+          </form>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-dark" type="submit">Search</button>
+        </div>
+      </div>
+    </div> -->
+
+    <div ng-view></div>
+
+    <!-- FOOTER -->
+    <div ng-show="main.registering" class="footer">
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-4">
+          <br><br>
+          <h2>About Us</h2>
+          <p style="margin-right: 50px;">VisionClerk is focused on enhancing a Lawyer's ability by creating tools which aim to minimize the amount of time spent on finding and evaluating the highest quality information.</p>
+        </div>
+        <div id="vertical_line" class="col-4">
+          <!-- <hr width="1" size="500"> -->
+          <br><br>
+          <h2>Contact Information</h2>
+          <p>600 Queens Quay West, Suite 232 Toronto On M5V3M3</p>
+          <p>Phone: +1 647-936-1140</p>
+          <p>Email: info@yoursite.com</p>
+        </div>
+        <div class="col-2"></div>
+      </div>
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-6">
+          <h4>© 2018 VisionClerk. All Rights Reserved.</h4>
+        </div>
+        <div class="col-2"></div>
+      </div>
+      <br>
+      <br>
+    </div>
+
+    <script src="assests/js/jquery-3.3.1.js"></script>
+    <script src="assests/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.1/bootstrap-slider.js"></script>
+  </body>
+</html>
