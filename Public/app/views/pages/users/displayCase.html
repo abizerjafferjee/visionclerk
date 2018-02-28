@@ -1,5 +1,10 @@
 <div class="row">
-  <div class="col-2"></div>
+  <div class="col-1"></div>
+  <div class="col-2">
+    <a href="/results">
+      <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px;" type="submit">Back to results</button>
+    </a>
+  </div>
   <div class="col-8">
     <div ng-controller="search.displayCase">
       <h2>{{ search.casename }}</h2>
@@ -10,12 +15,12 @@
     <div class="container">
       <div  class="row">
         <div class="col-2"></div>
-        <div class="col-6"></div>
-        <div class="col-4">
+        <div class="col-5"></div>
+        <div class="col-5">
           <form style="border-radius: 25px; background: #6b61f4; padding: 30px;" ng-submit="search.userFeedback(relevance);">
-            How relevant do you think this document is, based on your query:
+            <p style="color: white;">Based on your what you are looking for, how relevant do you think this document is</p>
             <input class="form-control" type="range" min="0" max="1" ng-model="search.relevance.score">
-            Left -Not relevant Right -relevant
+            <p style="color: white;"><- Left (Not relevant)  . . .  Right (relevant) -> <p>
             <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px;" type="submit" ng-click="search.getDateTimeLocation();">Submit</button>
           </form>
           <!-- <form ng-submit="search.searchData(data);">
@@ -34,5 +39,5 @@
 
     <!-- docID, relevance/label, query_raw_text, date_time, user_id, location -->
   </div>
-  <div class="col-2"></div>
+  <div class="col-1"></div>
 </div>
