@@ -40,7 +40,7 @@
   <body ng-app='userApp' ng-controller="mainCtrl as main" ng-show="main.loadme" ng-clock>
     <nav style="background-color: #FFFFFF; margin-top: 20px;">
       <ul style="padding:20px">
-        <li style="margin: 20px 10px 10px 120px;"><a href="/">
+        <li style="margin: 20px 10px 10px 120px;"><a href="/" ng-click="main.showLanding();">
           <img src="assests/images/visionclerk-logo.png" alt="VisionClerk Logo" width="400" height="70">
         </a></li>
         <!-- <li>
@@ -51,21 +51,21 @@
         <div class="reset">
           <li><a href="/profile"> {{ main.username }}<span class="sr-only">(current)</span></a></li>
           <li><a href="/register" ng-show="!main.isLoggedIn">Register<span class="sr-only">(current)</span></a></li>
-          <li><a href="/login" ng-show="!main.isLoggedIn">Login<span class="sr-only">(current)</span></a></li>
-          <li><a href="#" ng-click="main.logout();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a></li>
+          <li><a href="/login" ng-show="!main.isLoggedIn" ng-click="main.doNOTshowLanding();">Login<span class="sr-only">(current)</span></a></li>
+          <li><a href="#" ng-click="main.logout(); main.showLanding();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a></li>
         </div>
       </ul>
     </nav>
 
     <br>
     <br>
-    <div ng-show="!main.isLoggedIn">
+    <div ng-show="main.registering">
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">
           <h2>Powered by Kanonick AI</h2>
           <br>
-          <a href="/register">
+          <a href="/register" ng-click="main.doNOTshowLanding();">
             <button id="landing_resgister" style="background-color:#6b61f4; border-radius: 12px; border: 2px solid #6b61f4; color: white; padding: 10px 15px 10px 15px;" type="button">Register to Begin</button>
           </a>
         </div>
@@ -99,8 +99,8 @@
 
     <div ng-view></div>
 
-    <!-- FOTTER -->
-    <div ng-show="!main.isLoggedIn" class="fotter">
+    <!-- FOOTER -->
+    <div ng-show="main.registering" class="footer">
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">
