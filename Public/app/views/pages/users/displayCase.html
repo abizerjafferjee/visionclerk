@@ -12,11 +12,11 @@
         <div class="col-1"></div>
         <div class="col-6"></div>
         <div class="col-4">
-          <form ng-submit="search.userFeedback(relevance);">
+          <form style="border-radius: 25px; background: #6b61f4; margin: 20px;" ng-submit="search.userFeedback(relevance);">
             How relevant do you think this document is, based on your query:
             <input class="form-control" type="range" min="0" max="1" ng-model="search.relevance.score">
             Left -Not relevant Right -relevant
-            <button class="btn btn-primary" type="submit" ng-click="search.getDateTimeLocation();">Submit</button>
+            <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px;" type="submit" ng-click="search.getDateTimeLocation();">Submit</button>
           </form>
           <!-- <form ng-submit="search.searchData(data);">
             <input class="form-control" type="search" ng-model="search.data.query">-->
