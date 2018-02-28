@@ -4,32 +4,30 @@
     <br><br>
     <h1 style="text-align: center; color: white;">User Login</h1>
 
-    <form ng-submit="main.doLogin(loginData);">
-
-      <!-- ERROR MESSAGES-->
-      <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8">
-          <div class="row show-hide-message" ng-show="main.successMsg">
-            <div class="alert alert-success">{{ main.successMsg }}</div>
-          </div>
-          <br>
-          <div class="row show-hide-message" ng-show="main.errorMsg">
-            <div class="alert alert-danger">{{ main.errorMsg }} &nbsp
-              <a ng-show="main.expired" href="/resend">
-                <button class="btn btn-success">Resend Activation Email</button>
-              </a>
-            </div>
-          </div>
-          <div class="jumbotron text-center" ng-show="main.loading">
-            <span class="glyphicon glyphicon-repeat spinner"></span>
-            <p>Loading...</p>
+    <!-- ERROR MESSAGES-->
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <div class="row show-hide-message" ng-show="main.successMsg">
+          <div class="alert alert-success">{{ main.successMsg }}</div>
+        </div>
+        <br>
+        <div class="row show-hide-message" ng-show="main.errorMsg">
+          <div class="alert alert-danger">{{ main.errorMsg }} &nbsp
+            <a ng-show="main.expired" href="/resend">
+              <button class="btn btn-success">Resend Activation Email</button>
+            </a>
           </div>
         </div>
-        <div class="col-2"></div>
+        <div class="jumbotron text-center" ng-show="main.loading">
+          <span class="glyphicon glyphicon-repeat spinner"></span>
+          <p>Loading...</p>
+        </div>
       </div>
+      <div class="col-2"></div>
+    </div>
 
-      <!-- USER INPUTS -->
+    <form ng-submit="main.doLogin(loginData);">
       <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
