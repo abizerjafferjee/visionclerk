@@ -4,7 +4,7 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
   var app = this;
 
   app.loadme = false;
-  app.registering = false;
+  app.registering = true;
 
   $rootScope.$on('$routeChangeStart', function(){
     if (Auth.isLoggedIn()){
