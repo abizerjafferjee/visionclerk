@@ -1,22 +1,26 @@
-<div class="page-header">
-  <h1>Are you sure you want to delete your account?</h1>
-</div>
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col-8" style="border-radius: 25px; background: #6b61f4; padding: 20px;">
+    <h1 style="text-align: center; color: white;">Are you sure you want to delete your account?</h1>
 
-<br>
-<button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-success" type="button">Yes, delete account</button>
-<a href="/profile" >
-  <button ng-disabled="deleteaccount.disabled" class="btn btn-danger" type="button">No, do NOT delete account</button>
-</a>
+    <!-- ERROR MESSAGES -->
+    <div class="jumbotron text-center" ng-show="deleteaccount.loading">
+      <span class="glyphicon glyphicon-repeat spinner"></span>
+      <p>Loading...</p>
+    </div>
+    <div class="row show-hide-message" ng-show="deleteaccount.successMsg">
+      <div class="alert alert-success">{{ deleteaccount.successMsg }}</div>
+    </div>
+    <br>
+    <div class="row show-hide-message" ng-show="deleteaccount.errorMsg">
+      <div class="alert alert-danger">{{ deleteaccount.errorMsg }}</div>
+    </div>
 
-<br>
-<div class="jumbotron text-center" ng-show="deleteaccount.loading">
-  <span class="glyphicon glyphicon-repeat spinner"></span>
-  <p>Loading...</p>
-</div>
-<div class="row show-hide-message" ng-show="deleteaccount.successMsg">
-  <div class="alert alert-success">{{ deleteaccount.successMsg }}</div>
-</div>
-<br>
-<div class="row show-hide-message" ng-show="deleteaccount.errorMsg">
-  <div class="alert alert-danger">{{ deleteaccount.errorMsg }}</div>
+
+    <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-success" type="button">Yes, delete account</button>
+    <a href="/profile" >
+      <button ng-disabled="deleteaccount.disabled" class="btn btn-danger" type="button">No, do NOT delete account</button>
+    </a>
+  </div>
+  <div class="col-2"></div>
 </div>

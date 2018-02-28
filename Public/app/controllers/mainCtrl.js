@@ -1,9 +1,10 @@
 var mainController = angular.module('mainController', ['authServices']);
 
-mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootScope){
+mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootScope, $route){
   var app = this;
 
   app.loadme = false;
+  app.registering = true;
 
   $rootScope.$on('$routeChangeStart', function(){
     if (Auth.isLoggedIn()){
@@ -26,7 +27,7 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
     app.expired = false;
     app.disabled = true;
 
-    Auth.login(app.loginData).then(function(data){
+    Auth.login(app.loginData).then(function(data) {
       if (data.data.success) {
         app.loading = false;
         //create Success message
@@ -52,11 +53,21 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
     });
   };
 
-  this.logout = function(){
+  this.logout = function() {
     Auth.logout();
     $location.path('/logout');
     $timeout(function(){
       $location.path('/')
     }, 1000);
+  };
+
+  this.showLanding = function() {
+    app.registering = true;
+    $route.reload();
+  }
+
+  this.doNOTshowLanding = function() {
+    app.registering = false;
+    $route.reload();
   };
 });

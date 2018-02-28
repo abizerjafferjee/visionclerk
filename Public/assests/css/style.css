@@ -12,17 +12,28 @@ li {
 }
 
 a {
-  color: white;
+  color: #6b61f4;
   font-size: 25px;
 }
 
 a:hover {
-  color: white;
+  color: #2a087a;
   text-decoration: none;
+}
+
+body {
+  min-height: 100%;
 }
 
 .reset {
   float: right;
+  padding-top: 10px;
+}
+
+.footer {
+  background-color: #ededed;
+  bottom:0;
+  margin-top: 30px;
 }
 
 
@@ -54,6 +65,19 @@ a:hover {
   to {-moz-transform:rotate(360deg);}
 }
 
-@user_options {
-  float: right; !important;
+@landing_resgister {
+  background-color:#3445DB;
+  border-radius: 12px;
+  border: 2px solid #3445DB;
+  color: white;
+  padding: 10px 15px 10px 15px;
+}
+
+@vertical_line {
+  border-left: thick solid #ff0000;
+}
+
+@registerFormStyle {
+  border-radius: 25px;
+  background: #6b61f4;
 }
