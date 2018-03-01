@@ -17,6 +17,9 @@ searchControllers
   // var feedback_date_time = null;
   // var feedback_location = null;
 
+  // SEARCH RESULTS PERSISTANCY
+  var search_results = null;
+
   return {
     getCase:function(){
       return [case_name, case_text];
@@ -38,7 +41,16 @@ searchControllers
     },
     getCaseID:function(){
       return case_id;
+    },
+
+    // SEARCH RESULTS PERSISTANCY
+    setSearchResults:function(results_data) {
+      search_results = results_data;
+    },
+    getSearchResults:function(){
+      return search_results;
     }
+
   }
 })
 
@@ -52,10 +64,22 @@ searchControllers
 
   var searchTable = this;
 
+  // AESTHETICS
+  searchTable.main_search_bar = true;
+  searchTable.search_examples = true;
+  searchTable.feedback_submitted = true;
+
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
+      // access db for query results
       $scope.results = query_results.data;
       myService.setUserQuery($scope.search.data.query);
+
+      // SEARCH RESULTS PERSISTANCY
+      myService.setSearchResults($scope.results);
+
+      // AESTHETICS
+      searchTable.main_search_bar = false;
     });
   };
 
@@ -72,7 +96,8 @@ searchControllers
   };
 
   this.userFeedback = function(relevance) {
-    searchTable.rel_score = this.relevance.score;
+    searchTable.rel_score = relevance;
+    searchTable.feedback_submitted = false;
   };
 
   // Send Case Data functions is used to send case data to the display case page
@@ -104,6 +129,11 @@ searchControllers
         });
       });
     }
+  };
 
+  // BACK TO RESULTS page
+  this.backToResults = function() {
+    $scope.results = myService.getSearchResults();
+    $scope.query = myService.getUserQuery();
   };
 });

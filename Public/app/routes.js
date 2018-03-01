@@ -11,6 +11,12 @@ appRoutes.config(function($routeProvider, $locationProvider){
     controllerAs : 'search'
   })
 
+  .when('/results', {
+    templateUrl : 'app/views/pages/users/search_results.html',
+    controller : 'searchCtrl',
+    controllerAs : 'search_results'
+  })
+
   .when('/register', {
     templateUrl : 'app/views/pages/users/register.html',
     controller : 'regCtrl',
