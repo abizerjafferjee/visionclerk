@@ -63,6 +63,7 @@ searchControllers
 .controller('searchCtrl', function($http, $scope, myService){
 
   var searchTable = this;
+  var search_examples = true;
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
@@ -71,6 +72,7 @@ searchControllers
 
       // SEARCH RESULTS PERSISTANCY
       myService.setSearchResults($scope.results);
+      search_examples = true;
     });
   };
 
@@ -87,7 +89,7 @@ searchControllers
   };
 
   this.userFeedback = function(relevance) {
-    searchTable.rel_score = this.relevance.score;
+    searchTable.rel_score = relevance;
   };
 
   // Send Case Data functions is used to send case data to the display case page

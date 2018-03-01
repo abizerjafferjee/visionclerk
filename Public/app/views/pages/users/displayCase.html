@@ -17,11 +17,16 @@
         <div class="col-2"></div>
         <div class="col-5"></div>
         <div class="col-5">
-          <form style="border-radius: 25px; background: #6b61f4; padding: 30px;" ng-submit="search.userFeedback(relevance);">
-            <p style="color: white;">Based on your what you are looking for, how relevant do you think this document is</p>
-            <input class="form-control" type="range" min="0" max="1" ng-model="search.relevance.score">
-            <p style="color: white;"><- Left (Not relevant)  . . .  Right (relevant) -> <p>
-            <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px;" type="submit" ng-click="search.getDateTimeLocation();">Submit</button>
+          <form style="border-radius: 25px; background: #6b61f4; padding: 30px;">
+            <p style="color: white; text-align: center; font-size: 25px;">Was this document relevant?</p>
+            <!-- <input class="form-control" type="range" min="0" max="1" ng-model="search.relevance.score">-->
+            <a href="#" ng-click="search.userFeedback(1); search.getDateTimeLocation();" style="padding: 0px 120px 0px 20px;">
+              <img src="assests/images/thumbs-up.png" alt="Thumbs Up" width="40" height="40">
+            </a>
+            <a href="#" ng-click="search.userFeedback(0); search.getDateTimeLocation();">
+              <img src="assests/images/thumbs-down.png" alt="Thumbs Down" width="40" height="40">
+            </a>
+            <!-- <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px;" type="submit" ng-click="search.getDateTimeLocation();">Submit</button>-->
           </form>
           <!-- <form ng-submit="search.searchData(data);">
             <input class="form-control" type="search" ng-model="search.data.query">-->
@@ -30,12 +35,12 @@
       </div>
     </div>
 
-    <p>Doc_ID: {{ search.caseid }}</p>
+    <!-- <p>Doc_ID: {{ search.caseid }}</p>
     <p>Relevance: {{ search.rel_score }}</p>
     <p>Query: {{ search.userquery }}</p>
     <p>date_time: {{ search.timestamp }}</p>
     <p>User_ID: {{ main.username }}</p>
-    <p>Location: Latitude: {{ search.latitude }} Longitude: {{ search.longitude }}</p>
+    <p>Location: Latitude: {{ search.latitude }} Longitude: {{ search.longitude }}</p> -->
 
     <!-- docID, relevance/label, query_raw_text, date_time, user_id, location -->
   </div>
