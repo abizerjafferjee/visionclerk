@@ -64,6 +64,7 @@ searchControllers
 
   var searchTable = this;
   var search_examples = true;
+  searchTable.feedback_submitted = true;
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
@@ -90,6 +91,7 @@ searchControllers
 
   this.userFeedback = function(relevance) {
     searchTable.rel_score = relevance;
+    searchTable.feedback_submitted = false;
   };
 
   // Send Case Data functions is used to send case data to the display case page
