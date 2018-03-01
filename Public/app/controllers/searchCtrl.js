@@ -63,17 +63,23 @@ searchControllers
 .controller('searchCtrl', function($http, $scope, myService){
 
   var searchTable = this;
-  var search_examples = true;
+
+  // AESTHETICS
+  searchTable.main_search_bar = true;
+  searchTable.search_examples = true;
   searchTable.feedback_submitted = true;
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
+      // access db for query results
       $scope.results = query_results.data;
       myService.setUserQuery($scope.search.data.query);
 
       // SEARCH RESULTS PERSISTANCY
       myService.setSearchResults($scope.results);
-      search_examples = true;
+
+      // AESTHETICS
+      searchTable.main_search_bar = false;
     });
   };
 
@@ -129,6 +135,5 @@ searchControllers
   this.backToResults = function() {
     $scope.results = myService.getSearchResults();
     $scope.query = myService.getUserQuery();
-    console.log($scope.query);
   };
 });

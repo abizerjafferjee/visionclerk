@@ -1,30 +1,42 @@
-<!-- <div id="search_padding" style="padding-top: 300px;"></div> -->
+<div ng-show="search.main_search_bar" style="padding-top: 250px;"></div>
 
-<!-- Search bar -->
+<!-- Main Search bar -->
 <div class="container">
+  <form ng-show="search.main_search_bar" style="text-align: left" ng-submit="search.searchData(data);">
+
+    <div  class="row">
+      <div class="col-10">
+        <input class="form-control" type="search" ng-model="search.data.query">
+      </div>
+      <div class="col-2">
+        <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;" type="submit">Search</button>
+      </div>
+    </div>
+
+    <div  class="row">
+      <div class="col-10" ng-show="search.search_examples">
+        <p style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
+        <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
+        <p style="text-align: center; color: #6b61f4;">Disability Discrimination Affirmative Defense Health or Safety Risk</p>
+        <p style="text-align: center; color: #6b61f4;">failure to mitigate termination when employee did not apply for jobs online</p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- Secondary Search bar -->
+<form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);">
   <div  class="row">
-    <div class="col-10">
-      <form id="search_form" style="padding-left: 35px;" ng-submit="search.searchData(data);" onsubmit="searchbar_transition()">
-        <div  class="row">
-          <div class="col-9">
-            <input class="form-control" type="search" ng-model="search.data.query">
-          </div>
-          <div class="col-3">
-            <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px;" type="submit">Search</button>
-          </div>
-        </div>
-        <div  class="row">
-          <div class="col-9" ng-show="search.search_examples">
-            <p style="text-align: center; text-decoration: underline; color: #33334d;">A Few Examples</p>
-            <p style="text-align: center; color: #33334d;">Breach of Employment Contract Specified Term Damages</p>
-            <p style="text-align: center; color: #33334d;">Disability Discrimination Affirmative Defense Health or Safety Risk</p>
-            <p style="text-align: center; color: #33334d;">failure to mitigate termination when employee did not apply for jobs online</p>
-          </div>
-        </div>
-      </form>
+    <div class="col-1"></div>
+    <div class="col-6" style="">
+      <input class="form-control" type="search" ng-model="search.data.query">
+    </div>
+    <div class="col-5">
+      <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;" type="submit">Search</button>
     </div>
   </div>
-</div>
+</form>
 
 <!-- dynamic divs to display query result documents -->
 <div  class="row">
@@ -41,9 +53,3 @@
   <div class="col-2"></div>
 </div>
 <div class="col-1"></div>
-
-<script>
-  function searchbar_transition() {
-    document.getElementById("search_padding").style.padding-top = '10px';
-  }
-</script>

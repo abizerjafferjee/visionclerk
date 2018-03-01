@@ -1,13 +1,13 @@
 <div  ng-controller="search_results.backToResults">
   <!-- dynamic divs to display query result documents -->
   <div  class="row">
-    <div class="col-2"></div>
+    <div class="col-1"></div>
     <div class="col-8">
       <h3 style="color: #2a087a;"> Results for: {{ query }}</h3>
       <div ng-repeat="x in results">
         <br>
         <h5>
-          <a href="/displaycase" style="color: #0066ff;" ng-click="sendCaseData(x.casename, x.documenttext, x.docid)">{{ x.casename }}</a>
+          <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.documenttext, x.docid)">{{ x.casename }}</a>
         </h5>
         <p style="color: #33334d;">Document Id: {{ x.docid }} Court: {{ x.court }}</p>
       </div>
