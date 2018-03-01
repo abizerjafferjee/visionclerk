@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-2"></div>
-  <div class="col-8" style="border-radius: 25px; background: #6b61f4; padding: 20px;">
+  <div class="col-3"></div>
+  <div class="col-6" style="border-radius: 25px; background: #6b61f4; padding: 20px;">
     <h1 style="text-align: center; color: white;">Are you sure you want to delete your account?</h1>
 
     <!-- ERROR MESSAGES -->
@@ -16,11 +16,12 @@
       <div class="alert alert-danger">{{ deleteaccount.errorMsg }}</div>
     </div>
 
-
-    <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-success" type="button">Yes, delete account</button>
-    <a href="/profile" >
+    <div style="float: left; padding-left: 80px;">
+      <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-success" type="button">Yes, delete account</button>
+    </div>
+    <a href="/profile" style="float: right; padding-right: 80px;" >
       <button ng-disabled="deleteaccount.disabled" class="btn btn-danger" type="button">No, do NOT delete account</button>
     </a>
   </div>
-  <div class="col-2"></div>
+  <div class="col-3"></div>
 </div>
