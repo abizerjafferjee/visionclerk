@@ -380,7 +380,8 @@ module.exports = function(router) {
       url:     'http://localhost:5000/predict',
       body:    req.body.query
     }, function(error, response, body){
-      console.log(error);
+      console.log(response);
+      console.log(body);
       console.log('****************');
     });
     // Triggers Python model to retrieve db table containing relevant documents to the user query
