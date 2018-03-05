@@ -20,6 +20,9 @@ searchControllers
   // SEARCH RESULTS PERSISTANCY
   var search_results = null;
 
+  // NEXT PAGE
+  var num_pages_req = null;
+
   return {
     getCase:function(){
       return [case_name, case_text];
@@ -49,8 +52,15 @@ searchControllers
     },
     getSearchResults:function(){
       return search_results;
-    }
+    },
 
+    // NEXT PAGE
+    setNumPagesReq:function(pages_req) {
+      num_pages_req = pages_req;
+    },
+    getNumPagesReq:function() {
+      return num_pages_req;
+    }
   }
 })
 
@@ -62,13 +72,15 @@ searchControllers
 */
 .controller('searchCtrl', function($http, $scope, myService){
 
-  var searchTable = this;
-  var results_per_page = 5;
+  var app = this;
+  var results_per_page = 10;
 
   // AESTHETICS
-  searchTable.main_search_bar = true;
-  searchTable.search_examples = true;
-  searchTable.feedback_submitted = true;
+  app.main_search_bar = true;
+  app.search_examples = true;
+  app.feedback_submitted = true;
+  app.nextTen = false;
+  app.prevTen = false;
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
@@ -81,7 +93,20 @@ searchControllers
       results_len = query_results.data.length
       if(results_len > results_per_page) {
         var num_pages = Math.ceil(results_len / results_per_page);
+        myService.setNumPagesReq(num_pages);
         $scope.pageResults = query_results.data.slice(0, results_per_page);
+
+        // generating buttons
+        if(num_pages <= 10) {
+          num_buttons = _.range(1, num_pages+1);
+          $scope.numButtons = num_buttons;
+
+        // need to generate more than 10 buttons i.e 100 results
+        } else {
+          app.nextTen = true;
+          num_buttons = _.range(1, 11);
+          $scope.numButtons = num_buttons;
+        }
       }
       //console.log($scope.pageResults);
 
@@ -90,14 +115,51 @@ searchControllers
       myService.setSearchResults($scope.results);
 
       // AESTHETICS
-      searchTable.main_search_bar = false;
+      app.main_search_bar = false;
     });
   };
 
   this.nextPage = function(pg_num) {
     var results = myService.getSearchResults();
     $scope.pageResults = results.slice((results_per_page*(pg_num-1)), results_per_page*pg_num);
-  }
+  };
+
+  var times_pressed = 0;
+  this.nextTenPages = function() {
+    times_pressed += 1;
+    // check for number of pages required
+    pgs_req = myService.getNumPagesReq();
+
+    // if less than 10 pages are needed
+    next_ten_start = times_pressed*10;
+    if(pgs_req <= next_ten_start+11) {
+      num_buttons = _.range(next_ten_start, pgs_req+1);
+      $scope.numButtons = num_buttons;
+      app.nextTen = false;
+
+    } else {
+      num_buttons = _.range(next_ten_start, next_ten_start+11);
+      $scope.numButtons = num_buttons;
+    }
+    app.prevTen = true;
+  };
+
+  this.prevTenPages = function() {
+    pgs_req = myService.getNumPagesReq();
+    cur_start = times_pressed*10;
+    prev_start = cur_start - 10;
+    if(prev_start < 1) {
+      num_buttons = _.range(1, 11);
+      $scope.numButtons = num_buttons;
+      app.prevTen = false;
+    } else {
+      num_buttons = _.range(prev_start, prev_start+11);
+      $scope.numButtons = num_buttons;
+    }
+    app.nextTen = true;
+    times_pressed -= 1;
+  };
+
 
 //  Display case function is used to display the raw text of a choosen case
   this.displayCase = function(){
@@ -105,14 +167,14 @@ searchControllers
     var query = myService.getUserQuery();
     var id = myService.getCaseID();
 
-    searchTable.casename = name;
-    searchTable.doctext = text;
-    searchTable.userquery = query;
-    searchTable.caseid = id;
+    app.casename = name;
+    app.doctext = text;
+    app.userquery = query;
+    app.caseid = id;
 
     // PARSING DOC TEXT
     /*var sub_text = text.split('\n');
-    searchTable.sub_text = sub_text;
+    app.sub_text = sub_text;
 
     var parsed = ' ';
     for(var i=0; i<sub_text.length; i++){
@@ -120,13 +182,13 @@ searchControllers
         parsed = parsed.concat(a);
     }
     console.log(parsed);
-    searchTable.parsed = parsed;*/
+    app.parsed = parsed;*/
     // PARSING DOC TEXT
   };
 
   this.userFeedback = function(relevance) {
-    searchTable.rel_score = relevance;
-    searchTable.feedback_submitted = false;
+    app.rel_score = relevance;
+    app.feedback_submitted = false;
   };
 
   // Send Case Data functions is used to send case data to the display case page
@@ -146,15 +208,15 @@ searchControllers
     var min = full_date.getMinutes();
     var sec = full_date.getSeconds();
     var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
-    searchTable.timestamp = timestamp;
+    app.timestamp = timestamp;
     // PSQL location: https://stackoverflow.com/questions/8150721/which-data-type-for-latitude-and-longitude
     // I will use two columns: LATITUDE and LONGITUDE
     if (navigator.geolocation){
       navigator.geolocation.getCurrentPosition(function(position){
         $scope.$apply(function(){
           $scope.position = position;
-          searchTable.latitude = position.coords.latitude;
-          searchTable.longitude = position.coords.longitude;
+          app.latitude = position.coords.latitude;
+          app.longitude = position.coords.longitude;
         });
       });
     }

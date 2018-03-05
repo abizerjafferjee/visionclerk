@@ -54,9 +54,18 @@
 </div>
 <div class="col-1"></div>
 
-<div  class="row">
+<div class="row" ng-show="!search.main_search_bar">
   <div class="col-4"></div>
   <div class="col-4">
-    <button ng-click="search.nextPage(2);">Page: 2</button>
+    <div class="row">
+      <p>Page: </p>
+      <div ng-repeat="q in numButtons">
+        <button class="button_list" ng-click="search.nextPage(q);">{{ q }}</button>
+      </div>
+    </div>
+    <button ng-show="search.nextTen" ng-click="search.nextTenPages();" style="float: right; background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;">Next 10 Pages</button>
+    <button ng-show="search.prevTen" ng-click="search.prevTenPages();" style="float: left; background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;">Previous 10 Pages</button>
+  </div>
   </div>
   <div class="col-4"></div>
+</div>
