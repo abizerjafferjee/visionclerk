@@ -21,6 +21,11 @@ a:hover {
   text-decoration: none;
 }
 
+a:visited {
+  color: #2a087a;
+  text-decoration: none;
+}
+
 body {
   min-height: 100%;
 }
