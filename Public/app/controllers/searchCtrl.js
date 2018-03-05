@@ -63,6 +63,7 @@ searchControllers
 .controller('searchCtrl', function($http, $scope, myService){
 
   var searchTable = this;
+  var results_per_page = 5;
 
   // AESTHETICS
   searchTable.main_search_bar = true;
@@ -74,6 +75,16 @@ searchControllers
       // access db for query results
       $scope.results = query_results.data;
       myService.setUserQuery($scope.search.data.query);
+      //myService.setCaseRawText(query_results.data);
+
+      // multi page results
+      results_len = query_results.data.length
+      if(results_len > results_per_page) {
+        var num_pages = Math.ceil(results_len / results_per_page);
+        $scope.pageResults = query_results.data.slice(0, results_per_page);
+      }
+      //console.log($scope.pageResults);
+
 
       // SEARCH RESULTS PERSISTANCY
       myService.setSearchResults($scope.results);
@@ -82,6 +93,11 @@ searchControllers
       searchTable.main_search_bar = false;
     });
   };
+
+  this.nextPage = function(pg_num) {
+    var results = myService.getSearchResults();
+    $scope.pageResults = results.slice((results_per_page*(pg_num-1)), results_per_page*pg_num);
+  }
 
 //  Display case function is used to display the raw text of a choosen case
   this.displayCase = function(){
@@ -93,6 +109,19 @@ searchControllers
     searchTable.doctext = text;
     searchTable.userquery = query;
     searchTable.caseid = id;
+
+    // PARSING DOC TEXT
+    /*var sub_text = text.split('\n');
+    searchTable.sub_text = sub_text;
+
+    var parsed = ' ';
+    for(var i=0; i<sub_text.length; i++){
+        var a = '<p>'.concat(sub_text[i].concat('</p>'));
+        parsed = parsed.concat(a);
+    }
+    console.log(parsed);
+    searchTable.parsed = parsed;*/
+    // PARSING DOC TEXT
   };
 
   this.userFeedback = function(relevance) {
