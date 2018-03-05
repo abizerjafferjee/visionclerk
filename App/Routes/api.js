@@ -376,14 +376,22 @@ module.exports = function(router) {
       args: [req.body.query]
     };
 
-    console.log(req.body.query);
+    var headersOpt = {
+        "content-type": "application/json",
+    };
 
-    request.post({
-      url:     'http://localhost:5000/predict',
-      body:    req.body.query
-    }, function(error, response, body){
-      console.log(response);
-      console.log('****************');
+    request(
+        {
+        method:'post',
+        url:'http://localhost:5000/predict', 
+        form: {query:req.body.query}, 
+        headers: headersOpt,
+        json: true,
+        }, function (error, response, body) {  
+        //Print the Response
+        console.log(body);
+        res_tab = body.table_id;
+        console.log(res_tab[0]);  
     });
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
