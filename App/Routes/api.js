@@ -368,6 +368,7 @@ module.exports = function(router) {
   // USER SEARCH ROUTE
   //http://localhost:8080/api/search
   router.post('/search', function(req, res){
+    console.log(req.decoded.username);
     var options = {
       mode: 'text',
       pythonPath: '/home/bitnami/anaconda3/bin/python',
@@ -383,20 +384,22 @@ module.exports = function(router) {
     request(
         {
         method:'post',
-        url:'http://localhost:5000/predict', 
-        form: {query:req.body.query}, 
+        url:'http://localhost:5000/predict',
+        form: {query:req.body.query, username:req.decoded.username},
         headers: headersOpt,
         json: true,
-        }, function (error, response, body) {  
+        }, function (error, response, body) {
         //Print the Response
         console.log(body);
         res_tab = body.table_id;
-        console.log(res_tab[0]);  
+        console.log(res_tab[0]);
     });
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
     //var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
     var proc = spawn('python', [ml_model, req.body.query]);
+
+    //python program output
     proc.stdout.on('data', function(data){
       // data holds the psql table name that contains all documents related to the user's query
       var results_table = data.toString('utf8');
@@ -413,6 +416,8 @@ module.exports = function(router) {
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
         res.json(JSON.parse(JSON.stringify(result.rows))));
     });
+
+    // python program error
     proc.stderr.on('data', function(data){
       var buff = new Buffer(data);
       console.log('******* THERE WAS AN ERROR EXECUTING PYTHON: ');
