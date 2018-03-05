@@ -23,6 +23,7 @@ searchControllers
   // NEXT PAGE
   var num_pages_req = null;
   var case_viewed = null;
+  var global_times_pressed = 0;
 
   return {
     getCase:function(){
@@ -67,6 +68,12 @@ searchControllers
     },
     getCaseViewed:function() {
       return case_viewed;
+    },
+    setTimesPressed:function(cur_times_pressed) {
+      global_times_pressed = cur_times_pressed;
+    },
+    getTimesPressed:function() {
+      return global_times_pressed;
     }
   }
 })
@@ -88,8 +95,9 @@ searchControllers
   app.feedback_submitted = true;
   app.nextTen = false;
   app.prevTen = false;
-  app.backToResultsNextTen = false;
-  app.backToResultsPrevTen = false;
+  // back to results next ten and prev ten
+  app.btr_nt = false;
+  app.btr_pt = false;
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
@@ -131,13 +139,13 @@ searchControllers
   this.nextPage = function(pg_num) {
     var results = myService.getSearchResults();
     $scope.pageResults = results.slice((results_per_page * (pg_num - 1)), results_per_page*pg_num);
-    console.log(pg_num);
     $scope.cur_results = results.slice((results_per_page * (pg_num - 1)), results_per_page*pg_num);
   };
 
-  var times_pressed = 0;
   this.nextTenPages = function() {
+    times_pressed = myService.getTimesPressed();
     times_pressed += 1;
+    myService.setTimesPressed(times_pressed);
     // check for number of pages required
     pgs_req = myService.getNumPagesReq();
 
@@ -146,29 +154,43 @@ searchControllers
     if(pgs_req <= next_ten_start + (results_per_page + 1)) {
       num_buttons = _.range(next_ten_start, pgs_req + 1);
       $scope.numButtons = num_buttons;
+
       app.nextTen = false;
+      app.btr_nt = false;
 
     } else {
       num_buttons = _.range(next_ten_start, next_ten_start + 11);
       $scope.numButtons = num_buttons;
     }
+
     app.prevTen = true;
+    app.btr_pt = true;
+
+    console.log(times_pressed);
   };
 
   this.prevTenPages = function() {
     pgs_req = myService.getNumPagesReq();
+    times_pressed = myService.getTimesPressed();
     cur_start = times_pressed * results_per_page;
     prev_start = cur_start - results_per_page;
     if(prev_start < 1) {
       num_buttons = _.range(1, 11);
       $scope.numButtons = num_buttons;
+
       app.prevTen = false;
+      app.btr_pt = false;
     } else {
       num_buttons = _.range(prev_start, prev_start + 11);
       $scope.numButtons = num_buttons;
     }
+
     app.nextTen = true;
+    app.btr_nt = true;
     times_pressed -= 1;
+    myService.setTimesPressed(times_pressed);
+
+    console.log(times_pressed);
   };
 
 
@@ -207,6 +229,7 @@ searchControllers
   this.backToResults = function() {
     var id = myService.getCaseID();
     var data = myService.getSearchResults();
+    var pgs_req = myService.getNumPagesReq();
     var index = data.map(function(d) { return d['docid']; }).indexOf(id);
     var cur_page = Math.floor(index / results_per_page);
 
@@ -217,6 +240,9 @@ searchControllers
       $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
       var num_buttons = _.range(1, results_per_page + 1);
       $scope.numButtons = num_buttons;
+
+      app.btr_nt = true;
+      app.btr_pt = false;
 
     // current case is NOT in the first page
     } else {
@@ -232,10 +258,24 @@ searchControllers
       // current page is after the first 10 buttons
       } else {
         var buttons_begin = (Math.floor(cur_page / 10) * 10);
-        var buttons_end = buttons_begin + 11;
-        var num_buttons = _.range(buttons_begin, buttons_end);
-        console.log(num_buttons);
-        $scope.numButtons = num_buttons;
+        // check the number of buttons needed, which = number of pages needed
+        if((buttons_begin + 11) > pgs_req) {
+          var buttons_end = pgs_req + 1;
+          var num_buttons = _.range(buttons_begin, buttons_end);
+          $scope.numButtons = num_buttons;
+
+          app.btr_nt = false;
+          app.btr_pt = true;
+
+        } else {
+          console.log(buttons_begin);
+          var buttons_end = buttons_begin + 11;
+          var num_buttons = _.range(buttons_begin, buttons_end);
+          $scope.numButtons = num_buttons;
+
+          app.btr_nt = true;
+          app.btr_pt = true;
+        }
       }
     }
 
