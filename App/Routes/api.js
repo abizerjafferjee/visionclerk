@@ -55,11 +55,11 @@ module.exports = function(router) {
           }
         } else {
           var mailOptions = {
-            from: 'Legalx Staff <legalxstartup@gmail.com>',
+            from: 'VisonClerk Staff <legalxstartup@gmail.com>',
             to: user.email,
-            subject: 'Legalx Account Activation link',
-            text: 'Hello ' + user.username + ', Thank you for registering at legalx.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
-            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://35.183.35.209:8080/activate/' + user.temporarytoken + '">http://35.183.35.209:8080/activate/</a>'
+            subject: 'VisonClerk Account Activation link',
+            text: 'Hello ' + user.username + ', Thank you for registering at VisonClerk.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
+            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at VisonClerk.com. Please click on the link below to complete your activation.<br><br><a href="http://35.183.35.209:8080/activate/' + user.temporarytoken + '">http://35.183.35.209:8080/activate/</a>'
           };
 
           transporter.sendMail(mailOptions, function(err, info){
@@ -122,11 +122,11 @@ module.exports = function(router) {
 
 
               var mailOptions = {
-                from: 'Legalx Staff <legalxstartup@gmail.com>',
+                from: 'VisonClerk Staff <legalxstartup@gmail.com>',
                 to: user.email,
-                subject: 'Legalx Account Activation link',
+                subject: 'VisonClerk Account Activation link',
                 text: 'Hello' + user.username + ', Your account has been successfully activated!',
-                html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your LegalX account has been successfully activated!'
+                html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your VisonClerk account has been successfully activated!'
               };
 
               transporter.sendMail(mailOptions, function(err, info){
@@ -179,11 +179,11 @@ module.exports = function(router) {
           console.log(err);
         } else {
           var mailOptions = {
-            from: 'Legalx Staff <legalxstartup@gmail.com>',
+            from: 'VisonClerk Staff <legalxstartup@gmail.com>',
             to: user.email,
-            subject: 'Legalx Account Activation link Request',
-            text: 'Hello ' + user.username + ', you recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
-            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a new account activation link at legalx.com. Please click on the link below to complete your activation.<br><br><a href="http://35.183.35.209:8080/activate/' + user.temporarytoken + '">http://35.183.35.209:8080/activate/</a>'
+            subject: 'VisonClerk Account Activation link Request',
+            text: 'Hello ' + user.username + ', you recently requested a new account activation link at VisonClerk.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
+            html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a new account activation link at VisonClerk.com. Please click on the link below to complete your activation.<br><br><a href="http://35.183.35.209:8080/activate/' + user.temporarytoken + '">http://35.183.35.209:8080/activate/</a>'
           };
 
           transporter.sendMail(mailOptions, function(err, info){
@@ -211,9 +211,9 @@ module.exports = function(router) {
             res.json({ success: false, message: 'E-mail was not found!' });
           } else {
             var mailOptions = {
-              from: 'Legalx Staff <legalxstartup@gmail.com>',
+              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
               to: user.email,
-              subject: 'Legalx Username Request',
+              subject: 'VisonClerk Username Request',
               text: 'Hello ' + user.username + ', you recently requested your username! Your username is: ' + user.username,
               html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested your username! Your username is: ' + user.username
             };
@@ -249,9 +249,9 @@ module.exports = function(router) {
             res.json({ success: false, message: err });
           } else {
             var mailOptions = {
-              from: 'Legalx Staff <legalxstartup@gmail.com>',
+              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
               to: user.email,
-              subject: 'Legalx Reset Password Request',
+              subject: 'VisonClerk Reset Password Request',
               text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://35.183.35.209:8080/newpassword/' + user.resettoken,
               html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a password reset link. Please click on the link below to reset your password:<br><br><a href="http://35.183.35.209:8080/newpassword/' + user.resettoken + '">http://35.183.35.209:8080/newpassword/</a>'
             };
@@ -308,11 +308,11 @@ module.exports = function(router) {
             res.json({ success: false, message: err});
           } else {
             var mailOptions = {
-              from: 'Legalx Staff <legalxstartup@gmail.com>',
+              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
               to: user.email,
-              subject: 'Legalx Reset Password',
-              text: 'Hello ' + user.username + ', this Email is to notify you that your password was recently reset at legalx.com',
-              html: 'Hello <strong> ' + user.username + '</strong>,<br><br> This Email is to notify you that your password was recently reset at legalx.com'
+              subject: 'VisonClerk Reset Password',
+              text: 'Hello ' + user.username + ', this Email is to notify you that your password was recently reset at VisonClerk.com',
+              html: 'Hello <strong> ' + user.username + '</strong>,<br><br> This Email is to notify you that your password was recently reset at VisonClerk.com'
             };
 
             transporter.sendMail(mailOptions, function(err, info){
@@ -389,7 +389,7 @@ module.exports = function(router) {
         if (err) { throw err; }
       });
       var query = client.query('set search_path to legalx_schema');
-      var query2 = client.query('SELECT docid, casename, court, documenttext FROM ' + results_table + ' LIMIT 10');
+      var query2 = client.query('SELECT docid, casename, court, documenttext FROM ' + results_table + ' LIMIT 233');
       query2.then((result) =>
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
         res.json(JSON.parse(JSON.stringify(result.rows))));

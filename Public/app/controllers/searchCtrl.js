@@ -22,6 +22,7 @@ searchControllers
 
   // NEXT PAGE
   var num_pages_req = null;
+  var case_viewed = null;
 
   return {
     getCase:function(){
@@ -60,6 +61,12 @@ searchControllers
     },
     getNumPagesReq:function() {
       return num_pages_req;
+    },
+    setCaseViewed:function(caseViewed) {
+      case_viewed = caseViewed;
+    },
+    getCaseViewed:function() {
+      return case_viewed;
     }
   }
 })
@@ -81,6 +88,8 @@ searchControllers
   app.feedback_submitted = true;
   app.nextTen = false;
   app.prevTen = false;
+  app.backToResultsNextTen = false;
+  app.backToResultsPrevTen = false;
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
@@ -97,14 +106,14 @@ searchControllers
         $scope.pageResults = query_results.data.slice(0, results_per_page);
 
         // generating buttons
-        if(num_pages <= 10) {
-          num_buttons = _.range(1, num_pages+1);
+        if(num_pages <= results_per_page) {
+          num_buttons = _.range(1, num_pages + 1);
           $scope.numButtons = num_buttons;
 
         // need to generate more than 10 buttons i.e 100 results
         } else {
           app.nextTen = true;
-          num_buttons = _.range(1, 11);
+          num_buttons = _.range(1, (results_per_page + 1));
           $scope.numButtons = num_buttons;
         }
       }
@@ -121,7 +130,9 @@ searchControllers
 
   this.nextPage = function(pg_num) {
     var results = myService.getSearchResults();
-    $scope.pageResults = results.slice((results_per_page*(pg_num-1)), results_per_page*pg_num);
+    $scope.pageResults = results.slice((results_per_page * (pg_num - 1)), results_per_page*pg_num);
+    console.log(pg_num);
+    $scope.cur_results = results.slice((results_per_page * (pg_num - 1)), results_per_page*pg_num);
   };
 
   var times_pressed = 0;
@@ -131,14 +142,14 @@ searchControllers
     pgs_req = myService.getNumPagesReq();
 
     // if less than 10 pages are needed
-    next_ten_start = times_pressed*10;
-    if(pgs_req <= next_ten_start+11) {
-      num_buttons = _.range(next_ten_start, pgs_req+1);
+    next_ten_start = (times_pressed * results_per_page);
+    if(pgs_req <= next_ten_start + (results_per_page + 1)) {
+      num_buttons = _.range(next_ten_start, pgs_req + 1);
       $scope.numButtons = num_buttons;
       app.nextTen = false;
 
     } else {
-      num_buttons = _.range(next_ten_start, next_ten_start+11);
+      num_buttons = _.range(next_ten_start, next_ten_start + 11);
       $scope.numButtons = num_buttons;
     }
     app.prevTen = true;
@@ -146,14 +157,14 @@ searchControllers
 
   this.prevTenPages = function() {
     pgs_req = myService.getNumPagesReq();
-    cur_start = times_pressed*10;
-    prev_start = cur_start - 10;
+    cur_start = times_pressed * results_per_page;
+    prev_start = cur_start - results_per_page;
     if(prev_start < 1) {
       num_buttons = _.range(1, 11);
       $scope.numButtons = num_buttons;
       app.prevTen = false;
     } else {
-      num_buttons = _.range(prev_start, prev_start+11);
+      num_buttons = _.range(prev_start, prev_start + 11);
       $scope.numButtons = num_buttons;
     }
     app.nextTen = true;
@@ -186,15 +197,56 @@ searchControllers
     // PARSING DOC TEXT
   };
 
-  this.userFeedback = function(relevance) {
-    app.rel_score = relevance;
-    app.feedback_submitted = false;
-  };
-
   // Send Case Data functions is used to send case data to the display case page
   $scope.sendCaseData = function(case_name, case_text, case_id){
     myService.setCase(case_name, case_text);
     myService.setCaseID(case_id);
+  };
+
+  // BACK TO RESULTS page
+  this.backToResults = function() {
+    var id = myService.getCaseID();
+    var data = myService.getSearchResults();
+    var index = data.map(function(d) { return d['docid']; }).indexOf(id);
+    var cur_page = Math.floor(index / results_per_page);
+
+    // current case is in the first page
+    if(cur_page == 0) {
+      var cur_results_beging = 0;
+      var cur_results_end = cur_results_beging + results_per_page;
+      $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
+      var num_buttons = _.range(1, results_per_page + 1);
+      $scope.numButtons = num_buttons;
+
+    // current case is NOT in the first page
+    } else {
+      var cur_results_beging = cur_page * results_per_page;
+      var cur_results_end = cur_results_beging + results_per_page;
+      $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
+
+      // if current page < results_per_page -> generate first 10 buttons
+      if(cur_page <= 10) {
+        var num_buttons = _.range(1, 11);
+        $scope.numButtons = num_buttons;
+
+      // current page is after the first 10 buttons
+      } else {
+        var buttons_begin = (Math.floor(cur_page / 10) * 10);
+        var buttons_end = buttons_begin + 11;
+        var num_buttons = _.range(buttons_begin, buttons_end);
+        console.log(num_buttons);
+        $scope.numButtons = num_buttons;
+      }
+    }
+
+    app.backToResultsNextTen = true;
+    app.backToResultsPrevTen = true;
+    $scope.query = myService.getUserQuery();
+  };
+
+  this.userFeedback = function(relevance) {
+    app.rel_score = relevance;
+    app.feedback_submitted = false;
   };
 
   // Send Case Data functions is used to send case data to the display case page
@@ -220,11 +272,5 @@ searchControllers
         });
       });
     }
-  };
-
-  // BACK TO RESULTS page
-  this.backToResults = function() {
-    $scope.results = myService.getSearchResults();
-    $scope.query = myService.getUserQuery();
   };
 });
