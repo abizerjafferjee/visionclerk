@@ -6,6 +6,8 @@ var secret        = 'mySecret';
 var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
 var nodemailer    = require('nodemailer');
 
+var request       = require('request');
+
 module.exports = function(router) {
 
   var transporter = nodemailer.createTransport({
@@ -374,6 +376,13 @@ module.exports = function(router) {
       args: [req.body.query]
     };
 
+    request.post({
+      url:     'http://localhost:5000/predict',
+      body:    req.body.query
+    }, function(error, response, body){
+      console.log(error);
+      console.log('****************');
+    });
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
     //var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
