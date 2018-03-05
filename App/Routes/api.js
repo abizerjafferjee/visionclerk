@@ -376,12 +376,13 @@ module.exports = function(router) {
       args: [req.body.query]
     };
 
+    console.log(req.body.query);
+
     request.post({
       url:     'http://localhost:5000/predict',
       body:    req.body.query
     }, function(error, response, body){
       console.log(response);
-      console.log(body);
       console.log('****************');
     });
     // Triggers Python model to retrieve db table containing relevant documents to the user query
