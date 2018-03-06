@@ -412,8 +412,6 @@ module.exports = function(router) {
           } else if(body.success == true) {
               //console.log(body.table_name);
               var results_table = body.table_name;
-              var format = util.format('The table name is: %s', results_table);
-              console.log(format);
 
               // Connecting to the PSQL DB
               var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
@@ -421,10 +419,10 @@ module.exports = function(router) {
               client.connect(err => {
                 if (err) { throw err; }
               });
-              //var query = client.query('set search_path to legalx_schema');
               // id = 1234 int and docid = "D-0" str
               //var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
-              //console.log('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, relevance, cos_sim FROM legalx_schema.vc_documents as A, {0} where A.id = index'.format(results_table));
+              var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
+              console.log(formatted_query);
               var query2 = client.query('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, ' + results_table + ' where A.id = index');
               query2.then((result) =>
                 // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
