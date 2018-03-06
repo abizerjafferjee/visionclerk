@@ -6,6 +6,7 @@ var secret        = 'mySecret';
 var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
 var nodemailer    = require('nodemailer');
 var request       = require('request');
+var format        = require('string-format')
 
 module.exports = function(router) {
 
@@ -421,8 +422,8 @@ module.exports = function(router) {
               //var query = client.query('set search_path to legalx_schema');
               // id = 1234 int and docid = "D-0" str
               //var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
-              console.log('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, relevance, cos_sim FROM legalx_schema.vc_documents as A, ' + results_table + ' where A.id = index');
-              var query2 = client.query('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, relevance, cos_sim FROM legalx_schema.vc_documents as A, ' + results_table + ' where A.id = index');
+              console.log('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, relevance, cos_sim FROM legalx_schema.vc_documents as A, ' + {0} + ' where A.id = index'.format(results_table));
+              var query2 = client.query('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, ' + results_table + ' where A.id = index');
               query2.then((result) =>
                 // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
                 res.json(JSON.parse(JSON.stringify(result.rows))));
