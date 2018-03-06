@@ -397,7 +397,6 @@ module.exports = function(router) {
         "content-type": "application/json",
     };
 
-    var res_tab;
     request({
         method:'post',
         url:'http://localhost:5000/predict',
@@ -407,19 +406,30 @@ module.exports = function(router) {
         function (error, response, body) {
           //Print the Response
           if(body.success == false) {
-              console.log(body); 
+              console.log(body);
           } else if(body.success == true) {
               //console.log(body.table_name);
-              res_tab = body.table_name;
+              var results_table = body.table_name;
+
+              // Connecting to the PSQL DB
+              var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
+              var client = new pg.Client(connectionString);
+              client.connect(err => {
+                if (err) { throw err; }
+              });
+              var query = client.query('set search_path to legalx_schema');
+              // id = 1234 int and docid = "D-0" str
+              var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
+              query2.then((result) =>
+                // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
+                res.json(JSON.parse(JSON.stringify(result.rows))));
           } else {
               console.log(error);
           }
-          //res_tab = body.table_name;
         });
 
-     console.log(res_tab);
     // spawning python program
-    var options = {
+    /*var options = {
       mode: 'text',
       pythonPath: '/home/bitnami/anaconda3/bin/python',
       pythonOptions: ['-u'],
@@ -455,7 +465,7 @@ module.exports = function(router) {
       var buff = new Buffer(data);
       console.log('******* THERE WAS AN ERROR EXECUTING PYTHON: ');
       console.log(buff.toString('utf8'));
-    });
+    });*/
   });
 
   return router;
