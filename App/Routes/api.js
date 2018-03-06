@@ -6,7 +6,8 @@ var secret        = 'mySecret';
 var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
 var nodemailer    = require('nodemailer');
 var request       = require('request');
-var format        = require('string-format')
+var format = require('string-format')
+var util = require('util');
 
 module.exports = function(router) {
 
