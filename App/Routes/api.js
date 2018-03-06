@@ -389,24 +389,35 @@ module.exports = function(router) {
   //http://localhost:8080/api/search
   router.post('/search', function(req, res){
 
+    /*console.log(req.body.query);
+    console.log(req.decoded.username);*/
+
     // sending requests to python API
     var headersOpt = {
         "content-type": "application/json",
     };
 
+    var res_tab;
     request({
         method:'post',
         url:'http://localhost:5000/predict',
-        form: {query:req.body.query, username:req.decoded.username},
+        form: {query:req.body.query, user:req.decoded.username},
         headers: headersOpt,
         json: true,},
         function (error, response, body) {
           //Print the Response
+          if(body.success == false) {
+              console.log(body); 
+          } else if(body.success == true) {
+              //console.log(body.table_name);
+              res_tab = body.table_name;
+          } else {
+              console.log(error);
+          }
           //res_tab = body.table_name;
-          console.log(body);
-          console.log(error);
         });
 
+     console.log(res_tab);
     // spawning python program
     var options = {
       mode: 'text',
@@ -417,8 +428,8 @@ module.exports = function(router) {
     };
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
-    var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
-    //var proc = spawn('python', [ml_model, req.body.query]);
+    //var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
+    var proc = spawn('python', [ml_model, req.body.query]);
 
     //python program output
     proc.stdout.on('data', function(data){
