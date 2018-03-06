@@ -364,12 +364,33 @@ module.exports = function(router) {
     res.send(req.decoded);
   });
 
+  // data to send: id | username | query | docid | score(0,1)
+  router.post('/userfeedback', function(req, res) {
+    console.log(req.body.user_name);
+    console.log(req.body.userquery);
+    console.log(req.body.caseid);
+    console.log(req.body.rel_score);
+
+    // Connecting to the PSQL DB
+    var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
+    var client = new pg.Client(connectionString);
+    client.connect(err => {
+      if (err) { throw err; }
+    });
+    var query = client.query('set search_path to user_feedback');
+    //console.log("INSERT INTO relevancy_score (username, query, docid, score) VALUES ('" + req.body.user_name +"','" + req.body.userquery + "'," + req.body.caseid + "," + req.body.rel_score + ")");
+    var query2 = client.query("INSERT INTO relevancy_score (username, query, docid, score) VALUES ('" + req.body.user_name +"','" + req.body.userquery + "'," + req.body.caseid + "," + req.body.rel_score + ")");
+    query2.then((result) =>
+      // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
+      res.json(JSON.parse(JSON.stringify(result))));
+  });
+
   // USER SEARCH ROUTE
   //http://localhost:8080/api/search
   router.post('/search', function(req, res){
 
     // sending requests to python API
-    var headersOpt = {
+    /*var headersOpt = {
         "content-type": "application/json",
     };
 
@@ -383,7 +404,7 @@ module.exports = function(router) {
           //Print the Response
           res_tab = body.table_id;
           console.log(res_tab[0]);
-        });
+        }); */
 
     // spawning python program
     var options = {
