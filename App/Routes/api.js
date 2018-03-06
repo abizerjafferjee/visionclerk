@@ -416,8 +416,8 @@ module.exports = function(router) {
     };
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
-    var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
-    //var proc = spawn('python', [ml_model, req.body.query]);
+    //var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
+    var proc = spawn('python', [ml_model, req.body.query]);
 
     //python program output
     proc.stdout.on('data', function(data){
