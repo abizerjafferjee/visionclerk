@@ -366,11 +366,6 @@ module.exports = function(router) {
 
   // data to send: id | username | query | docid | score(0,1)
   router.post('/userfeedback', function(req, res) {
-    console.log(req.body.user_name);
-    console.log(req.body.userquery);
-    console.log(req.body.caseid);
-    console.log(req.body.rel_score);
-
     // Connecting to the PSQL DB
     var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
     var client = new pg.Client(connectionString);

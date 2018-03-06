@@ -292,6 +292,7 @@ searchControllers
     // data to send: id | username | query | docid | score(0,1)
     $http.post('/api/userfeedback', app).then(function(feedback_results){
         console.log(feedback_results);
+        // add if cases for failures, allow users to submit again
     });
   };
 
