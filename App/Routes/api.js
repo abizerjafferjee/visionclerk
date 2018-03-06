@@ -403,7 +403,8 @@ module.exports = function(router) {
         function (error, response, body) {
           //Print the Response
           res_tab = body.table_name;
-          console.log(res_tab);
+          console.log(body);
+          console.log(error);
         });
 
     // spawning python program
