@@ -402,7 +402,7 @@ module.exports = function(router) {
         json: true,},
         function (error, response, body) {
           //Print the Response
-          res_tab = body.table_name;
+          //res_tab = body.table_name;
           console.log(body);
           console.log(error);
         });
