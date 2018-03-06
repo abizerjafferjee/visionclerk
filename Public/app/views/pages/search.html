@@ -45,7 +45,8 @@
     <div ng-repeat="x in pageResults">
       <br>
       <h5>
-        <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.documenttext, x.docid)">{{ x.casename }}</a>
+        {{ x.id }}--
+        <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.doc_raw_text, x.docid, x.id)">{{ x.casename }}</a>
       </h5>
       <p style="color: black;">Document Id: {{ x.docid }} Court: {{ x.court }}</p>
     </div>

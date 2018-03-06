@@ -364,8 +364,13 @@ module.exports = function(router) {
     res.send(req.decoded);
   });
 
-  // data to send: id | username | query | docid | score(0,1)
+  // data to send: id | username | query | id/caserank | docid | score(0,1)
   router.post('/userfeedback', function(req, res) {
+    /*console.log(req.body.user_name);
+    console.log(req.body.userquery);
+    console.log(req.body.caseid);
+    console.log(req.body.rel_score);*/
+
     // Connecting to the PSQL DB
     var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
     var client = new pg.Client(connectionString);
@@ -373,8 +378,8 @@ module.exports = function(router) {
       if (err) { throw err; }
     });
     var query = client.query('set search_path to user_feedback');
-    //console.log("INSERT INTO relevancy_score (username, query, docid, score) VALUES ('" + req.body.user_name +"','" + req.body.userquery + "'," + req.body.caseid + "," + req.body.rel_score + ")");
-    var query2 = client.query("INSERT INTO relevancy_score (username, query, docid, score) VALUES ('" + req.body.user_name +"','" + req.body.userquery + "'," + req.body.caseid + "," + req.body.rel_score + ")");
+    console.log("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caserank + ",'" + req.body.docid + "'," + req.body.rel_score + ")");
+    var query2 = client.query("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caserank + ",'" + req.body.docid + "'," + req.body.rel_score + ")");
     query2.then((result) =>
       // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
       res.json(JSON.parse(JSON.stringify(result))));
@@ -411,8 +416,8 @@ module.exports = function(router) {
     };
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
-    //var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
-    var proc = spawn('python', [ml_model, req.body.query]);
+    var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
+    //var proc = spawn('python', [ml_model, req.body.query]);
 
     //python program output
     proc.stdout.on('data', function(data){
@@ -426,7 +431,8 @@ module.exports = function(router) {
         if (err) { throw err; }
       });
       var query = client.query('set search_path to legalx_schema');
-      var query2 = client.query('SELECT docid, casename, court, documenttext FROM ' + results_table + ' LIMIT 233');
+      // id = 1234 int and docid = "D-0" str
+      var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
       query2.then((result) =>
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
         res.json(JSON.parse(JSON.stringify(result.rows))));

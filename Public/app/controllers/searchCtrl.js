@@ -13,7 +13,8 @@ searchControllers
 
   // USER FEEDBACK TABLE: docID, relevance/label, query_raw_text, date_time, user_id, location
   var user_query = null;
-  var case_id = null;
+  var doc_id = null;
+  var case_rank = null;
   // var feedback_date_time = null;
   // var feedback_location = null;
 
@@ -41,11 +42,17 @@ searchControllers
     getUserQuery:function(){
       return user_query;
     },
-    setCaseID:function(id){
-      case_id = id;
+    setDocID:function(id){
+      doc_id = id;
     },
-    getCaseID:function(){
-      return case_id;
+    getDocID:function(){
+      return doc_id;
+    },
+    setCaseRank:function(rank) {
+      case_rank = rank;
+    },
+    getCaseRank:function() {
+      return case_rank;
     },
 
     // SEARCH RESULTS PERSISTANCY
@@ -198,12 +205,14 @@ searchControllers
   this.displayCase = function(){
     var [name, text] = myService.getCase();
     var query = myService.getUserQuery();
-    var id = myService.getCaseID();
+    var id = myService.getDocID();
+    var rank = myService.getCaseRank();
 
     app.casename = name;
     app.doctext = text;
     app.userquery = query;
-    app.caseid = id;
+    app.docid = id;
+    app.caserank = rank;
 
     // PARSING DOC TEXT
     /*var sub_text = text.split('\n');
@@ -220,14 +229,16 @@ searchControllers
   };
 
   // Send Case Data functions is used to send case data to the display case page
-  $scope.sendCaseData = function(case_name, case_text, case_id){
+  $scope.sendCaseData = function(case_name, case_text, doc_id, rank){
     myService.setCase(case_name, case_text);
-    myService.setCaseID(case_id);
+    myService.setDocID(doc_id);
+    myService.setCaseRank(rank);
   };
 
   // BACK TO RESULTS page
   this.backToResults = function() {
-    var id = myService.getCaseID();
+    var id = myService.getDocID();
+    var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
     var pgs_req = myService.getNumPagesReq();
     var index = data.map(function(d) { return d['docid']; }).indexOf(id);
@@ -287,12 +298,16 @@ searchControllers
   this.userFeedback = function(relevance) {
     app.rel_score = relevance;
     app.user_name = $scope.main.username;
-    app.feedback_submitted = false;
 
     // data to send: id | username | query | docid | score(0,1)
     $http.post('/api/userfeedback', app).then(function(feedback_results){
-        console.log(feedback_results);
         // add if cases for failures, allow users to submit again
+        if(feedback_results.statusText == 'OK') {
+          app.feedback_submitted = false;
+        } else {
+          console.log("There was an error submitting user's feedback");
+          //app.feedback_submitted = false;
+        }
     });
   };
 
