@@ -402,8 +402,8 @@ module.exports = function(router) {
         json: true,},
         function (error, response, body) {
           //Print the Response
-          res_tab = body.table_id;
-          console.log(res_tab[0]);
+          res_tab = body.table_name;
+          console.log(res_tab);
         });
 
     // spawning python program
