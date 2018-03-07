@@ -172,8 +172,6 @@ searchControllers
 
     app.prevTen = true;
     app.btr_pt = true;
-
-    console.log(times_pressed);
   };
 
   this.prevTenPages = function() {
@@ -196,8 +194,6 @@ searchControllers
     app.btr_nt = true;
     times_pressed -= 1;
     myService.setTimesPressed(times_pressed);
-
-    console.log(times_pressed);
   };
 
 
@@ -240,6 +236,7 @@ searchControllers
     var id = myService.getDocID();
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
+    console.log(data);
     var pgs_req = myService.getNumPagesReq();
     var index = data.map(function(d) { return d['docid']; }).indexOf(id);
     var cur_page = Math.floor(index / results_per_page);
@@ -279,7 +276,6 @@ searchControllers
           app.btr_pt = true;
 
         } else {
-          console.log(buttons_begin);
           var buttons_end = buttons_begin + 11;
           var num_buttons = _.range(buttons_begin, buttons_end);
           $scope.numButtons = num_buttons;
