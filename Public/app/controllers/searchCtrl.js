@@ -109,7 +109,11 @@ searchControllers
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
       // access db for query results
+      for (var i=0; i<query_results.data.length; i++){
+        query_results.data[i].rank = i+1;
+      }
       $scope.results = query_results.data;
+      console.log($scope.results);
       myService.setUserQuery($scope.search.data.query);
       //myService.setCaseRawText(query_results.data);
 
@@ -237,10 +241,11 @@ searchControllers
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
     var pgs_req = myService.getNumPagesReq();
-    var index = data.map(function(d) { return d['docid']; }).indexOf(id);
+    var index = data.map(function(d) { return d['id']; }).indexOf(rank);
+    console.log(rank);
     var cur_page = Math.floor(index / results_per_page);
 
-    // current case is in the first page
+    // case1: current case is in the first page
     if(cur_page == 0) {
       var cur_results_beging = 0;
       var cur_results_end = cur_results_beging + results_per_page;
@@ -257,7 +262,7 @@ searchControllers
       var cur_results_end = cur_results_beging + results_per_page;
       $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
 
-      // if current page < results_per_page -> generate first 10 buttons
+      // case2: current page within the first 10 buttons
       if(cur_page <= 10) {
         var num_buttons = _.range(1, 11);
         $scope.numButtons = num_buttons;
@@ -268,7 +273,7 @@ searchControllers
       // current page is after the first 10 buttons
       } else {
         var buttons_begin = (Math.floor(cur_page / 10) * 10);
-        // check the number of buttons needed, which = number of pages needed
+        // case3 : last pages/last button -not all 10 buttons are needed
         if((buttons_begin + 11) > pgs_req) {
           var buttons_end = pgs_req + 1;
           var num_buttons = _.range(buttons_begin, buttons_end);
@@ -277,6 +282,7 @@ searchControllers
           app.btr_nt = false;
           app.btr_pt = true;
 
+        // case4: current page is somewhere in the middle -not first 10 pages -not last pages
         } else {
           var buttons_end = buttons_begin + 11;
           var num_buttons = _.range(buttons_begin, buttons_end);
