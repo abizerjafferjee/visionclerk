@@ -236,7 +236,7 @@ searchControllers
     var id = myService.getDocID();
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
-    console.log(data);
+    console.log(rank);
     var pgs_req = myService.getNumPagesReq();
     var index = data.map(function(d) { return d['docid']; }).indexOf(id);
     var cur_page = Math.floor(index / results_per_page);
