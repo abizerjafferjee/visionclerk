@@ -236,7 +236,6 @@ searchControllers
     var id = myService.getDocID();
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
-    console.log(data);
     var pgs_req = myService.getNumPagesReq();
     var index = data.map(function(d) { return d['docid']; }).indexOf(id);
     var cur_page = Math.floor(index / results_per_page);
@@ -262,6 +261,9 @@ searchControllers
       if(cur_page <= 10) {
         var num_buttons = _.range(1, 11);
         $scope.numButtons = num_buttons;
+
+        app.btr_nt = true;
+        app.btr_pt = false;
 
       // current page is after the first 10 buttons
       } else {
