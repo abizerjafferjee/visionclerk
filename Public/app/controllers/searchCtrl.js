@@ -1,4 +1,4 @@
-var searchControllers = angular.module('searchControllers', []);
+var searchControllers = angular.module('searchControllers', ['ngSanitize']);
 
 searchControllers
 
