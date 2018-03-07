@@ -110,6 +110,7 @@ searchControllers
     $http.post('/api/search', this.data).then(function(query_results){
       // access db for query results
       $scope.results = query_results.data;
+      console.log(query_results);
       myService.setUserQuery($scope.search.data.query);
       //myService.setCaseRawText(query_results.data);
 
@@ -236,7 +237,6 @@ searchControllers
     var id = myService.getDocID();
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
-    console.log(rank);
     var pgs_req = myService.getNumPagesReq();
     var index = data.map(function(d) { return d['docid']; }).indexOf(id);
     var cur_page = Math.floor(index / results_per_page);
