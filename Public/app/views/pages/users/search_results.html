@@ -7,9 +7,9 @@
       <div ng-repeat="x in cur_results">
         <br>
         <h5>
-          <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.htmltext, x.docid, x.rank)">{{ x.id }}-- {{ x.casename }}</a>
+          <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.htmltext, x.docid, x.rank)">{{ x.casename }}</a>
         </h5>
-        <p style="color: #33334d;">Document Id: {{ x.docid }} Court: {{ x.court }}</p>
+        <p style="color: #33334d;"><strong>Document Id: {{ x.docid }}, Court: {{ x.court }}, Date Filed: {{ x.datefiled }}</strong></p>
       </div>
     </div>
     <div class="col-2"></div>

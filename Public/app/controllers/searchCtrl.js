@@ -113,7 +113,6 @@ searchControllers
         query_results.data[i].rank = i+1;
       }
       $scope.results = query_results.data;
-      console.log($scope.results);
       myService.setUserQuery($scope.search.data.query);
       //myService.setCaseRawText(query_results.data);
 
@@ -241,9 +240,9 @@ searchControllers
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
     var pgs_req = myService.getNumPagesReq();
-    var index = data.map(function(d) { return d['id']; }).indexOf(rank);
-    console.log(rank);
-    var cur_page = Math.floor(index / results_per_page);
+    //var index = data.map(function(d) { return d['id']; }).indexOf(rank);
+    var cur_page = Math.floor(rank / results_per_page);
+    app.curpage = cur_page;
 
     // case1: current case is in the first page
     if(cur_page == 0) {
