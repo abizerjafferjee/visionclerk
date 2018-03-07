@@ -7,7 +7,8 @@
   <div class="col-9">
     <div ng-controller="search.displayCase">
       <h2>{{ search.caserank }}-- {{ search.casename }}</h2>
-      {{ search.doctext }}
+      <div ng-bind-html="search.doctext"></div>
+      <!--{{ search.doctext }}-->
     </div>
   </div>
   <div class="col-1"></div>
