@@ -134,3 +134,16 @@ body {
 .icon-facebook2:before {
   content: "\ea91";
 }
+/*Icon for Search engine*/
+.icon-search:before {
+  content: "\e007";
+  color: #6b61f4;
+  font-size: 30px;
+}
+
+/*Icon for Easy query*/
+.icon-genius:before {
+  content: "\e046";
+  color: #6b61f4;
+  font-size: 30px;
+}
