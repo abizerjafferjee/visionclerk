@@ -111,7 +111,7 @@ searchControllers
     app.loading = true;
     app.noResults = false;
     $http.post('/api/search', this.data).then(function(query_results){
-
+      app.loading = false;
       // if results sucess is undefined it means we have results
       if(angular.isUndefined(query_results.data.success)){
 
@@ -119,7 +119,6 @@ searchControllers
         for (var i=0; i<query_results.data.length; i++){
           query_results.data[i].rank = i+1;
         }
-        app.loading = false;
         $scope.results = query_results.data;
         myService.setUserQuery($scope.search.data.query);
         //myService.setCaseRawText(query_results.data);
