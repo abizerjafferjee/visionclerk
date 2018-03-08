@@ -109,10 +109,9 @@ searchControllers
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
-      if(!query_results.data.success){
-        app.noResults = true;
-      } else {
-        app.noResults = false;
+
+      // if results sucess is undefined it means we have results
+      if(angular.isUndefined(query_results.data.success)){
         // access db for query results
         for (var i=0; i<query_results.data.length; i++){
           query_results.data[i].rank = i+1;
@@ -145,6 +144,10 @@ searchControllers
 
         // AESTHETICS
         app.main_search_bar = false;
+
+      // ressults success did NOT successed i.e no matching documents
+      } else if(!query_results.data.success) {
+        app.noResults = false;
       }
     });
   };
