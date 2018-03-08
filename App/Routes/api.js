@@ -6,18 +6,17 @@ var secret        = 'mySecret';
 var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.py';
 var nodemailer    = require('nodemailer');
 var request       = require('request');
-var format = require('string-format')
-var util = require('util');
+var util          = require('util');
 
 module.exports = function(router) {
 
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
     secure: false,
     port: 25,
     auth: {
-      user: 'legalxstartup@gmail.com',
-      pass: 'legalx1234'
+      user: 'noreply@visionclerk.com',
+      pass: 'Pllio**&nm156'
     }
   });
 
@@ -58,7 +57,7 @@ module.exports = function(router) {
           }
         } else {
           var mailOptions = {
-            from: 'VisonClerk Staff <legalxstartup@gmail.com>',
+            from: 'VisonClerk Staff <info@visionclerk.com>',
             to: user.email,
             subject: 'VisonClerk Account Activation link',
             text: 'Hello ' + user.username + ', Thank you for registering at VisonClerk.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
@@ -125,7 +124,7 @@ module.exports = function(router) {
 
 
               var mailOptions = {
-                from: 'VisonClerk Staff <legalxstartup@gmail.com>',
+                from: 'VisonClerk Staff <info@visionclerk.com>',
                 to: user.email,
                 subject: 'VisonClerk Account Activation link',
                 text: 'Hello' + user.username + ', Your account has been successfully activated!',
@@ -182,7 +181,7 @@ module.exports = function(router) {
           console.log(err);
         } else {
           var mailOptions = {
-            from: 'VisonClerk Staff <legalxstartup@gmail.com>',
+            from: 'VisonClerk Staff <info@visionclerk.com>',
             to: user.email,
             subject: 'VisonClerk Account Activation link Request',
             text: 'Hello ' + user.username + ', you recently requested a new account activation link at VisonClerk.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
@@ -214,7 +213,7 @@ module.exports = function(router) {
             res.json({ success: false, message: 'E-mail was not found!' });
           } else {
             var mailOptions = {
-              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
+              from: 'VisonClerk Staff <info@visionclerk.com>',
               to: user.email,
               subject: 'VisonClerk Username Request',
               text: 'Hello ' + user.username + ', you recently requested your username! Your username is: ' + user.username,
@@ -252,7 +251,7 @@ module.exports = function(router) {
             res.json({ success: false, message: err });
           } else {
             var mailOptions = {
-              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
+              from: 'VisonClerk Staff <info@visionclerk.com>',
               to: user.email,
               subject: 'VisonClerk Reset Password Request',
               text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://35.183.35.209:8080/newpassword/' + user.resettoken,
@@ -311,7 +310,7 @@ module.exports = function(router) {
             res.json({ success: false, message: err});
           } else {
             var mailOptions = {
-              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
+              from: 'VisonClerk Staff <info@visionclerk.com>',
               to: user.email,
               subject: 'VisonClerk Reset Password',
               text: 'Hello ' + user.username + ', this Email is to notify you that your password was recently reset at VisonClerk.com',
@@ -407,6 +406,7 @@ module.exports = function(router) {
         json: true,},
         function (error, response, body) {
           //Print the Response
+          console.log(body);
           if(body.success == false) {
               console.log(body);
           } else if(body.success == true) {
@@ -422,10 +422,12 @@ module.exports = function(router) {
               // id = 1234 int and docid = "D-0" str
               //var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
               if(results_table == 'no matching docs') {
+                console.log('No matching docs');
                 res.json({ success: false, message: 'no matching docs' });
               } else {
-                var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
-                var query2 = client.query(formatted_query);
+                //var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
+              var formatted_query = util.format('SELECT id, casename, datefiled, court, A."docID", htmltext, relevance, cos_sim from legalx_schema.vc_documents as A, %s as B where A."docID" = B."docID"', results_table);  
+              var query2 = client.query(formatted_query);
                 query2.then((result) =>
                   // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
                   res.json(JSON.parse(JSON.stringify(result.rows))));
