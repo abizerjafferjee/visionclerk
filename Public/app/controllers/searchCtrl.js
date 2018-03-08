@@ -112,6 +112,8 @@ searchControllers
 
       // if results sucess is undefined it means we have results
       if(angular.isUndefined(query_results.data.success)){
+        app.noResults = true;
+        
         // access db for query results
         for (var i=0; i<query_results.data.length; i++){
           query_results.data[i].rank = i+1;
@@ -148,6 +150,7 @@ searchControllers
       // ressults success did NOT successed i.e no matching documents
       } else if(!query_results.data.success) {
         app.noResults = true;
+        app.main_search_bar = false;
       }
     });
   };
