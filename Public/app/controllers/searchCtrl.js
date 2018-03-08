@@ -112,8 +112,8 @@ searchControllers
 
       // if results sucess is undefined it means we have results
       if(angular.isUndefined(query_results.data.success)){
-        app.noResults = true;
-        
+        app.noResults = false;
+
         // access db for query results
         for (var i=0; i<query_results.data.length; i++){
           query_results.data[i].rank = i+1;
