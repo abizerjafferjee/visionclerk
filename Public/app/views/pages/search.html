@@ -38,6 +38,15 @@
   </div>
 </form>
 
+<!-- loading data -->
+<div  class="row">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <div class="loader" ng-show="search.loading"></div>
+  </div>
+  <div class="col-4"></div>
+</div>
+
 <!-- No matching documents error -->
 <div  class="row">
   <div class="col-2"></div>
@@ -49,15 +58,6 @@
     </div>
   </div>
   <div class="col-2"></div>
-</div>
-
-<!-- loading data -->
-<div  class="row">
-  <div class="col-4"></div>
-  <div class="col-4">
-    <div class="loader" ng-show="search.loading"></div>
-  </div>
-  <div class="col-4"></div>
 </div>
 
 <!-- dynamic divs to display query result documents -->

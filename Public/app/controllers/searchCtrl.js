@@ -109,11 +109,11 @@ searchControllers
 
   this.searchData = function(data) {
     app.loading = true;
+    app.noResults = false;
     $http.post('/api/search', this.data).then(function(query_results){
 
       // if results sucess is undefined it means we have results
       if(angular.isUndefined(query_results.data.success)){
-        app.noResults = false;
 
         // access db for query results
         for (var i=0; i<query_results.data.length; i++){
