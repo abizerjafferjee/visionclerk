@@ -152,6 +152,7 @@ searchControllers
       } else if(!query_results.data.success) {
         app.noResults = true;
         app.main_search_bar = false;
+        app.loading = false;
       }
       app.loading = false;
     });
