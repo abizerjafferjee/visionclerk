@@ -102,6 +102,7 @@ searchControllers
   app.feedback_submitted = true;
   app.nextTen = false;
   app.prevTen = false;
+  app.noResults = false;
   // back to results next ten and prev ten
   app.btr_nt = false;
   app.btr_pt = false;
@@ -110,6 +111,7 @@ searchControllers
     $http.post('/api/search', this.data).then(function(query_results){
       if(!query_results.data.success){
         console.log(query_results.data.message);
+        app.noResults = true;
       }
       // access db for query results
       for (var i=0; i<query_results.data.length; i++){
