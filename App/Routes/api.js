@@ -43,11 +43,11 @@ module.exports = function(router) {
     user.email = req.body.email;
     user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
     if (user.username == null || user.username == ''){
-      res.json({ success: false, message:'Please provide an Username'});
+      res.json({ success: false, message:'Please provide a valid Username'});
     } else if (user.password == null || user.password == '') {
-      res.json({ success: false, message:'Please provide a Password'});
+      res.json({ success: false, message:'Please provide a valid Password'});
     } else if (user.email == null || user.email == '') {
-      res.json({ success: false, message:'Please provide a email'});
+      res.json({ success: false, message:'Please provide a valid email'});
     } else {
       user.save(function(err){
         if (err) {
@@ -440,7 +440,7 @@ module.exports = function(router) {
                 res.json({ success: false, message: 'no matching docs' });
               } else {
                 //var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
-              var formatted_query = util.format('SELECT id, casename, datefiled, court, A."docID", htmltext, relevance, cos_sim from legalx_schema.vc_documents as A, %s as B where A."docID" = B."docID"', results_table);  
+              var formatted_query = util.format('SELECT id, casename, datefiled, court, A."docID", htmltext, relevance, cos_sim from legalx_schema.vc_documents as A, %s as B where A."docID" = B."docID"', results_table);
               var query2 = client.query(formatted_query);
                 query2.then((result) =>
                   // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
