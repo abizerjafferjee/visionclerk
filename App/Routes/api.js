@@ -15,8 +15,8 @@ module.exports = function(router) {
     secure: false,
     port: 25,
     auth: {
-      user: 'noreply@visionclerk.com',
-      pass: 'Pllio**&nm156'
+      user: 'info.visionclerk@gmail.com',
+      pass: 'Poljmv98**)!'
     }
   });
 
