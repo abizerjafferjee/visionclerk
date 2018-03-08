@@ -7,10 +7,12 @@ var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.p
 var nodemailer    = require('nodemailer');
 var request       = require('request');
 var util          = require('util');
+var smtpTransport = require('nodemailer-smtp-transport');
+var xoauth2       = require('xoauth2');
 
 module.exports = function(router) {
 
-  var transporter = nodemailer.createTransport({
+  /*var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     secure: false,
     port: 25,
@@ -18,7 +20,19 @@ module.exports = function(router) {
       user: 'info.visionclerk@gmail.com',
       pass: 'Poljmv98**)!'
     }
-  });
+  });*/
+  var transporter = nodemailer.createTransport(smtpTransport({
+    service: 'Gmail',
+    auth: {
+      xoauth2: xoauth2.createXOAuth2Generator({
+        user: 'noreply@visionclerk.com',
+
+        clientId: '376764402439-nh5gbd9387tb638jjabdaf76cufirhp4.apps.googleusercontent.com',
+        clientSecret: 'xPPBc9eMqLnyz5FUo4blharj',
+        refreshToken: '1/9kCf9kgMI_Os8Yk3Qsvpnmi32OKAHzVb5103FVCnURIoG4D7CjqTZVX0ftE12cqs'
+      })
+    }
+  }));
 
   // USER REGISTRATION ROUTE
   //http://localhost:8080/api/users
