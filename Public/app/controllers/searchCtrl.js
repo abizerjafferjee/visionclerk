@@ -147,7 +147,7 @@ searchControllers
 
       // ressults success did NOT successed i.e no matching documents
       } else if(!query_results.data.success) {
-        app.noResults = false;
+        app.noResults = true;
       }
     });
   };
