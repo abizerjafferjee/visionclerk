@@ -108,9 +108,8 @@ searchControllers
 
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
-      if(query_results.success == false) {
-        console.log('query Results: ');
-        console.log(query_results);
+      if(!query_results.data.success){
+        console.log(query_results.data.message);
       }
       // access db for query results
       for (var i=0; i<query_results.data.length; i++){
