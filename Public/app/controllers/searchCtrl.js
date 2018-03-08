@@ -119,6 +119,7 @@ searchControllers
         for (var i=0; i<query_results.data.length; i++){
           query_results.data[i].rank = i+1;
         }
+        app.loading = false;
         $scope.results = query_results.data;
         myService.setUserQuery($scope.search.data.query);
         //myService.setCaseRawText(query_results.data);
@@ -150,11 +151,10 @@ searchControllers
 
       // ressults success did NOT successed i.e no matching documents
       } else if(!query_results.data.success) {
+        app.loading = false;
         app.noResults = true;
         app.main_search_bar = false;
-        app.loading = false;
       }
-      app.loading = false;
     });
   };
 
