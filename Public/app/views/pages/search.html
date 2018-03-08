@@ -39,10 +39,16 @@
 </form>
 
 <!-- No matching documents error -->
-<div class="row show-hide-message" ng-show="search.noResults">
-  <div class="alert alert-danger">
-    <h4>Sorry, we couldn't find any documents based on your query.</h4>
+<div  class="row">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <div class="row show-hide-message" ng-show="search.noResults" style="padding-top: 100px;">
+      <div class="alert alert-danger">
+        <h4>Sorry, we couldn't find any documents based on your query.</h4>
+      </div>
+    </div>
   </div>
+  <div class="col-2"></div>
 </div>
 
 <!-- dynamic divs to display query result documents -->

@@ -110,44 +110,42 @@ searchControllers
   this.searchData = function(data) {
     $http.post('/api/search', this.data).then(function(query_results){
       if(!query_results.data.success){
-        console.log(query_results.data.message);
         app.noResults = true;
-      }
-      // access db for query results
-      for (var i=0; i<query_results.data.length; i++){
-        query_results.data[i].rank = i+1;
-      }
-      $scope.results = query_results.data;
-      myService.setUserQuery($scope.search.data.query);
-      //myService.setCaseRawText(query_results.data);
-
-      // multi page results
-      results_len = query_results.data.length
-      if(results_len > results_per_page) {
-        var num_pages = Math.ceil(results_len / results_per_page);
-        myService.setNumPagesReq(num_pages);
-        $scope.pageResults = query_results.data.slice(0, results_per_page);
-
-        // generating buttons
-        if(num_pages <= results_per_page) {
-          num_buttons = _.range(1, num_pages + 1);
-          $scope.numButtons = num_buttons;
-
-        // need to generate more than 10 buttons i.e 100 results
-        } else {
-          app.nextTen = true;
-          num_buttons = _.range(1, (results_per_page + 1));
-          $scope.numButtons = num_buttons;
+      } else {
+        app.noResults = false;
+        // access db for query results
+        for (var i=0; i<query_results.data.length; i++){
+          query_results.data[i].rank = i+1;
         }
+        $scope.results = query_results.data;
+        myService.setUserQuery($scope.search.data.query);
+        //myService.setCaseRawText(query_results.data);
+
+        // multi page results
+        results_len = query_results.data.length
+        if(results_len > results_per_page) {
+          var num_pages = Math.ceil(results_len / results_per_page);
+          myService.setNumPagesReq(num_pages);
+          $scope.pageResults = query_results.data.slice(0, results_per_page);
+
+          // generating buttons
+          if(num_pages <= results_per_page) {
+            num_buttons = _.range(1, num_pages + 1);
+            $scope.numButtons = num_buttons;
+
+          // need to generate more than 10 buttons i.e 100 results
+          } else {
+            app.nextTen = true;
+            num_buttons = _.range(1, (results_per_page + 1));
+            $scope.numButtons = num_buttons;
+          }
+        }
+        // SEARCH RESULTS PERSISTANCY
+        myService.setSearchResults($scope.results);
+
+        // AESTHETICS
+        app.main_search_bar = false;
       }
-      //console.log($scope.pageResults);
-
-
-      // SEARCH RESULTS PERSISTANCY
-      myService.setSearchResults($scope.results);
-
-      // AESTHETICS
-      app.main_search_bar = false;
     });
   };
 
