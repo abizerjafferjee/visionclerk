@@ -37,7 +37,8 @@ body {
 }
 
 .footer {
-   position: relative;
+   position: fixed;
+   width: 100%;
    bottom: 0px;
 }
 
