@@ -47,6 +47,15 @@ body {
   display: inline;
 }
 
+.loader {
+  border: 16px solid #6b61f4;
+  border-radius: 50%;
+  border-top: 16px solid #2a087a;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
 
 .show-hide-message.ng-hide-remove {
   -webkit-animation:zoomIn 0.3s both ease;

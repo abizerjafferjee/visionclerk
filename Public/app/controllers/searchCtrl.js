@@ -108,6 +108,7 @@ searchControllers
   app.btr_pt = false;
 
   this.searchData = function(data) {
+    app.loading = true;
     $http.post('/api/search', this.data).then(function(query_results){
 
       // if results sucess is undefined it means we have results
@@ -152,6 +153,7 @@ searchControllers
         app.noResults = true;
         app.main_search_bar = false;
       }
+      app.loading = false;
     });
   };
 
