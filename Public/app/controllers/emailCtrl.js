@@ -9,15 +9,15 @@ emailController.controller('emailCtrl', function($routeParams, User, $timeout, $
     app.errorMsg = false;
 
     if (data.data.success) {
-      app.successMsg = data.data.message + '... Redirecting';
-      $timeout(function() {
+      app.successMsg = data.data.message;
+      /*$timeout(function() {
         $location.path('/login');
-      }, 1000);
+      }, 1000);*/
     } else {
-      app.errorMsg = data.data.message + '... Redirecting';
-      $timeout(function() {
+      app.errorMsg = data.data.message;
+      /*$timeout(function() {
         $location.path('/login');
-      }, 5000);
+      }, 5000);*/
     }
   });
 })

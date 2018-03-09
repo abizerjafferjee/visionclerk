@@ -15,9 +15,9 @@ userControllers.controller('regCtrl', function($http, $location, $timeout, User)
         //create Success message
         app.successMsg = data.data.message;
         // redirect to home page
-        /*$timeout(function(){
+        $timeout(function(){
           $location.path('/login');
-        }, 2000);*/
+        }, 2000);
       } else {
         app.disabled = false;
         app.loading = false;
