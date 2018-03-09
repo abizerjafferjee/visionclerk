@@ -312,7 +312,8 @@ searchControllers
   this.userFeedback = function(relevance) {
     app.rel_score = relevance;
     app.user_name = $scope.main.username;
-    app.docid = myService.getDocID();
+    app.docID = myService.getDocID();
+    console.log(app.docID);
 
     // data to send: id | username | query | docid | score(0,1)
     $http.post('/api/userfeedback', app).then(function(feedback_results){
