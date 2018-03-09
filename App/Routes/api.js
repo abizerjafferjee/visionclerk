@@ -152,7 +152,7 @@ module.exports = function(router) {
                   console.log('Email sent');
                 }
               });
-              res.json({ success: true, message: 'Account activated!'});
+              res.json({ success: true, message: 'Account activated! You may now login.'});
             }
           });
         }
