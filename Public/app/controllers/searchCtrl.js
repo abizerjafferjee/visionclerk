@@ -15,6 +15,7 @@ searchControllers
   var user_query = null;
   var doc_id = null;
   var case_rank = null;
+  var case_id = null;
   // var feedback_date_time = null;
   // var feedback_location = null;
 
@@ -47,6 +48,12 @@ searchControllers
     },
     getDocID:function(){
       return doc_id;
+    },
+    setCaseId:function(cid){
+      case_id = cid;
+    },
+    getCaseId:function(){
+      return case_id;
     },
     setCaseRank:function(rank) {
       case_rank = rank;
@@ -239,10 +246,11 @@ searchControllers
   };
 
   // Send Case Data functions is used to send case data to the display case page
-  $scope.sendCaseData = function(case_name, case_text, doc_id, rank){
+  $scope.sendCaseData = function(case_name, case_text, doc_id, rank, case_id){
     myService.setCase(case_name, case_text);
     myService.setDocID(doc_id);
     myService.setCaseRank(rank);
+    myService.setCaseId(case_id);
   };
 
   // BACK TO RESULTS page
@@ -313,7 +321,8 @@ searchControllers
     app.rel_score = relevance;
     app.user_name = $scope.main.username;
     app.docID = myService.getDocID();
-    console.log(app.docID);
+    app.caseId = myService.getCaseId();
+    console.log(app.caseId);
 
     // data to send: id | username | query | docid | score(0,1)
     $http.post('/api/userfeedback', app).then(function(feedback_results){

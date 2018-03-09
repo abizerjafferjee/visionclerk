@@ -384,7 +384,7 @@ module.exports = function(router) {
     console.log(req.body);
     console.log(req.body.user_name);
     console.log(req.body.userquery);
-    console.log(req.body.caserank);
+    console.log(req.body.caseId);
     console.log(req.body.docID);
     console.log(req.body.rel_score);
 
@@ -395,8 +395,8 @@ module.exports = function(router) {
       if (err) { throw err; }
     });
     var query = client.query('set search_path to user_feedback');
-    console.log("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caserank + ",'" + req.body.docID + "'," + req.body.rel_score + ")");
-    var query2 = client.query("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caserank + ",'" + req.body.docID + "'," + req.body.rel_score + ")");
+    console.log("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caseId + ",'" + req.body.docID + "'," + req.body.rel_score + ")");
+    var query2 = client.query("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caseId + ",'" + req.body.docID + "'," + req.body.rel_score + ")");
     query2.then((result) =>
       // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
       res.json(JSON.parse(JSON.stringify(result))));
