@@ -5,12 +5,18 @@
 
     <br>
 
-    <div class="row show-hide-message" ng-show="email.successMsg">
-      <div class="alert alert-success">{{ email.successMsg }}</div>
-    </div>
-    <br>
-    <div class="row show-hide-message" ng-show="email.errorMsg">
-      <div class="alert alert-danger">{{ email.errorMsg }}</div>
+    <div class="row">
+      <div class="col-4"></div>
+      <div class="col-4" style="padding-left: 50px;">
+        <div class="row show-hide-message" ng-show="email.successMsg">
+          <div class="alert alert-success" style="text-align: center;">{{ email.successMsg }}</div>
+        </div>
+        <br>
+        <div class="row show-hide-message" ng-show="email.errorMsg">
+          <div class="alert alert-danger">{{ email.errorMsg }}</div>
+        </div>
+      </div>
+      <div class="col-4"></div>
     </div>
   </div>
   <div class="col-2"></div>

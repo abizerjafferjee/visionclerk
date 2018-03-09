@@ -4,20 +4,26 @@
     <h1 style="text-align: center; color: white;">Forgot Username</h1>
 
     <!-- ERROR MESSAGES -->
-    <div class="jumbotron text-center" ng-show="resetusername.loading">
-      <span class="glyphicon glyphicon-repeat spinner"></span>
-      <p>Loading...</p>
-    </div>
+    <div class="row">
+      <div class="col-4"></div>
+      <div class="col-4" style="padding-left: 50px;">
+        <div class="jumbotron text-center" ng-show="resetusername.loading">
+          <span class="glyphicon glyphicon-repeat spinner"></span>
+          <p>Loading...</p>
+        </div>
 
-    <br>
-    <div class="row show-hide-message" ng-show="resetusername.successMsg">
-      <div class="alert alert-success">{{ resetusername.successMsg }}</div>
+        <br>
+        <div class="row show-hide-message" ng-show="resetusername.successMsg">
+          <div class="alert alert-success">{{ resetusername.successMsg }}</div>
+        </div>
+        <br>
+        <div class="row show-hide-message" ng-show="resetusername.errorMsg">
+          <div class="alert alert-danger">{{ resetusername.errorMsg }}</div>
+        </div>
+        <br>
+      </div>
+      <div class="col-4"></div>
     </div>
-    <br>
-    <div class="row show-hide-message" ng-show="resetusername.errorMsg">
-      <div class="alert alert-danger">{{ resetusername.errorMsg }}</div>
-    </div>
-    <br>
 
     <form name="userForm" ng-submit="resetusername.sendUsername(userData, userForm.$valid);" novalidate>
       <label style="color: white;">Email:</label>

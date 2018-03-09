@@ -4,18 +4,23 @@
     <h1 style="text-align: center; color: white;">Resend Activation Email</h1>
 
     <!-- ERROR MESSAGES -->
-    <div class="jumbotron text-center" ng-show="resend.loading">
-      <span class="glyphicon glyphicon-repeat spinner"></span>
-      <p>Loading...</p>
-    </div>
-
-    <br>
-    <div class="row show-hide-message" ng-show="resend.successMsg">
-      <div class="alert alert-success">{{ resend.successMsg }}</div>
-    </div>
-    <br>
-    <div class="row show-hide-message" ng-show="resend.errorMsg">
-      <div class="alert alert-danger">{{ resend.errorMsg }}</div>
+    <div class="row">
+      <div class="col-4"></div>
+      <div class="col-4" style="padding-left: 50px;">
+        <div class="jumbotron text-center" ng-show="resend.loading">
+          <span class="glyphicon glyphicon-repeat spinner"></span>
+          <p>Loading...</p>
+        </div>
+        <br>
+        <div class="row show-hide-message" ng-show="resend.successMsg">
+          <div class="alert alert-success">{{ resend.successMsg }}</div>
+        </div>
+        <br>
+        <div class="row show-hide-message" ng-show="resend.errorMsg">
+          <div class="alert alert-danger">{{ resend.errorMsg }}</div>
+        </div>
+      </div>
+      <div class="col-4"></div>
     </div>
 
     <form ng-submit="resend.checkCredentials(loginData);">

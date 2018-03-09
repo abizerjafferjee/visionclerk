@@ -16,9 +16,9 @@
     <div  class="row">
       <div class="col-10" ng-show="search.search_examples">
         <p style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
+        <p style="text-align: center; color: #6b61f4;">Single Offensive Act</p>
+        <p style="text-align: center; color: #6b61f4;">Liability of Parent for Child vandalism</p>
         <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
-        <p style="text-align: center; color: #6b61f4;">Disability Discrimination Affirmative Defense Health or Safety Risk</p>
-        <p style="text-align: center; color: #6b61f4;">failure to mitigate termination when employee did not apply for jobs online</p>
       </div>
     </div>
 
@@ -38,18 +38,55 @@
   </div>
 </form>
 
+<!-- loading data -->
+<div  class="row">
+  <div class="col-5"></div>
+  <div class="col-2">
+    <div class="loader" ng-show="search.loading"></div>
+  </div>
+  <div class="col-5"></div>
+</div>
+
+<!-- No matching documents error -->
+<div  class="row">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <div class="row show-hide-message" ng-show="search.noResults" style="padding-top: 100px;">
+      <div class="alert alert-danger">
+        <h4>Sorry, we couldn't find any documents based on your query.</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-2"></div>
+</div>
+
 <!-- dynamic divs to display query result documents -->
 <div  class="row">
   <div class="col-1"></div>
   <div class="col-8">
-    <div ng-repeat="x in results">
+    <div ng-repeat="x in pageResults">
       <br>
       <h5>
-        <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.documenttext, x.docid)">{{ x.casename }}</a>
+        <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.htmltext, x.docID, x.rank, x.id)">{{ x.casename }}</a>
       </h5>
-      <p style="color: black;">Document Id: {{ x.docid }} Court: {{ x.court }}</p>
+      <p style="color: black;"><strong>Document Id:</strong> {{ x.docID }}, <strong>Court:</strong> {{ x.court }}, <strong>Date Filed:</strong> {{ x.datefiled }}</p>
     </div>
   </div>
   <div class="col-2"></div>
 </div>
 <div class="col-1"></div>
+
+<div class="row" ng-show="!search.main_search_bar">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <div class="row">
+      <div ng-repeat="q in numButtons">
+        <button class="button_list" ng-click="search.nextPage(q);">{{ q }}</button>
+      </div>
+    </div>
+    <button ng-show="search.nextTen" ng-click="search.nextTenPages();" style="float: right; background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;">Next 10 Pages</button>
+    <button ng-show="search.prevTen" ng-click="search.prevTenPages();" style="float: left; background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;">Previous 10 Pages</button>
+  </div>
+  </div>
+  <div class="col-4"></div>
+</div>

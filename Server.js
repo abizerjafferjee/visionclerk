@@ -7,6 +7,7 @@ var pg         = require('pg');
 var router     = express.Router();
 var appRoutes  = require('./App/Routes/api.js')(router);
 var path       = require('path');
+var favicon    = require('serve-favicon');
 
 // TRYING MONGOCLIENG
 var mongoClient = require('mongodb').MongoClient;
@@ -15,6 +16,7 @@ app.use(morgan('dev')); // morgan logs web app requests
 app.use(express.urlencoded()); // parse application/x-www-form-urlencoded
 app.use(express.json()); // parse application/json
 app.use(express.static(__dirname + '/Public'));
+app.use(favicon(__dirname + '/Public/assests/images/favicon.ico'));
 app.use('/api', appRoutes);
 
 // Mongo db used to store user information

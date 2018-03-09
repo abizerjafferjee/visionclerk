@@ -5,8 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="description" content="VisionClerk is a legal research engine for Canadian caselaw powered by artificial intelligence. VisionClerk is focused on enhancing a Lawyer's ability by creating tools which aim to minimize the amount of time spent on finding and evaluating the highest quality information.">
+    <meta name="keywords" content="legal research, canadian caselaw, judge, court, lawyer, litigator, law, court decisions, caselaw, legal, legal services, litigation, artificial intelligence, natural language processing, machine learning">
 
     <!-- Cascade Style Sheets -->
     <!-- <link rel="stylesheet" href="assests/css/bootstrap.css"> -->
@@ -17,8 +18,10 @@
 
     <!-- Main Angular Files -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-animate.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
 
     <!-- Angular config/Routes -->
     <script src="app/app.js"></script>
@@ -34,7 +37,7 @@
     <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
 
-    <title>VisionClerk</title>
+    <title>VisionClerk - Legal Research Engine Powered By Artificial Intelligence</title>
   </head>
 
   <body ng-app='userApp' ng-controller="mainCtrl as main" ng-show="main.loadme" ng-clock>
@@ -64,45 +67,48 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">
-          <h2>Powered by Kanonick AI</h2>
+          <h2>Legal Research Engine</h2>
+          <h4>Powered by Kanonick AI</h4>
           <p>VisionClerk is a search engine for Canadian Caselaw which uses the power of AI to make search more intuitive and make search results most relevant. We are currently in beta. You may use our search engine for free.</p>
+          <p>We are currently in beta. You may use our search engine for free. Please send us your feedback at the info@visionclerk.com</p>
           <br>
           <a href="/register" ng-click="main.doNOTshowLanding();">
             <button id="landing_resgister" style="background-color:#6b61f4; border-radius: 12px; border: 2px solid #6b61f4; color: white; padding: 10px 15px 10px 15px;" type="button">Register to Begin</button>
           </a>
         </div>
         <div id="vertical_line" class="col-4">
-          <!-- <hr width="1" size="500"> -->
-          <h2>Easy Query</h2>
-          <p>Search using plain language. You can ask questions, state specific fact patterns, search up on how a particular rule or principle of law is applied, and so much more...</p>
+          <div class="row">
+            <div class="col-1">
+              <!-- <span class="icon-search"></span> -->
+              <img src="assests/images/search.png" alt="nothing" style="width: 20px; height: 20px; paddin-top: 10px">
+            </div>
+            <div class="col-11">
+              <h2>Easy Query</h2>
+              <p>Search using plain language. You can ask questions, state specific fact patterns, search up on how a particular rule or principle of law is applied, and so much more...</p>
+            </div>
+          </div>
           <br>
-          <h2>Intelligent Search</h2>
-          <p>Our AI compares features of the query and documents by examining multiple dimensions. We retrieve documents with the strongest correlations and the greatest contextual relevance.</p>
-          <br><br>
+          <div class="row">
+            <div class="col-1">
+              <!-- <span class="icon-genius"></span> -->
+              <img src="assests/images/query.png" alt="nothing" style="width: 20px; height: 20px;">
+            </div>
+            <div class="col-11">
+              <h2>Intelligent Search</h2>
+              <p>Our AI compares features of the query and documents by examining multiple dimensions. We retrieve documents with the strongest correlations and the greatest contextual relevance.</p>
+            </div>
+            <br><br>
+        </div>
         </div>
         <div class="col-2"></div>
       </div>
     </div>
 
-    <!-- Search bar Incase we change our mind for landing page -->
-    <!-- <div ng-show="!main.isLoggedIn" class="container">
-      <div  class="row">
-        <div class="col-1"></div>
-        <div class="col-8">
-          <form ng-submit="search.searchData(data);">
-            <input class="form-control" type="search" ng-model="search.data.query">
-          </form>
-        </div>
-        <div class="col-2">
-          <button class="btn btn-dark" type="submit">Search</button>
-        </div>
-      </div>
-    </div> -->
-
     <div ng-view></div>
+    <br><br>
 
     <!-- FOOTER -->
-    <div ng-show="main.registering" class="footer">
+    <div ng-show="main.registering" class="footer" style="background-color: #ededed">
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">
@@ -116,7 +122,7 @@
           <h2>Contact Information</h2>
           <p>600 Queens Quay West, Suite 232 Toronto On M5V3M3</p>
           <p>Phone: +1 647-936-1140</p>
-          <p>Email: info@yoursite.com</p>
+          <p>Email: info@visionclerk.com</p>
         </div>
         <div class="col-2"></div>
       </div>
