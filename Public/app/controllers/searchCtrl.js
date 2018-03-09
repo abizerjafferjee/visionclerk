@@ -322,7 +322,6 @@ searchControllers
     app.user_name = $scope.main.username;
     app.docID = myService.getDocID();
     app.caseId = myService.getCaseId();
-    console.log(app.caseId);
 
     // data to send: id | username | query | docid | score(0,1)
     $http.post('/api/userfeedback', app).then(function(feedback_results){

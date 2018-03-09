@@ -381,12 +381,12 @@ module.exports = function(router) {
 
   // data to send: id | username | query | id/caserank | docid | score(0,1)
   router.post('/userfeedback', function(req, res) {
-    console.log(req.body);
+    /*console.log(req.body);
     console.log(req.body.user_name);
     console.log(req.body.userquery);
     console.log(req.body.caseId);
     console.log(req.body.docID);
-    console.log(req.body.rel_score);
+    console.log(req.body.rel_score);*/
 
     // Connecting to the PSQL DB
     var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
@@ -422,7 +422,6 @@ module.exports = function(router) {
         json: true,},
         function (error, response, body) {
           //Print the Response
-          console.log(body);
           if(body.success == false) {
               console.log(body);
           } else if(body.success == true) {

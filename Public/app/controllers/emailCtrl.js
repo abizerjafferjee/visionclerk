@@ -122,7 +122,7 @@ emailController.controller('emailCtrl', function($routeParams, User, $timeout, $
       User.savePassword(app.regData).then(function(data) {
         app.loading = false;
         if (data.data.success) {
-          app.successMsg = data.data.message + ' You may now login using your new password';
+          app.successMsg = data.data.message;
           /*$timeout(function() {
             $location.path('/login');
           }, 1000);*/
