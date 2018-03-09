@@ -312,7 +312,7 @@ searchControllers
   this.userFeedback = function(relevance) {
     app.rel_score = relevance;
     app.user_name = $scope.main.username;
-
+    app.docID - myservice.getDocID();
     // data to send: id | username | query | docid | score(0,1)
     $http.post('/api/userfeedback', app).then(function(feedback_results){
         // add if cases for failures, allow users to submit again
