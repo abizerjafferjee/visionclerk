@@ -265,14 +265,27 @@ searchControllers
 
     // case1: current case is in the first page
     if(cur_page == 0) {
-      var cur_results_beging = 0;
-      var cur_results_end = cur_results_beging + results_per_page;
-      $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
-      var num_buttons = _.range(1, results_per_page + 1);
-      $scope.numButtons = num_buttons;
+      // case1_a: pages required <= 10
+      if(pgs_req <= 10){
+        var cur_results_beging = 0;
+        var cur_results_end = cur_results_beging + results_per_page;
+        $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
+        var num_buttons = _.range(1, (pgs_req + 1));
+        $scope.numButtons = num_buttons;
 
-      app.btr_nt = true;
-      app.btr_pt = false;
+        app.btr_nt = false;
+        app.btr_pt = false;
+      } else {
+        // case1_b: pages required > 10
+        var cur_results_beging = 0;
+        var cur_results_end = cur_results_beging + results_per_page;
+        $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
+        var num_buttons = _.range(1, 11); // max 10 buttons
+        $scope.numButtons = num_buttons;
+
+        app.btr_nt = true;
+        app.btr_pt = false;
+      }
 
     // current case is NOT in the first page
     } else {
@@ -281,18 +294,29 @@ searchControllers
       $scope.cur_results = data.slice(cur_results_beging, cur_results_end);
 
       // case2: current page within the first 10 buttons
-      if(cur_page <= 10) {
-        var num_buttons = _.range(1, 11);
-        $scope.numButtons = num_buttons;
+      if(cur_page <= 10) { // max 10 buttons
+        // case2_a: pages required <= 10
+        if(pgs_req <= 10) { // max 10 buttons
+          var num_buttons = _.range(1, (pgs_req + 1));
+          $scope.numButtons = num_buttons;
 
-        app.btr_nt = true;
-        app.btr_pt = false;
+          app.btr_nt = false;
+          app.btr_pt = false;
+
+        // case2_b: pages required > 10
+        } else {
+          var num_buttons = _.range(1, 11);  // max 10 buttons
+          $scope.numButtons = num_buttons;
+
+          app.btr_nt = true;
+          app.btr_pt = false;
+        }
 
       // current page is after the first 10 buttons
       } else {
-        var buttons_begin = (Math.floor(cur_page / 10) * 10);
+        var buttons_begin = (Math.floor(cur_page / 10) * 10); // max 10 buttons
         // case3 : last pages/last button -not all 10 buttons are needed
-        if((buttons_begin + 11) > pgs_req) {
+        if((buttons_begin + 11) > pgs_req) { // max 10 buttons
           var buttons_end = pgs_req + 1;
           var num_buttons = _.range(buttons_begin, buttons_end);
           $scope.numButtons = num_buttons;
@@ -302,7 +326,7 @@ searchControllers
 
         // case4: current page is somewhere in the middle -not first 10 pages -not last pages
         } else {
-          var buttons_end = buttons_begin + 11;
+          var buttons_end = buttons_begin + 11; // max 10 buttons
           var num_buttons = _.range(buttons_begin, buttons_end);
           $scope.numButtons = num_buttons;
 
@@ -318,13 +342,13 @@ searchControllers
   };
 
   this.userFeedback = function(relevance) {
-    app.rel_score = relevance;
-    app.user_name = $scope.main.username;
-    app.docID = myService.getDocID();
-    app.caseId = myService.getCaseId();
+    var id = myService.getCaseId();
+    var docID = myService.getDocID();
+    var feedback = '{"username":"' + $scope.main.username + '", "query":"' + app.userquery + '", "id":"' + id + '", "docID":"' + docID + '", "score":"' + relevance + '"}';
+    app.userfeedback = JSON.parse(JSON.stringify(feedback));
 
     // data to send: id | username | query | docid | score(0,1)
-    $http.post('/api/userfeedback', app).then(function(feedback_results){
+    $http.post('/api/userfeedback', app.userfeedback).then(function(feedback_results){
         // add if cases for failures, allow users to submit again
         if(feedback_results.statusText == 'OK') {
           app.feedback_submitted = false;
