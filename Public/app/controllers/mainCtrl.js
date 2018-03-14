@@ -1,10 +1,15 @@
 var mainController = angular.module('mainController', ['authServices']);
 
-mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootScope, $route){
+mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootScope, $route, $scope){
   var app = this;
 
   app.loadme = false;
-  app.registering = true;
+  var landing = localStorage.getItem('registering');
+  if(landing == null){
+    app.registering = true;
+  } else if(landing == 1) {
+    app.registering = true;
+  } // if landing == 0 don't even create the flag because creating it shows it
 
   $rootScope.$on('$routeChangeStart', function(){
     if (Auth.isLoggedIn()){
@@ -62,12 +67,14 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
   };
 
   this.showLanding = function() {
+    localStorage.setItem('registering', 1);
     app.registering = true;
-    $route.reload();
+    //$route.reload();
   }
 
   this.doNOTshowLanding = function() {
+    localStorage.setItem('registering', 0);
     app.registering = false;
-    $route.reload();
+    //$route.reload();
   };
 });

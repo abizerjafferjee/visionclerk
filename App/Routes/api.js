@@ -7,32 +7,18 @@ var ml_model      = '//home//bitnami//projects//legalx//App//Routes//my_python.p
 var nodemailer    = require('nodemailer');
 var request       = require('request');
 var util          = require('util');
-var smtpTransport = require('nodemailer-smtp-transport');
-var xoauth2       = require('xoauth2');
 
 module.exports = function(router) {
 
-  /*var transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
     secure: false,
     port: 25,
     auth: {
-      user: 'info.visionclerk@gmail.com',
-      pass: 'Poljmv98**)!'
+      user: 'legalxstartup@gmail.com',
+      pass: 'legalx1234'
     }
-  });*/
-  var transporter = nodemailer.createTransport(smtpTransport({
-    service: 'Gmail',
-    auth: {
-      xoauth2: xoauth2.createXOAuth2Generator({
-        user: 'noreply@visionclerk.com',
-
-        clientId: '376764402439-nh5gbd9387tb638jjabdaf76cufirhp4.apps.googleusercontent.com',
-        clientSecret: 'xPPBc9eMqLnyz5FUo4blharj',
-        refreshToken: '1/9kCf9kgMI_Os8Yk3Qsvpnmi32OKAHzVb5103FVCnURIoG4D7CjqTZVX0ftE12cqs'
-      })
-    }
-  }));
+  });
 
   // USER REGISTRATION ROUTE
   //http://localhost:8080/api/users
@@ -43,11 +29,11 @@ module.exports = function(router) {
     user.email = req.body.email;
     user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
     if (user.username == null || user.username == ''){
-      res.json({ success: false, message:'Please provide a valid Username'});
+      res.json({ success: false, message:'Please provide an Username'});
     } else if (user.password == null || user.password == '') {
-      res.json({ success: false, message:'Please provide a valid Password'});
+      res.json({ success: false, message:'Please provide a Password'});
     } else if (user.email == null || user.email == '') {
-      res.json({ success: false, message:'Please provide a valid email'});
+      res.json({ success: false, message:'Please provide a email'});
     } else {
       user.save(function(err){
         if (err) {
@@ -71,7 +57,7 @@ module.exports = function(router) {
           }
         } else {
           var mailOptions = {
-            from: 'VisonClerk Staff <info@visionclerk.com>',
+            from: 'VisonClerk Staff <legalxstartup@gmail.com>',
             to: user.email,
             subject: 'VisonClerk Account Activation link',
             text: 'Hello ' + user.username + ', Thank you for registering at VisonClerk.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
@@ -138,7 +124,7 @@ module.exports = function(router) {
 
 
               var mailOptions = {
-                from: 'VisonClerk Staff <info@visionclerk.com>',
+                from: 'VisonClerk Staff <legalxstartup@gmail.com>',
                 to: user.email,
                 subject: 'VisonClerk Account Activation link',
                 text: 'Hello' + user.username + ', Your account has been successfully activated!',
@@ -152,7 +138,7 @@ module.exports = function(router) {
                   console.log('Email sent');
                 }
               });
-              res.json({ success: true, message: 'Account activated! You may now login.'});
+              res.json({ success: true, message: 'Account activated!'});
             }
           });
         }
@@ -195,7 +181,7 @@ module.exports = function(router) {
           console.log(err);
         } else {
           var mailOptions = {
-            from: 'VisonClerk Staff <info@visionclerk.com>',
+            from: 'VisonClerk Staff <legalxstartup@gmail.com>',
             to: user.email,
             subject: 'VisonClerk Account Activation link Request',
             text: 'Hello ' + user.username + ', you recently requested a new account activation link at VisonClerk.com. Please click on the link below to complete your activation: http://35.183.35.209:8080/activate/' + user.temporarytoken,
@@ -227,7 +213,7 @@ module.exports = function(router) {
             res.json({ success: false, message: 'E-mail was not found!' });
           } else {
             var mailOptions = {
-              from: 'VisonClerk Staff <info@visionclerk.com>',
+              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
               to: user.email,
               subject: 'VisonClerk Username Request',
               text: 'Hello ' + user.username + ', you recently requested your username! Your username is: ' + user.username,
@@ -265,7 +251,7 @@ module.exports = function(router) {
             res.json({ success: false, message: err });
           } else {
             var mailOptions = {
-              from: 'VisonClerk Staff <info@visionclerk.com>',
+              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
               to: user.email,
               subject: 'VisonClerk Reset Password Request',
               text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://35.183.35.209:8080/newpassword/' + user.resettoken,
@@ -324,7 +310,7 @@ module.exports = function(router) {
             res.json({ success: false, message: err});
           } else {
             var mailOptions = {
-              from: 'VisonClerk Staff <info@visionclerk.com>',
+              from: 'VisonClerk Staff <legalxstartup@gmail.com>',
               to: user.email,
               subject: 'VisonClerk Reset Password',
               text: 'Hello ' + user.username + ', this Email is to notify you that your password was recently reset at VisonClerk.com',
@@ -381,12 +367,7 @@ module.exports = function(router) {
 
   // data to send: id | username | query | id/caserank | docid | score(0,1)
   router.post('/userfeedback', function(req, res) {
-    /*console.log(req.body);
-    console.log(req.body.user_name);
-    console.log(req.body.userquery);
-    console.log(req.body.caseId);
-    console.log(req.body.docID);
-    console.log(req.body.rel_score);*/
+    console.log(req.body);
 
     // Connecting to the PSQL DB
     var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
@@ -395,8 +376,9 @@ module.exports = function(router) {
       if (err) { throw err; }
     });
     var query = client.query('set search_path to user_feedback');
-    console.log("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caseId + ",'" + req.body.docID + "'," + req.body.rel_score + ")");
-    var query2 = client.query("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.user_name + "','" + req.body.userquery + "'," + req.body.caseId + ",'" + req.body.docID + "'," + req.body.rel_score + ")");
+    req.body.docID = 'D-01';
+    console.log("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.username + "','" + req.body.query + "'," + req.body.id + ",'" + req.body.docID + "'," + req.body.score + ")");
+    var query2 = client.query("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.username + "','" + req.body.query + "'," + req.body.id + ",'" + req.body.docID + "'," + req.body.score + ")");
     query2.then((result) =>
       // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
       res.json(JSON.parse(JSON.stringify(result))));
@@ -410,7 +392,7 @@ module.exports = function(router) {
     console.log(req.decoded.username);*/
 
     // sending requests to python API
-    var headersOpt = {
+    /*var headersOpt = {
         "content-type": "application/json",
     };
 
@@ -437,12 +419,10 @@ module.exports = function(router) {
               // id = 1234 int and docid = "D-0" str
               //var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
               if(results_table == 'no matching docs') {
-                console.log('No matching docs');
                 res.json({ success: false, message: 'no matching docs' });
               } else {
-                //var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
-              var formatted_query = util.format('SELECT id, casename, datefiled, court, A."docID", htmltext, relevance, cos_sim from legalx_schema.vc_documents as A, %s as B where A."docID" = B."docID"', results_table);
-              var query2 = client.query(formatted_query);
+                var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
+                var query2 = client.query(formatted_query);
                 query2.then((result) =>
                   // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
                   res.json(JSON.parse(JSON.stringify(result.rows))));
@@ -450,10 +430,10 @@ module.exports = function(router) {
           } else {
               console.log(error);
           }
-        });
+        });*/
 
     // spawning python program
-    /*var options = {
+    var options = {
       mode: 'text',
       pythonPath: '/home/bitnami/anaconda3/bin/python',
       pythonOptions: ['-u'],
@@ -462,8 +442,8 @@ module.exports = function(router) {
     };
     // Triggers Python model to retrieve db table containing relevant documents to the user query
     var spawn = require('child_process').spawn;
-    //var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
-    var proc = spawn('python', [ml_model, req.body.query]);
+    var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
+    //var proc = spawn('python', [ml_model, req.body.query]);
 
     //python program output
     proc.stdout.on('data', function(data){
@@ -476,9 +456,10 @@ module.exports = function(router) {
       client.connect(err => {
         if (err) { throw err; }
       });
-      var query = client.query('set search_path to legalx_schema');
+      //var query = client.query('set search_path to legalx_schema');
       // id = 1234 int and docid = "D-0" str
-      var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
+      //'SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table
+      var query2 = client.query('SELECT id, casename, court, doc_raw_text, htmltext, datefiled FROM legalx_schema.vc_documents LIMIT 233');
       query2.then((result) =>
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
         res.json(JSON.parse(JSON.stringify(result.rows))));
@@ -489,7 +470,7 @@ module.exports = function(router) {
       var buff = new Buffer(data);
       console.log('******* THERE WAS AN ERROR EXECUTING PYTHON: ');
       console.log(buff.toString('utf8'));
-    });*/
+    });
   });
 
   return router;
