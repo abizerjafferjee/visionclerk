@@ -21,6 +21,7 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
           app.errorMsg = 'Your session has expired, please login again.';
           Auth.logout();
           $location.path('/login');
+          location.reload();
         } else {
           app.username = data.data.username;
           app.useremail = data.data.email;
