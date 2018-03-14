@@ -15,9 +15,17 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
     if (Auth.isLoggedIn()){
       app.isLoggedIn = true;
       Auth.getUser().then(function(data){
-        app.username = data.data.username;
-        app.useremail = data.data.email;
-        app.loadme = true;
+        // if get user returns success false, it means that token has expried, must log user out
+        if(data.data.message){
+          app.disabled = false;
+          app.errorMsg = 'Your session has expired, please login again.';
+          Auth.logout();
+          $location.path('/login');
+        } else {
+          app.username = data.data.username;
+          app.useremail = data.data.email;
+          app.loadme = true;
+        }
       });
     } else {
       app.isLoggedIn = false;
