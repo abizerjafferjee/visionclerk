@@ -41,7 +41,7 @@ module.exports = function(router) {
     user.username = req.body.username;
     user.password = req.body.password;
     user.email = req.body.email;
-    user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
+    user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
     if (user.username == null || user.username == ''){
       res.json({ success: false, message:'Please provide a valid Username'});
     } else if (user.password == null || user.password == '') {
@@ -111,7 +111,7 @@ module.exports = function(router) {
         } else if (!user.active) {
           res.json({ success: false, message: 'Account is not yet activated. Please check your email for activation link.', expired: true });
         } else {
-          var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
+          var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
           res.json({ success: true, message: 'User authenticated!', token: token });
         }
       }
@@ -189,7 +189,7 @@ module.exports = function(router) {
     .select('username email temporarytoken')
     .exec(function(err, user) {
       if (err) throw err;
-      user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
+      user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
       user.save(function(err) {
         if (err) {
           console.log(err);
@@ -259,7 +259,7 @@ module.exports = function(router) {
       } else if (!user.active) {
         res.json({ success: false, message: 'Account has not yet been activated, Please check your Email!' })
       } else {
-        user.resettoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '24h' });
+        user.resettoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
         user.save(function(err) {
           if (err) {
             res.json({ success: false, message: err });
