@@ -11,6 +11,16 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
     app.registering = true;
   } // if landing == 0 don't even create the flag because creating it shows it
 
+  // onpopstate is used to track when user uses back/forward browser arrows
+  window.onpopstate=function() {
+    if(window.location.pathname == '/') {
+        console.log('back to root');
+        localStorage.setItem('registering', 1);
+        app.registering = true;
+        location.reload();
+    }
+  }
+
   $rootScope.$on('$routeChangeStart', function(){
     if (Auth.isLoggedIn()){
       app.isLoggedIn = true;

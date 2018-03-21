@@ -41,6 +41,12 @@ appRoutes.config(function($routeProvider, $locationProvider){
     controllerAs : 'search'
   })
 
+  .when('/displaycase/:case_id', {
+    templateUrl : 'app/views/pages/users/displayCase.html',
+    controller : 'searchCtrl',
+    controllerAs : 'search'
+  })
+
   .when('/activate/:token', {
     templateUrl : 'app/views/pages/users/activation/activate.html',
     controller : 'emailCtrl',

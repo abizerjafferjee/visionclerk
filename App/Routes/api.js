@@ -331,6 +331,12 @@ module.exports = function(router) {
     });
   });
 
+  router.post('/displaycase/:case_id', function(req, res) {
+    console.log(req.params.case_id);
+    //console.log(req.body);
+    res.json(req.body);
+  });
+
   router.delete('/deleteaccount/:email', function(req, res) {
      User.findOneAndRemove({ email: req.params.email })
      .exec(function(err, info) {
@@ -463,6 +469,13 @@ module.exports = function(router) {
       query2.then((result) =>
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
         res.json(JSON.parse(JSON.stringify(result.rows))));
+
+      /*client.end((err) => {
+        console.log('client has disconnected')
+        if (err) {
+          console.log('error during disconnection', err.stack)
+        }
+      });*/
     });
 
     // python program error

@@ -98,7 +98,7 @@ searchControllers
     2) Recieves query results (JSON object of related cases to the query[data])
     3) Sets case data ($scope.results) to be dynamically displayed
 */
-.controller('searchCtrl', function($http, $scope, myService){
+.controller('searchCtrl', function($http, $scope, $routeParams, myService){
 
   var app = this;
   var results_per_page = 10;
@@ -225,24 +225,14 @@ searchControllers
     var id = myService.getDocID();
     var rank = myService.getCaseRank();
 
-    app.casename = name;
-    app.doctext = text;
-    app.userquery = query;
-    app.docid = id;
-    app.caserank = rank;
+    var dis = sessionStorage.displayCase
+    var json = JSON.parse(dis);
 
-    // PARSING DOC TEXT
-    /*var sub_text = text.split('\n');
-    app.sub_text = sub_text;
-
-    var parsed = ' ';
-    for(var i=0; i<sub_text.length; i++){
-        var a = '<p>'.concat(sub_text[i].concat('</p>'));
-        parsed = parsed.concat(a);
-    }
-    console.log(parsed);
-    app.parsed = parsed;*/
-    // PARSING DOC TEXT
+    app.casename = json.caseName;
+    app.doctext = json.caseText;
+    app.userquery = json.caseQuery;
+    app.docid = json.docId;
+    app.caserank = json.caseRank;
   };
 
   // Send Case Data functions is used to send case data to the display case page
@@ -251,6 +241,13 @@ searchControllers
     myService.setDocID(doc_id);
     myService.setCaseRank(rank);
     myService.setCaseId(case_id);
+    var rep = case_text.replace(/"/g, "'");
+    var case_data = '{ "caseName":"' + case_name + '", "caseText":"' + rep + '", "caseQuery":"' + myService.getUserQuery() + '", "docId":"' + doc_id + '", "caseRank":' + rank + ', "caseId":' + case_id + ' }';
+    sessionStorage.displayCase = case_data;
+
+    // must be doc_id not case_id
+    console.log('/api/displaycase/' + case_id);
+    $http.post('/api/displaycase/' + case_id, case_data);
   };
 
   // BACK TO RESULTS page
