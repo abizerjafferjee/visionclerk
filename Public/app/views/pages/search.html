@@ -64,12 +64,12 @@
 <div  class="row">
   <div class="col-1"></div>
   <div class="col-8">
-    <div ng-repeat="x in pageResults">
+    <div ng-repeat="case in pageResults">
       <br>
       <h5>
-        <a href="/displaycase/{{ x.id }}" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(x.casename, x.htmltext, x.docID, x.rank, x.id)">{{ x.casename }}</a>
+        <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(case.case_name, case.case_html, case.case_id, case.case_rank)">{{ case.case_name }}</a>
       </h5>
-      <p style="color: black;"><strong>Document Id:</strong> {{ x.docID }}, <strong>Court:</strong> {{ x.court }}, <strong>Date Filed:</strong> {{ x.datefiled }}</p>
+      <p style="color: black;"><strong>Document Id:</strong> {{ case.case_id }}, <strong>Court:</strong> {{ case.case_court }}, <strong>Date Filed:</strong> {{ case.case_datefiled }}</p>
     </div>
   </div>
   <div class="col-2"></div>

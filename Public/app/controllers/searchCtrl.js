@@ -28,11 +28,10 @@ searchControllers
   var global_times_pressed = 0;
 
   return {
-    getCase:function(){
-      return [case_name, case_text];
+    getCaseText:function(){
+      return case_text;
     },
-    setCase:function(name, text){
-      case_name = name;
+    setCaseText:function(text){
       case_text = text;
     },
 
@@ -88,6 +87,33 @@ searchControllers
     },
     getTimesPressed:function() {
       return global_times_pressed;
+    },
+
+    // WATSON HELPER FUNCTIONS
+    getCaseNameFromWatsonResults:function(i_watson_result) {
+      file_name = i_watson_result["extracted_metadata"]["filename"];
+      if(file_name.includes('_')) {
+        return file_name.substring(0, file_name.indexOf('_')).replace(/.html/ig, '').replace(/.pdf/ig, '');
+      } else {
+        return file_name.replace(/.html/ig, '').replace(/.pdf/ig, '');
+      }
+
+    },
+    getCaseCourtFromWatsonResults:function(i_watson_result) {
+      for (i = 0; i < i_watson_result['enriched_text'].entities.length; i++) {
+        if ((i_watson_result['enriched_text'].entities[i]['type'] == 'Organization') && (i_watson_result['enriched_text'].entities[i]['text'].includes('Court'))) {
+          return i_watson_result['enriched_text'].entities[i]['text'];
+          break;
+        }
+      }
+      return 'No Court information found';
+    },
+    getCaseDateFiledFromWatsonResults:function(i_watson_result) {
+      if ("publicationdate" in i_watson_result["extracted_metadata"]) {
+        return i_watson_result["extracted_metadata"]["publicationdate"];
+      } else {
+        return "No Information";
+      }
     }
   }
 })
@@ -117,50 +143,59 @@ searchControllers
   this.searchData = function(data) {
     app.loading = true;
     app.noResults = false;
-    $http.post('/api/search', this.data).then(function(query_results){
+    $http.post('/api/search', this.data).then(function(watson_response){
       app.loading = false;
-      // if results sucess is undefined it means we have results
-      if(angular.isUndefined(query_results.data.success)){
-
-        // access db for query results
-        for (var i=0; i<query_results.data.length; i++){
-          query_results.data[i].rank = i+1;
-        }
-        $scope.results = query_results.data;
-        myService.setUserQuery($scope.search.data.query);
-        //myService.setCaseRawText(query_results.data);
-
-        // multi page results
-        results_len = query_results.data.length
-        if(results_len > results_per_page) {
-          var num_pages = Math.ceil(results_len / results_per_page);
-          myService.setNumPagesReq(num_pages);
-          $scope.pageResults = query_results.data.slice(0, results_per_page);
-
-          // generating buttons
-          if(num_pages <= results_per_page) {
-            num_buttons = _.range(1, num_pages + 1);
-            $scope.numButtons = num_buttons;
-
-          // need to generate more than 10 buttons i.e 100 results
-          } else {
-            app.nextTen = true;
-            num_buttons = _.range(1, (results_per_page + 1));
-            $scope.numButtons = num_buttons;
-          }
-        }
-        // SEARCH RESULTS PERSISTANCY
-        myService.setSearchResults($scope.results);
-
-        // AESTHETICS
-        app.main_search_bar = false;
-
-      // ressults success did NOT successed i.e no matching documents
-      } else if(!query_results.data.success) {
+      if(watson_response.data.matching_results == 0) {
         app.loading = false;
         app.noResults = true;
         app.main_search_bar = false;
       }
+      var watson_results = watson_response.data.results;
+      console.log(watson_results);
+      // Need to filter out extra information i.e create simpler results just with data needed
+      // Data needed: case_name, case_id, case_court, case_datefiled, case_text, case_html
+      var query_results = [];
+      for (var i=0; i<watson_results.length; i++){
+        var i_name = myService.getCaseNameFromWatsonResults(watson_results[i]);
+        var i_id = watson_results[i].id;
+        var i_court = myService.getCaseCourtFromWatsonResults(watson_results[i]);
+        var i_datefiled = myService.getCaseDateFiledFromWatsonResults(watson_results[i]);
+        //filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_text":"' + i_text + '", "case_html":"' + i_html + '"}';
+        filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_rank":"' + (i + 1) + '" }';
+        query_results[i] = JSON.parse(filtered_result);
+        query_results[i]['case_text'] = watson_results[i].text;
+        query_results[i]['case_html'] = watson_results[i].html;
+      }
+      $scope.results = query_results;
+      myService.setUserQuery($scope.search.data.query);
+
+      // multi page results
+      var results_len = query_results.length;
+      if(results_len > results_per_page) {
+        var num_pages = Math.ceil(results_len / results_per_page);
+        myService.setNumPagesReq(num_pages);
+        $scope.pageResults = query_results.slice(0, results_per_page);
+
+        // generating buttons
+        if(num_pages <= results_per_page) {
+          num_buttons = _.range(1, num_pages + 1);
+          $scope.numButtons = num_buttons;
+
+        // need to generate more than 10 buttons i.e 100 results
+        } else {
+          app.nextTen = true;
+          num_buttons = _.range(1, (results_per_page + 1));
+          $scope.numButtons = num_buttons;
+        }
+      // single page results i.e less than 10 results
+    } else {
+      $scope.pageResults = query_results;
+    }
+      // SEARCH RESULTS PERSISTANCY
+      myService.setSearchResults($scope.results);
+
+      // AESTHETICS
+      app.main_search_bar = false;
     });
   };
 
@@ -220,43 +255,39 @@ searchControllers
 
 //  Display case function is used to display the raw text of a choosen case
   this.displayCase = function(){
-    var [name, text] = myService.getCase();
-    var query = myService.getUserQuery();
-    var id = myService.getDocID();
-    var rank = myService.getCaseRank();
+    var case_data = sessionStorage.displayCase;
+    var case_json = JSON.parse(case_data);
+    case_json['case_text'] = myService.getCaseText();
 
-    var dis = sessionStorage.displayCase
-    var json = JSON.parse(dis);
+    app.casename = case_json.case_name;
+    app.doctext = case_json.case_text;
+    app.userquery = case_json.case_query;
+    app.docid = case_json.case_id;
+    app.caserank = case_json.case_rank;
 
-    app.casename = json.caseName;
-    app.doctext = json.caseText;
-    app.userquery = json.caseQuery;
-    app.docid = json.docId;
-    app.caserank = json.caseRank;
+    // rank is used to go back to reults
+    myService.setCaseRank(case_json.case_rank);
+    // case id is needed for user feedback_results
+    myService.setCaseId(case_json.case_id);
   };
 
   // Send Case Data functions is used to send case data to the display case page
-  $scope.sendCaseData = function(case_name, case_text, doc_id, rank, case_id){
-    myService.setCase(case_name, case_text);
-    myService.setDocID(doc_id);
-    myService.setCaseRank(rank);
-    myService.setCaseId(case_id);
-    var rep = case_text.replace(/"/g, "'");
-    var case_data = '{ "caseName":"' + case_name + '", "caseText":"' + rep + '", "caseQuery":"' + myService.getUserQuery() + '", "docId":"' + doc_id + '", "caseRank":' + rank + ', "caseId":' + case_id + ' }';
+  $scope.sendCaseData = function(case_name, case_text, case_id, case_rank){
+    var case_data = '{ "case_name":"' + case_name + '", "case_id":"' + case_id + '", "case_rank":"' + case_rank + '", "case_query":"' + myService.getUserQuery() + '" }';
     sessionStorage.displayCase = case_data;
+    myService.setCaseText(case_text);
 
     // must be doc_id not case_id
-    console.log('/api/displaycase/' + case_id);
-    $http.post('/api/displaycase/' + case_id, case_data);
+    //console.log('/api/displaycase/' + case_id);
+    //$http.post('/api/displaycase/' + case_id, case_data);
   };
 
   // BACK TO RESULTS page
   this.backToResults = function() {
-    var id = myService.getDocID();
+    //var id = myService.getDocID();
     var rank = myService.getCaseRank();
     var data = myService.getSearchResults();
     var pgs_req = myService.getNumPagesReq();
-    //var index = data.map(function(d) { return d['id']; }).indexOf(rank);
     var cur_page = Math.floor(rank / results_per_page);
     app.curpage = cur_page;
 
@@ -343,12 +374,12 @@ searchControllers
     app.user_name = $scope.main.username;
     app.docID = myService.getDocID();
     app.caseId = myService.getCaseId();*/
-    var id = myService.getCaseId();
-    var docID = myService.getDocID();
-    var feedback = '{"username":"' + $scope.main.username + '", "query":"' + app.userquery + '", "id":"' + id + '", "docID":"' + docID + '", "score":"' + relevance + '"}';
+    var case_id = myService.getCaseId();
+    //var docID = myService.getDocID();
+    var feedback = '{"username":"' + $scope.main.username + '", "query":"' + app.userquery + '", "docid":"' + case_id + '", "score":"' + relevance + '"}';
     app.userfeedback = JSON.parse(JSON.stringify(feedback));
 
-    // data to send: id | username | query | id | docid | score(0,1)
+    // data to send: ix | username | query | id | docid | score(0,1)
     $http.post('/api/userfeedback', app.userfeedback).then(function(feedback_results){
         // add if cases for failures, allow users to submit again
         if(feedback_results.statusText == 'OK') {

@@ -8,8 +8,22 @@ var nodemailer    = require('nodemailer');
 var request       = require('request');
 var util          = require('util');
 
+var DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
+// WATSON ENVIRONMENT PARAMETERS
+collection_id = '0f01bb27-4154-4995-9887-577be72218f2';
+configuration_id = 'b79654d2-76d8-48e1-be0b-5601a9738daf';
+environment_id = '18d60b1b-d3eb-4a55-9a9b-0fd9a3281aa7';
+
 module.exports = function(router) {
 
+  // WATSON CREDENTIALS
+  var discovery = new DiscoveryV1({
+    username: "0878e83e-37b8-4e8a-bd8f-9be48e1ac754",
+    password: "YGCfaBJTwi3S",
+    version_date: '2017-11-07'
+  });
+
+  // EMAIL CREDENTIALS
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     secure: false,
@@ -373,18 +387,15 @@ module.exports = function(router) {
 
   // data to send: id | username | query | id/caserank | docid | score(0,1)
   router.post('/userfeedback', function(req, res) {
-    console.log(req.body);
-
     // Connecting to the PSQL DB
     var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
     var client = new pg.Client(connectionString);
     client.connect(err => {
       if (err) { throw err; }
     });
-    var query = client.query('set search_path to user_feedback');
-    req.body.docID = 'D-01';
-    console.log("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.username + "','" + req.body.query + "'," + req.body.id + ",'" + req.body.docID + "'," + req.body.score + ")");
-    var query2 = client.query("INSERT INTO relevancy_score (username, query, id, docid, score) VALUES ('" + req.body.username + "','" + req.body.query + "'," + req.body.id + ",'" + req.body.docID + "'," + req.body.score + ")");
+    //var query = client.query('set search_path to user_feedback');
+    console.log("INSERT INTO user_feedback.relevancy_score (username, query, docid, score) VALUES ('" + req.body.username + "','" + req.body.query + "','" + req.body.docid + "'," + req.body.score + ")");
+    var query2 = client.query("INSERT INTO user_feedback.relevancy_score (username, query, docid, score) VALUES ('" + req.body.username + "','" + req.body.query + "','" + req.body.docid + "'," + req.body.score + ")");
     query2.then((result) =>
       // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
       res.json(JSON.parse(JSON.stringify(result))));
@@ -393,6 +404,28 @@ module.exports = function(router) {
   // USER SEARCH ROUTE
   //http://localhost:8080/api/search
   router.post('/search', function(req, res){
+    console.log(req.body.query);
+    // WATSON API QUERY
+    //QUERY PARAMETERS
+    natural_language_query = req.body.query;
+    count = 10;
+    offset = 0;
+    passages = true;
+    highlight = true;
+    //return_fields = ['id', 'result_metadata', 'extracted_metadata', 'html', 'enriched_text', 'highlight'];
+    filter = 'enriched_text.entities.type:Organization,enriched_text.entities.type:Location';
+    // aggregation = '';
+    // sort = [];
+
+    parameters = {environment_id: environment_id, collection_id: collection_id,
+                  natural_language_query: natural_language_query, count: count,
+                  offset: offset, passages: passages, highlight: highlight};
+
+    //QUERY
+    discovery.query(parameters, function(error, data) {
+      // MAKE SURE TO TAKE CARE OF THE ERRORS IF THEY HAPPEN
+      res.json(data);
+    });
 
     /*console.log(req.body.query);
     console.log(req.decoded.username);*/
@@ -439,7 +472,7 @@ module.exports = function(router) {
         });*/
 
     // spawning python program
-    var options = {
+    /*var options = {
       mode: 'text',
       pythonPath: '/home/bitnami/anaconda3/bin/python',
       pythonOptions: ['-u'],
@@ -468,7 +501,7 @@ module.exports = function(router) {
       var query2 = client.query('SELECT id, casename, court, doc_raw_text, htmltext, datefiled FROM legalx_schema.vc_documents LIMIT 233');
       query2.then((result) =>
         // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
-        res.json(JSON.parse(JSON.stringify(result.rows))));
+        res.json(JSON.parse(JSON.stringify(result.rows))));*/
 
       /*client.end((err) => {
         console.log('client has disconnected')
@@ -476,14 +509,14 @@ module.exports = function(router) {
           console.log('error during disconnection', err.stack)
         }
       });*/
-    });
+    //});
 
     // python program error
-    proc.stderr.on('data', function(data){
+    /*proc.stderr.on('data', function(data){
       var buff = new Buffer(data);
       console.log('******* THERE WAS AN ERROR EXECUTING PYTHON: ');
       console.log(buff.toString('utf8'));
-    });
+    });*/
   });
 
   return router;
