@@ -63,6 +63,7 @@
       </ul>
     </nav>
 
+    <!-- main.registering: {{ main.registering }}, $scope.registering: {{ registering }} -->
     <div ng-show="main.registering">
       <div class="row">
         <div class="col-2"></div>
@@ -108,7 +109,7 @@
     <br><br>
 
     <!-- FOOTER -->
-    <div ng-show="main.registering" class="footer" style="background-color: #ededed">
+    <div ng-show="main.registering" ng-clock class="footer" style="background-color: #ededed">
       <div class="row">
         <div class="col-2"></div>
         <div class="col-4">

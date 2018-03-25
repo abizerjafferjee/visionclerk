@@ -23,7 +23,7 @@ authServices.factory('Auth', function($http, AuthToken) {
   // Auth.getUser();
   authFactory.getUser = function(){
     if (AuthToken.getToken()){
-      return $http.post('/api/currentUser');;
+      return $http.post('/api/currentUser');
     } else {
       $q.reject({ message: 'User has no token' });
     }
