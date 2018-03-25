@@ -408,7 +408,7 @@ module.exports = function(router) {
     // WATSON API QUERY
     //QUERY PARAMETERS
     natural_language_query = req.body.query;
-    count = 10;
+    count = 100;
     offset = 0;
     passages = true;
     highlight = true;
@@ -426,97 +426,6 @@ module.exports = function(router) {
       // MAKE SURE TO TAKE CARE OF THE ERRORS IF THEY HAPPEN
       res.json(data);
     });
-
-    /*console.log(req.body.query);
-    console.log(req.decoded.username);*/
-
-    // sending requests to python API
-    /*var headersOpt = {
-        "content-type": "application/json",
-    };
-
-    request({
-        method:'post',
-        url:'http://localhost:5000/predict',
-        form: {query:req.body.query, user:req.decoded.username},
-        headers: headersOpt,
-        json: true,},
-        function (error, response, body) {
-          //Print the Response
-          if(body.success == false) {
-              console.log(body);
-          } else if(body.success == true) {
-              //console.log(body.table_name);
-              var results_table = body.table_name;
-
-              // Connecting to the PSQL DB
-              var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
-              var client = new pg.Client(connectionString);
-              client.connect(err => {
-                if (err) { throw err; }
-              });
-              // id = 1234 int and docid = "D-0" str
-              //var query2 = client.query('SELECT id, docid, casename, court, doc_raw_text FROM ' + results_table + ' LIMIT 233');
-              if(results_table == 'no matching docs') {
-                res.json({ success: false, message: 'no matching docs' });
-              } else {
-                var formatted_query = util.format('SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table);
-                var query2 = client.query(formatted_query);
-                query2.then((result) =>
-                  // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
-                  res.json(JSON.parse(JSON.stringify(result.rows))));
-              }
-          } else {
-              console.log(error);
-          }
-        });*/
-
-    // spawning python program
-    /*var options = {
-      mode: 'text',
-      pythonPath: '/home/bitnami/anaconda3/bin/python',
-      pythonOptions: ['-u'],
-      scriptPath: '/home/bitnami/projects/legalx/App/Routes',
-      args: [req.body.query]
-    };
-    // Triggers Python model to retrieve db table containing relevant documents to the user query
-    var spawn = require('child_process').spawn;
-    var proc = spawn('python', ['C://Users//gilberto//Desktop//work//Freelance//LegalX//LEGALX_GIT_REPO/legalx//App//Routes//my_python.py', req.body.query]);
-    //var proc = spawn('python', [ml_model, req.body.query]);
-
-    //python program output
-    proc.stdout.on('data', function(data){
-      // data holds the psql table name that contains all documents related to the user's query
-      var results_table = data.toString('utf8');
-
-      // Connecting to the PSQL DB
-      var connectionString = 'postgres://legalmaster95:Oklnmgh**&@legalxinstance.clfgvqoltleg.ca-central-1.rds.amazonaws.com:5432/legalx_db';
-      var client = new pg.Client(connectionString);
-      client.connect(err => {
-        if (err) { throw err; }
-      });
-      //var query = client.query('set search_path to legalx_schema');
-      // id = 1234 int and docid = "D-0" str
-      //'SELECT id, casename, datefiled, court, A.docid, doc_raw_text, htmltext, relevance, cos_sim FROM legalx_schema.vc_documents as A, %s where A.id = index', results_table
-      var query2 = client.query('SELECT id, casename, court, doc_raw_text, htmltext, datefiled FROM legalx_schema.vc_documents LIMIT 233');
-      query2.then((result) =>
-        // link to res.row type: https://github.com/brianc/node-postgres/wiki/FAQ
-        res.json(JSON.parse(JSON.stringify(result.rows))));*/
-
-      /*client.end((err) => {
-        console.log('client has disconnected')
-        if (err) {
-          console.log('error during disconnection', err.stack)
-        }
-      });*/
-    //});
-
-    // python program error
-    /*proc.stderr.on('data', function(data){
-      var buff = new Buffer(data);
-      console.log('******* THERE WAS AN ERROR EXECUTING PYTHON: ');
-      console.log(buff.toString('utf8'));
-    });*/
   });
 
   return router;
