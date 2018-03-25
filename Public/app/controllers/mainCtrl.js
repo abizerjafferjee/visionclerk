@@ -1,6 +1,6 @@
 var mainController = angular.module('mainController', ['authServices']);
 
-mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootScope, $route){
+mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootScope, $route, $scope){
   var app = this;
 
   app.loadme = false;
@@ -88,12 +88,12 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
   this.showLanding = function() {
     localStorage.setItem('registering', 1);
     app.registering = true;
-    $route.reload();
+    //$route.reload();
   }
 
   this.doNOTshowLanding = function() {
     localStorage.setItem('registering', 0);
     app.registering = false;
-    $route.reload();
+    //$route.reload();
   };
 });
