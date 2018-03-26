@@ -149,9 +149,10 @@ searchControllers
         app.loading = false;
         app.noResults = true;
         app.main_search_bar = false;
+        $scope.numButtons = [0];
       }
       var watson_results = watson_response.data.results;
-      console.log(watson_results);
+      //console.log(watson_results);
       // Need to filter out extra information i.e create simpler results just with data needed
       // Data needed: case_name, case_id, case_court, case_datefiled, case_text, case_html
       var query_results = [];
