@@ -1,33 +1,24 @@
-<div class="row">
+<div class="container-fluid">
+<div class="row align-items-center m-5 p-5">
   <div class="col-3"></div>
-  <div class="col-6" style="border-radius: 25px; background: #6b61f4; padding: 20px;">
-    <h1 style="text-align: center; color: white;">Are you sure you want to delete your account?</h1>
+  <div id="deleteAccFormStyle" class="col-6 card">
+    <p class="h3 text-center py-4" style="color:white;">Are you sure you want to delete your account?</p>
 
     <!-- ERROR MESSAGES -->
-    <div class="row">
-      <div class="col-4"></div>
-      <div class="col-4" style="padding-left: 50px;">
+    <div class="wrapper text-center">
         <div class="jumbotron text-center" ng-show="deleteaccount.loading">
           <span class="glyphicon glyphicon-repeat spinner"></span>
           <p>Loading...</p>
         </div>
-        <div class="row show-hide-message" ng-show="deleteaccount.successMsg">
-          <div class="alert alert-success">{{ deleteaccount.successMsg }}</div>
-        </div>
-        <br>
-        <div class="row show-hide-message" ng-show="deleteaccount.errorMsg">
-          <div class="alert alert-danger">{{ deleteaccount.errorMsg }}</div>
-        </div>
-      </div>
-      <div class="col-4"></div>
+          <div class="row show-hide-message alert alert-success" ng-show="deleteaccount.successMsg">{{ deleteaccount.successMsg }}</div>
+          <div class="row show-hide-message alert alert-danger" ng-show="deleteaccount.errorMsg">{{ deleteaccount.errorMsg }}</div>
+    </div>
+    <div class="wrapper text-center">
+    <div class="btn-group text-center m-4">
+      <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-primary btn-lg mr-1" type="button">Yes, delete account</button>
+      <a href="/profile"><button ng-disabled="deleteaccount.disabled" class="btn btn-danger btn-lg ml-1" type="button">No, do NOT delete account</button></a>
+    </div>
     </div>
 
-    <div style="float: left; padding-left: 80px;">
-      <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-success" type="button">Yes, delete account</button>
-    </div>
-    <a href="/profile" style="float: right; padding-right: 80px;" >
-      <button ng-disabled="deleteaccount.disabled" class="btn btn-danger" type="button">No, do NOT delete account</button>
-    </a>
-  </div>
   <div class="col-3"></div>
 </div>

@@ -1,59 +1,50 @@
-<div class="row">
-  <div class="col-2"></div>
-  <div class="col-8" style="border-radius: 25px; background: #6b61f4; margin: 20px;">
-    <br><br>
-    <h1 style="text-align: center; color: white;">User Login</h1>
+<div class="container-fluid">
 
-    <!-- ERROR MESSAGES-->
-    <div class="row">
-      <div class="col-2"></div>
-      <div class="col-8">
-        <div class="row show-hide-message" ng-show="main.successMsg">
-          <div class="alert alert-success">{{ main.successMsg }}</div>
-        </div>
-        <br>
-        <div class="row show-hide-message" ng-show="main.errorMsg">
-          <div class="alert alert-danger">{{ main.errorMsg }} &nbsp
-            <a ng-show="main.expired" href="/resend">
-              <button class="btn btn-success">Resend Activation Email</button>
-            </a>
-          </div>
-        </div>
-        <div class="jumbotron text-center" ng-show="main.loading">
-          <span class="glyphicon glyphicon-repeat spinner"></span>
-          <p>Loading...</p>
-        </div>
-      </div>
-      <div class="col-2"></div>
-    </div>
+  <div class="row align-items-center m-5 p-5">
+    <div class="col-4"></div>
 
-    <form ng-submit="main.doLogin(loginData);">
-      <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8">
-          <label style="color: white;">Email:</label>
-          <input ng-disabled="main.disabled" class="form-control" type="text" name="email" value="" placeholder="Please enter Email" ng-model="main.loginData.email">
-          <br>
-          <label style="color: white;">Password:</label>
-          <input ng-disabled="main.disabled" class="form-control" type="password" name="password" value="" placeholder="Please enter Password" ng-model="main.loginData.password">
-          <br><br>
-          <button ng-disabled="main.disabled" style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px; width: 30%" type="submit">Login</button>
+    <div id="loginFormStyle" class="col-4 card">
+      <form ng-submit="main.doLogin(loginData);">
+        <p class="h1 text-center py-4" style="color:white;">Sign In</p>
 
+        <!-- ERROR MESSAGES-->
+        <div class="form-group ml-2 mr-2">
+              <div class="row show-hide-message alert alert-success" ng-show="main.successMsg">{{ main.successMsg }}</div>
+              <div class="row show-hide-message alert alert-danger" ng-show="main.errorMsg">{{ main.errorMsg }} &nbsp
+                <a ng-show="main.expired" href="/resend">
+                  <button class="btn btn-success">Resend Activation Email</button>
+                </a>
+              </div>
+            <div class="jumbotron text-center" ng-show="main.loading">
+              <span class="glyphicon glyphicon-repeat spinner"></span>
+              <p>Loading...</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="login-email-input" style="color: white;">Email</label>
+          <input id="login-email-input" ng-disabled="main.disabled" class="form-control form-control-success" type="text" name="email" value="" placeholder="email@example.com" ng-model="main.loginData.email">
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" for="login-password-input" style="color: white;">Password</label>
+          <input id="login-password-input" ng-disabled="main.disabled" class="form-control form-control-success" type="password" name="password" value="" placeholder="Please enter Password" ng-model="main.loginData.password">
+        </div>
+
+        <div class="text-center m-4">
+          <button ng-disabled="main.disabled" class="btn btn-primary btn-lg" type="submit">Sign In</button>
+        </div>
           <!-- Reset password/ Forgot username -->
-          <div class="reset">
-            <a href="/resetpassword" >
-              <button ng-disabled="main.disabled" class="btn btn-danger" type="button">Forgot Password</button>
-            </a>
+          <div class="text-center m-4">
+            <a href="/resetpassword" ng-disabled="main.disabled"><p class="h6" style="color:white;">Forgot Password?</p></a>
             <!-- INCASE LATER USERNAME IS USED TO LOGIN INSTEAD OF EMAIL
             <a href="/resetusername" >
               <button ng-disabled="main.disabled" class="btn btn-success" type="button">Forgot Username</button>
             </a> -->
-            <br><br><br>
           </div>
         </div>
-        <div class="col-2"></div>
-      </div>
+      </form>
 
-    </form>
+    </div>
+    <div class="col-4"></div>
   </div>
 </div>
