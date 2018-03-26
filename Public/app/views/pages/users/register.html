@@ -1,96 +1,78 @@
-<div class="row">
-  <div class="col-2"></div>
-  <div id="registerFormStyle" class="col-8" style="border-radius: 25px; background: #6b61f4; margin: 20px;">
-    <br><br>
-    <h1 style="text-align: center; color: white;">User Registration</h1>
-    <form name="regForm" ng-submit="register.regUser(regData);" novalidate>
-      <div ng-class="{ 'has-success': (regForm.email.$valid && !regForm.email.$pristine), 'has-danger': (!regForm.email.$valid && !regForm.email$pristine) || (!regForm.email.$valid && regForm.$submitted) }">
+<div class="container-fluid">
+  <div class="row align-items-center p-sm-5 m-sm-5">
+    <div class="col-sm-2 col-md-4"></div>
+    <div id="registerFormStyle"  class="col-xs-10 col-sm-8 col-md-4 card">
+        <form name="regForm" ng-submit="register.regUser(regData);" novalidate>
+          <p class="h1 text-center py-4" style="color:white;">Sign Up</p>
 
-        <!-- ERROR MESSAGES-->
-        <div class="row">
-          <div class="col-2"></div>
-          <div class="col-8">
-            <div class="row show-hide-message" ng-show="register.successMsg">
-              <div class="alert alert-success">{{ register.successMsg }}</div>
-            </div>
-            <br>
-            <div class="row show-hide-message" ng-show="register.errorMsg">
-              <div class="alert alert-danger">{{ register.errorMsg }}</div>
-            </div>
-            <div class="jumbotron text-center" ng-show="register.loading">
-              <span class="glyphicon glyphicon-repeat spinner"></span>
-              <p>Loading...</p>
-            </div>
-          </div>
-          <div class="col-2"></div>
-        </div>
+            <!-- USER INPUTS TO REGISTER -->
+            <div class="form-group" ng-class="{ 'has-success': (regForm.email.$valid && !regForm.email.$pristine), 'has-danger': (!regForm.email.$valid && !regForm.email$pristine) || (!regForm.email.$valid && regForm.$submitted) }">
+              <!-- ERROR MESSAGES-->
 
-        <!-- USER INPUTS TO REGISTER -->
-        <div class="row">
-          <div class="col-2"></div>
-          <div class="col-8">
-            <br><br>
-            <label style="color: white;">Email:</label>
-            <input ng-disabled="register.disabled" class="form-control" type="text" name="email" value="" placeholder="Please enter Email" ng-model="register.regData.email" ng-minlength="3" ng-maxlength="50" required>
-            <p class="help-block" style="color: white;" ng-show="(!regForm.email.$pristine && regForm.email.$error.required) || (regForm.$submitted && regForm.email.$error.required)">This field is required</p>
-            <ul ng-show="(!regForm.email.$pristine ) || (!regForm.email.$pristine && regForm.email.$error.minlength) || (!regForm.email.$pristine && regForm.email.$error.maxlength)">
-              <li style="color: white; display: block;">Must not be empty</li>
-              <li style="color: white; display: block;">Must contain "@"</li>
-              <li style="color: white; display: block;">Must not contain any special characters</li>
-              <li style="color: white; display: block;">Must bet at least 3 characters but no more than 100</li>
-            </ul>
+                    <div class="row show-hide-message alert alert-success text-center" ng-show="register.successMsg" style="margin:5px;">{{ register.successMsg }}</div>
+
+                    <div class=" row show-hide-message alert alert-danger text-center" ng-show="register.errorMsg" style="margin:5px;">{{ register.errorMsg }}</div>
+
+                  <div class="text-center" ng-show="register.loading">
+                    <span class="glyphicon glyphicon-repeat spinner"></span>
+                    <p>Loading...</p>
+                  </div>
+
+                <label class="form-control-label" for="email-input" style="color:white;">Email</label>
+                <input id="email-input" ng-disabled="register.disabled" class="form-control form-control-success" type="text" name="email" value="" placeholder="email@example.com" ng-model="register.regData.email" ng-minlength="3" ng-maxlength="50" required>
+
+                <!-- <p class="help-block" style="color: white;" ng-show="(!regForm.email.$pristine && regForm.email.$error.required) || (regForm.$submitted && regForm.email.$error.required)">This field is required</p>
+                <button data-toggle="collapse" data-target="#collapse1"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
+                <div id="collapse1" class="panel-collapse collapse">
+                <ul id="help-email" ng-show="(!regForm.email.$pristine ) || (!regForm.email.$pristine && regForm.email.$error.minlength) || (!regForm.email.$pristine && regForm.email.$error.maxlength)">
+                  <li style="color: white; display: block;">Must not be empty</li>
+                  <li style="color: white; display: block;">Must contain "@"</li>
+                  <li style="color: white; display: block;">Must not contain any special characters</li>
+                  <li style="color: white; display: block;">Must bet at least 3 characters but no more than 100</li>
+                </ul>
+              </div> -->
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-success': (regForm.username.$valid && !regForm.username.$pristine), 'has-danger': (!regForm.username.$valid && !regForm.username$pristine) || (!regForm.username.$valid && regForm.$submitted) }">
+                <label class="form-control-label"  for="username-input" style="color: white;">Username</label>
+                <input id="username-input" ng-disabled="register.disabled" class="form-control form-control-success" type="text" name="username" value="" placeholder="Please enter Username" ng-model="register.regData.username" ng-minlength="3" ng-maxlength="25" required>
+                <!-- <p class="help-block" style="color: white;" ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)">This field is required</p>
+                <ul ng-show="(!regForm.username.$pristine) || (!regForm.username.$pristine && regForm.username.$error.minlength) || (!regForm.username.$pristine && regForm.username.$error.maxlength)">
+                  <li style="color: white; display: block;">Must not be empty</li>
+                  <li style="color: white; display: block;">Must not contain any spaces</li>
+                  <li style="color: white; display: block;">Must bet at least 3 characters but no more than 25</li>
+                </ul> -->
+                <small style="color:white;">
+                  No spaces and 3-25 characters long.
+                </small>
+              </div>
+
+            <div class="form-group" ng-class="{ 'has-success': (regForm.password.$valid && !regForm.password.$pristine), 'has-danger': (!regForm.password.$valid && !regForm.password$pristine) || (!regForm.password.$valid && regForm.$submitted) }">
+                <label class="form-control-label"  for="password-input" style="color: white;">Password</label>
+                <input id="password-input" ng-disabled="register.disabled" class="form-control form-control-success" type="password" name="password" value="" placeholder="Please enter Password" ng-model="register.regData.password" ng-minlength="8" ng-maxlength="35" required>
+
+                <div id="pass-help" class="collapse"><li style="display:block"><small style="color:white;"> Must be 8-25 characters long. </small></li>
+                <li style="display:block"><small style="color:white;"> At least one uppercase letter, one lowercase letter, one number and one special character.</small></li></div>
+
+                <!-- <p class="help-block" style="color: white;" ng-show="(!regForm.password.$pristine && regForm.password.$error.required) || (regForm.$submitted && regForm.password.$error.required)">This field is required</p> -->
+                <!-- <button data-toggle="collapse" data-target="#collapse1"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
+                <ul ng-show="(!regForm.password.$pristine) || (!regForm.password.$pristine && regForm.password.$error.minlength) || (!regForm.password.$pristine && regForm.password.$error.maxlength)">
+                  <li style="color: white; display: block;">Must not be empty</li>
+                  <li style="color: white; display: block;">Must contain at least one upper case letter</li>
+                  <li style="color: white; display: block;">Must contain at least one lower case letter</li>
+                  <li style="color: white; display: block;">Must contain at least one number</li>
+                  <li style="color: white; display: block;">Must contain at least one special character</li>
+                  <li style="color: white; display: block;">Must bet at least 8 characters but no more than 35</li>
+                </ul> -->
+            </div>
+            <button class="btn btn-sm btn-info" data-toggle="collapse" data-target="#pass-help">help</button>
+
+          <div class="text-center m-4">
+              <button ng-disabled="register.disabled" class="btn btn-primary btn-lg" type="submit">Sign Up</button>
           </div>
-          <div class="col-2"></div>
-        </div>
+
+        </form>
       </div>
-      <br>
-      <div ng-class="{ 'has-success': (regForm.username.$valid && !regForm.username.$pristine), 'has-danger': (!regForm.username.$valid && !regForm.username$pristine) || (!regForm.username.$valid && regForm.$submitted) }">
-        <div class="row">
-          <div class="col-2"></div>
-          <div class="col-8">
-            <label style="color: white;">Username:</label>
-            <input ng-disabled="register.disabled" class="form-control" type="text" name="username" value="" placeholder="Please enter Username" ng-model="register.regData.username" ng-minlength="3" ng-maxlength="25" required>
-            <p class="help-block" style="color: white;" ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)">This field is required</p>
-            <ul ng-show="(!regForm.username.$pristine) || (!regForm.username.$pristine && regForm.username.$error.minlength) || (!regForm.username.$pristine && regForm.username.$error.maxlength)">
-              <li style="color: white; display: block;">Must not be empty</li>
-              <li style="color: white; display: block;">Must not contain any spaces</li>
-              <li style="color: white; display: block;">Must bet at least 3 characters but no more than 25</li>
-            </ul>
-          </div>
-          <div class="col-2"></div>
-        </div>
-      </div>
-      <br>
-      <div ng-class="{ 'has-success': (regForm.password.$valid && !regForm.password.$pristine), 'has-danger': (!regForm.password.$valid && !regForm.password$pristine) || (!regForm.password.$valid && regForm.$submitted) }">
-        <div class="row">
-          <div class="col-2"></div>
-          <div class="col-8">
-            <label style="color: white;">Password:</label>
-            <input ng-disabled="register.disabled" class="form-control" type="password" name="password" value="" placeholder="Please enter Password" ng-model="register.regData.password" ng-minlength="8" ng-maxlength="35" required>
-            <p class="help-block" style="color: white;" ng-show="(!regForm.password.$pristine && regForm.password.$error.required) || (regForm.$submitted && regForm.password.$error.required)">This field is required</p>
-            <ul ng-show="(!regForm.password.$pristine) || (!regForm.password.$pristine && regForm.password.$error.minlength) || (!regForm.password.$pristine && regForm.password.$error.maxlength)">
-              <li style="color: white; display: block;">Must not be empty</li>
-              <li style="color: white; display: block;">Must contain at least one upper case letter</li>
-              <li style="color: white; display: block;">Must contain at least one lower case letter</li>
-              <li style="color: white; display: block;">Must contain at least one number</li>
-              <li style="color: white; display: block;">Must contain at least one special character</li>
-              <li style="color: white; display: block;">Must bet at least 8 characters but no more than 35</li>
-            </ul>
-            <br>
-          </div>
-          <div class="col-2"></div>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8">
-          <button ng-disabled="register.disabled" style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px 15px 10px 15px; width:100%;" type="submit">Register</button>
-          <br><br><br>
-        </div>
-        <div class="col-2"></div>
-      </div>
-  </form>
+      <div class="col-sm-2 col-md-4"></div>
   </div>
-  <div class="col-2"></div>
 </div>
