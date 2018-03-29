@@ -114,6 +114,18 @@ searchControllers
       } else {
         return "No Information";
       }
+    },
+    //Abizer's Changes
+    getCaseHighlightsFromWatsonResults:function(i_watson_result) {
+      if ("highlight" in i_watson_result) {
+        if ("text" in i_watson_result["highlight"]) {
+          return i_watson_result["highlight"]["html"];
+        } else {
+          return "No highlights";
+        }
+      } else {
+        return "No highlights";
+      }
     }
   }
 })
@@ -161,11 +173,14 @@ searchControllers
         var i_id = watson_results[i].id;
         var i_court = myService.getCaseCourtFromWatsonResults(watson_results[i]);
         var i_datefiled = myService.getCaseDateFiledFromWatsonResults(watson_results[i]);
+        //Abizer Highlight
+        var i_highlight = myService.getCaseHighlightsFromWatsonResults(watson_results[i]);
         //filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_text":"' + i_text + '", "case_html":"' + i_html + '"}';
         filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_rank":"' + (i + 1) + '" }';
         query_results[i] = JSON.parse(filtered_result);
         query_results[i]['case_text'] = watson_results[i].text;
         query_results[i]['case_html'] = watson_results[i].html;
+        query_results[i]['case_highlight'] = i_highlight;
       }
       $scope.results = query_results;
       myService.setUserQuery($scope.search.data.query);

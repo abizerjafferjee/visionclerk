@@ -1,32 +1,69 @@
-<div ng-show="search.main_search_bar" style="padding-top: 250px;"></div>
+<div ng-show="search.main_search_bar" style="padding-top: 15%;"></div>
 
 <!-- Main Search bar -->
-<div class="container">
-  <form ng-show="search.main_search_bar" style="text-align: left" ng-submit="search.searchData(data);">
-
-    <div  class="row">
-      <div class="col-10">
-        <input class="form-control" type="search" ng-model="search.data.query">
-      </div>
-      <div class="col-2">
-        <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;" type="submit">Search</button>
-      </div>
-    </div>
-
-    <div  class="row">
-      <div class="col-10" ng-show="search.search_examples">
-        <p style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
-        <p style="text-align: center; color: #6b61f4;">Single Offensive Act</p>
-        <p style="text-align: center; color: #6b61f4;">Liability of Parent for Child vandalism</p>
-        <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
+<div class="container-fluid" ng-show="search.main_search_bar">
+  <div  class="row">
+    <div class="col-md-2"></div>
+    <div class="col-xs-12 col-md-9">
+      <form class="form-inline" style="text-align: left" ng-submit="search.searchData(data);">
+            <input class="form-control w-75 mr-3" type="search" ng-model="search.data.query">
+            <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+      <div class="row">
+          <div class="col-xs-12 col-md-10 mt-3" ng-show="search.search_examples">
+            <p class="h5" style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
+            <p style="text-align: center; color: #6b61f4;">Single Offensive Act</p>
+            <p style="text-align: center; color: #6b61f4;">Liability of Parent for Child vandalism</p>
+            <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
+          </div>
+        </div>
       </div>
     </div>
-
-  </form>
+    <div class="col-md-1"></div>
+  </div>
 </div>
 
+
+
+<!-- <div class="container-fluid" ng-show="search.main_search_bar">
+  <div class="row mt-5"></div>
+  <div class="row align-items-center m-sm-5 p-sm-5">
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8" style="background:brown;">
+      <form class="form-inline" ng-submit="search.searchData(data);">
+        <input class="form-control w-75 mr-3" type="search" ng-model="search.data.query">
+        <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;" type="submit">Search</button>
+      </form>
+      <div  class="row text-center" ng-show="search.search_examples">
+            <p style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
+            <p style="text-align: center; color: #6b61f4;">Single Offensive Act</p>
+            <p style="text-align: center; color: #6b61f4;">Liability of Parent for Child vandalism</p>
+            <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
+        </div>
+    </div>
+
+    <div class="col-md-2"></div>
+  </div>
+</div> -->
+
+
 <!-- Secondary Search bar -->
-<form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);">
+
+<div  class="row mt-2">
+  <div class="col-md-1"></div>
+  <div class="col-xs-12 col-md-8">
+    <form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);" class="form-inline inner-addon right-addon">
+        <input ng-model="search.data.query" class="form-control mr-3 w-75 input-lg" type="text" placeholder="Search" aria-label="Search">
+        <button type="submit" class="btn btn-light">
+          <i class="fas fa-search" aria-hidden="true"></i>
+        </button>
+    </form>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+<!-- <form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);">
   <div  class="row">
     <div class="col-1"></div>
     <div class="col-6" style="">
@@ -36,49 +73,58 @@
       <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;" type="submit">Search</button>
     </div>
   </div>
-</form>
+</form> -->
 
 <!-- loading data -->
 <div  class="row">
-  <div class="col-5"></div>
-  <div class="col-2">
+  <div class="col-md-5"></div>
+  <div class="col-md-2">
     <div class="loader" ng-show="search.loading"></div>
   </div>
-  <div class="col-5"></div>
+  <div class="col-md-5"></div>
 </div>
 
 <!-- No matching documents error -->
 <div  class="row">
-  <div class="col-2"></div>
-  <div class="col-8">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
     <div class="row show-hide-message" ng-show="search.noResults" style="padding-top: 100px;">
       <div class="alert alert-danger">
         <h4>Sorry, we couldn't find any documents based on your query.</h4>
       </div>
     </div>
   </div>
-  <div class="col-2"></div>
+  <div class="col-md-2"></div>
 </div>
 
 <!-- dynamic divs to display query result documents -->
 <div  class="row">
-  <div class="col-1"></div>
-  <div class="col-8">
-    <div ng-repeat="case in pageResults">
-      <br>
-      <h5>
-        <a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(case.case_name, case.case_html, case.case_id, case.case_rank)">{{ case.case_name }}</a>
-      </h5>
-      <p style="color: black;"><strong>Document Id:</strong> {{ case.case_id }}, <strong>Court:</strong> {{ case.case_court }}, <strong>Date Filed:</strong> {{ case.case_datefiled }}</p>
+  <div class="col-md-1"></div>
+  <div class="col-xs-12 col-md-8">
+    <div class="card w-75 mt-2" ng-repeat="case in pageResults">
+      <div class="card-body">
+        <div clas="card-title">
+          <p class="h5"><a href="/displaycase" style="color: #0066ff; font-size: 20px;" ng-click="sendCaseData(case.case_name, case.case_html, case.case_id, case.case_rank)">{{ case.case_name }}</a></p>
+        </div>
+        <div class="card-text">
+          <p style="color: black;"><strong> Court:</strong> {{ case.case_court }} <strong> Date Filed:</strong> {{ case.case_datefiled }}</p>
+          <button class="btn btn-link" data-toggle="collapse" data-target="#id-{{$index}}">
+            <i class="fas fa-angle-down"></i> More Information
+          </button>
+          <div id="id-{{$index}}" class="collapse hide">
+            <p ng-repeat="highlight in case.case_highlight">{{ highlight }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="col-2"></div>
+  <div class="col-md-2"></div>
 </div>
-<div class="col-1"></div>
+<div class="col-md-1"></div>
 
-<div class="row" ng-show="!search.main_search_bar">
-  <div class="col-4"></div>
-  <div class="col-4">
+<div class="row mt-3" ng-show="!search.main_search_bar">
+  <div class="col-md-4"></div>
+  <div class="col-xs-12 col-md-4">
     <div class="row">
       <div ng-repeat="q in numButtons">
         <button class="button_list" ng-click="search.nextPage(q);">{{ q }}</button>
@@ -88,5 +134,5 @@
     <button ng-show="search.prevTen" ng-click="search.prevTenPages();" style="float: left; background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;">Previous 10 Pages</button>
   </div>
   </div>
-  <div class="col-4"></div>
+  <div class="col-md-4"></div>
 </div>
