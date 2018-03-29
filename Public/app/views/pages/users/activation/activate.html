@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-2"></div>
   <div class="col-8" style="border-radius: 25px; background: #6b61f4; padding: 20px;">
     <h1 style="text-align: center; color: white;">Account Activation</h1>
@@ -20,4 +20,24 @@
     </div>
   </div>
   <div class="col-2"></div>
+</div> -->
+
+<div class="container-fluid">
+
+  <div class="row align-items-center m-sm-5 p-sm-5">
+    <div class="col-sm-2 col-md-4"></div>
+
+    <div id="loginFormStyle" class="col-xs-10 col-sm-8 col-md-4 card">
+        <p class="h1 text-center py-4" style="color:white;">Account Activation</p>
+
+        <!-- ERROR MESSAGES -->
+        <div class="form-group ml-2 mr-2">
+              <div class="row show-hide-message alert alert-success" ng-show="email.successMsg">{{ email.successMsg }}</div>
+              <div class="row show-hide-message alert alert-danger" ng-show="email.errorMsg">{{ email.errorMsg }}</div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-2 col-md-4"></div>
+  </div>
 </div>

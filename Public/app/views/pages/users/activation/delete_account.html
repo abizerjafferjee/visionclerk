@@ -1,7 +1,7 @@
 <div class="container-fluid">
-<div class="row align-items-center m-5 p-5">
-  <div class="col-3"></div>
-  <div id="deleteAccFormStyle" class="col-6 card">
+<div class="row align-items-center m-sm-5 p-sm-5">
+  <div class="col-sm-1 col-md-3"></div>
+  <div id="deleteAccFormStyle" class="col-xs-12 col-sm-10 col-md-6 card">
     <p class="h3 text-center py-4" style="color:white;">Are you sure you want to delete your account?</p>
 
     <!-- ERROR MESSAGES -->
@@ -14,11 +14,11 @@
           <div class="row show-hide-message alert alert-danger" ng-show="deleteaccount.errorMsg">{{ deleteaccount.errorMsg }}</div>
     </div>
     <div class="wrapper text-center">
-    <div class="btn-group text-center m-4">
-      <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-primary btn-lg mr-1" type="button">Yes, delete account</button>
-      <a href="/profile"><button ng-disabled="deleteaccount.disabled" class="btn btn-danger btn-lg ml-1" type="button">No, do NOT delete account</button></a>
+    <div class="btn-group text-center m-md-4">
+      <button ng-disabled="deleteaccount.disabled" ng-click="deleteaccount.deleteAccount(main.useremail); main.logout()" class="btn btn-primary btn-lg mr-1" type="button">Yes</button>
+      <a href="/profile"><button ng-disabled="deleteaccount.disabled" class="btn btn-danger btn-lg ml-1" type="button">No</button></a>
     </div>
     </div>
 
-  <div class="col-3"></div>
+  <div class="col-sm-1 col-md-3"></div>
 </div>

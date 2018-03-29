@@ -1,9 +1,9 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-2"></div>
   <div class="col-8" style="border-radius: 25px; background: #6b61f4; padding: 20px;">
     <h1 style="text-align: center; color: white;">Resend Activation Email</h1>
 
-    <!-- ERROR MESSAGES -->
+
     <div class="row">
       <div class="col-4"></div>
       <div class="col-4" style="padding-left: 50px;">
@@ -34,4 +34,42 @@
     </form>
   </div>
   <div class="col-2"></div>
+</div> -->
+
+<div class="container-fluid">
+
+  <div class="row align-items-center m-sm-5 p-sm-5">
+    <div class="col-sm-2 col-md-4"></div>
+
+    <div id="loginFormStyle" class="col-xs-10 col-sm-8 col-md-4 card">
+      <form ng-submit="resend.checkCredentials(loginData);">
+        <p class="h1 text-center py-4" style="color:white;">Resend Activation Email</p>
+
+        <!-- ERROR MESSAGES -->
+        <div class="form-group ml-2 mr-2">
+              <div class="row show-hide-message alert alert-success" ng-show="resend.successMsg">{{ resend.successMsg }}</div>
+              <div class="row show-hide-message alert alert-danger" ng-show="resend.errorMsg">{{ resend.errorMsg }}</div>
+            <div class="jumbotron text-center" ng-show="resend.loading">
+              <span class="glyphicon glyphicon-repeat spinner"></span>
+              <p>Loading...</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="resend-email-input" style="color: white;">Email</label>
+          <input id="resend-email-input" ng-disabled="resend.disabled" class="form-control form-control-success" type="text" name="email" value="" placeholder="email@example.com" ng-model="resend.loginData.email">
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" for="resend-password-input" style="color: white;">Password</label>
+          <input id="resend-password-input" ng-disabled="resend.disabled" class="form-control form-control-success" type="password" name="password" value="" placeholder="Please enter Password" ng-model="resend.loginData.password">
+        </div>
+
+        <div class="text-center m-4">
+          <button ng-disabled="resend.disabled" class="btn btn-primary btn-lg" type="submit">Resend</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-sm-2 col-md-4"></div>
+  </div>
 </div>

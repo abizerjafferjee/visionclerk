@@ -1,13 +1,13 @@
 <div class="container-fluid">
 
-  <div class="row align-items-center m-5 p-5">
-    <div class="col-4"></div>
+  <div class="row align-items-center m-sm-5 p-sm-5">
+    <div class="col-sm-2 col-md-4"></div>
 
-    <div id="loginFormStyle" class="col-4 card">
+    <div id="loginFormStyle" class="col-xs-10 col-sm-8 col-md-4 card">
       <form ng-submit="main.doLogin(loginData);">
         <p class="h1 text-center py-4" style="color:white;">Sign In</p>
 
-        <!-- ERROR MESSAGES-->
+        <!-- ERROR MESSAGES -->
         <div class="form-group ml-2 mr-2">
               <div class="row show-hide-message alert alert-success" ng-show="main.successMsg">{{ main.successMsg }}</div>
               <div class="row show-hide-message alert alert-danger" ng-show="main.errorMsg">{{ main.errorMsg }} &nbsp
@@ -33,18 +33,69 @@
         <div class="text-center m-4">
           <button ng-disabled="main.disabled" class="btn btn-primary btn-lg" type="submit">Sign In</button>
         </div>
-          <!-- Reset password/ Forgot username -->
+
           <div class="text-center m-4">
             <a href="/resetpassword" ng-disabled="main.disabled"><p class="h6" style="color:white;">Forgot Password?</p></a>
-            <!-- INCASE LATER USERNAME IS USED TO LOGIN INSTEAD OF EMAIL
-            <a href="/resetusername" >
-              <button ng-disabled="main.disabled" class="btn btn-success" type="button">Forgot Username</button>
-            </a> -->
+
           </div>
         </div>
       </form>
 
     </div>
-    <div class="col-4"></div>
+    <div class="col-sm-2 col-md-4"></div>
   </div>
 </div>
+
+
+<!-- <div  class="row">
+  <div class="col-1"></div>
+  <div class="col-8">
+
+    <div class="card w-75 mt-2">
+      <div class="card-body">
+        <div clas="card-title"><p class="h5">Example 1 of Case Title</p></div>
+        <div class="card-text">
+
+          <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn <strong> Court:</strong> ontario court <strong> Date filed:</strong> ontario date filed</p>
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <i class="fas fa-angle-down"></i> More Information
+          </button>
+          <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne">
+                <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card w-75 mt-2">
+      <div class="card-body">
+        <div clas="card-title">Example 1 of Case Title</div>
+        <div class="card-text">
+          <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn, <strong>Court:</strong> ontario court, <strong>Date Filed:</strong> ontario date filed</p>
+          <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card w-75 mt-2">
+      <div class="card-body">
+        <div clas="card-title">Example 1 of Case Title</div>
+        <div class="card-text">
+          <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn, <strong>Court:</strong> ontario court, <strong>Date Filed:</strong> ontario date filed</p>
+          <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
+        </div>
+      </div>
+    </div>
+
+    <div >
+      <br>
+      <h5>
+        Example 1 of Case Title
+      </h5>
+      <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn, <strong>Court:</strong> ontario court, <strong>Date Filed:</strong> ontario date filed</p>
+      <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
+    </div>
+  </div>
+  <div class="col-2"></div>
+</div>
+<div class="col-1"></div> -->
