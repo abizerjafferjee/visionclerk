@@ -4,12 +4,11 @@ mainController.controller('mainCtrl', function(Auth, $location, $timeout, $rootS
   var app = this;
 
   app.loadme = false;
-  var landing = localStorage.getItem('registering');
-  if(landing == null){
-    app.registering = true;
-  } else if(landing == 1) {
-    app.registering = true;
-  } // if landing == 0 don't even create the flag because creating it shows it
+  if(window.location.pathname == '/') {
+      console.log('back to root');
+      localStorage.setItem('registering', 1);
+      app.registering = true;
+  }
 
   // onpopstate is used to track when user uses back/forward browser arrows
   window.onpopstate=function() {
