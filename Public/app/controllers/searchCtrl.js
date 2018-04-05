@@ -119,7 +119,11 @@ searchControllers
     getCaseHighlightsFromWatsonResults:function(i_watson_result) {
       if ("highlight" in i_watson_result) {
         if ("text" in i_watson_result["highlight"]) {
-          return i_watson_result["highlight"]["html"];
+          results = i_watson_result["highlight"]["html"];
+          for (var i=0; i < results.length; i++) {
+            results[i] = results[i].replace(/[^\x00-\x7F]/g, "");
+          }
+          return results;
         } else {
           return "No highlights";
         }

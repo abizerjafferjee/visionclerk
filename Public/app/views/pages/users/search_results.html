@@ -24,7 +24,7 @@
               <i class="fas fa-angle-down"></i> More Information
             </button>
             <div id="id-{{$index}}" class="collapse hide">
-              <p ng-repeat="highlight in case.case_highlight">{{ highlight }}</p>
+              <p ng-repeat="highlight in case.case_highlight" ng-bind-html="highlight"></p>
             </div>
           </div>
         </div>
