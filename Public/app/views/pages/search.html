@@ -17,6 +17,13 @@
             <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
           </div>
         </div>
+        <div class="row">
+          <div class="col-xs-2 col-md-5"></div>
+          <div class="col-xs-8 col-md-2">
+            <div class="loader" ng-show="search.loading"></div>
+          </div>
+          <div class="col-xs-2 col-md-5"></div>
+        </div>
       </div>
     </div>
     <div class="col-md-1"></div>
@@ -50,7 +57,7 @@
 
 <!-- Secondary Search bar -->
 
-<div  class="row mt-2">
+<!-- <div  class="row mt-2">
   <div class="col-md-1"></div>
   <div class="col-xs-12 col-md-8">
     <form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);" class="form-inline inner-addon right-addon">
@@ -63,19 +70,6 @@
   <div class="col-md-3"></div>
 </div>
 
-<!-- <form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);">
-  <div  class="row">
-    <div class="col-1"></div>
-    <div class="col-6" style="">
-      <input class="form-control" type="search" ng-model="search.data.query">
-    </div>
-    <div class="col-5">
-      <button style="background-color: #2a087a; border-radius: 12px; border: 2px solid #2a087a; color: white; padding: 10px;" type="submit">Search</button>
-    </div>
-  </div>
-</form> -->
-
-<!-- loading data -->
 <div  class="row">
   <div class="col-md-5"></div>
   <div class="col-md-2">
@@ -84,7 +78,6 @@
   <div class="col-md-5"></div>
 </div>
 
-<!-- No matching documents error -->
 <div  class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
@@ -97,7 +90,6 @@
   <div class="col-md-2"></div>
 </div>
 
-<!-- dynamic divs to display query result documents -->
 <div  class="row">
   <div class="col-md-1"></div>
   <div class="col-xs-12 col-md-8">
@@ -135,4 +127,188 @@
   </div>
   </div>
   <div class="col-md-4"></div>
+</div> -->
+
+
+<!-- <div class="container-fluid" ng-show="!search.main_search_bar">
+
+  <section class="mt-2 p-0">
+    <div class="card w-100" style="border-radius:0px;">
+    <div class="card-body">
+      <form ng-submit="search.searchData(data);" class="form-inline">
+        <input ng-model="search.data.query" class="form-control mr-sm-2 w-25" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+    </div>
+  </section>
+
+  <section class="row mt-2 mb-2 p-0">
+
+    <div class="col-md-5 pr-2">
+      <section class="card card-cascade narrower p-0 m-0" style="height:800px; overflow-y:auto; border-radius:0px;">
+            <div class="card-header">
+              <a href="" class="white-text">Results</a>
+            </div>
+
+            <div class="card-body p-0">
+
+              <table class="table-responsive">
+                  <tbody>
+                      <div class="card w-100 show-hide-message alert alert-danger" ng-show="search.noResults" style="border-radius:0px;">
+                          <h4>Sorry, we couldn't find any documents based on your query.</h4>
+                      </div>
+                      <div ng-repeat="case in pageResults" class="card w-100" style="border-radius:0px;">
+                        <div class="card-body">
+                          <div clas="card-title">
+                            <p class="h5 m-0"><a href="" ng-click="sendCaseData(case.case_name, case.case_html, case.case_id, case.case_rank)" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">{{ case.case_name }}</a></p>
+                          </div>
+                          <div class="card-text">
+                            <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><b> Court:</b> {{ case.case_court }} <b> Date:</b> {{ case.case_datefiled }}</p>
+                            <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                              <i class="fas fa-angle-down"></i> More...
+                            </button>
+                            <div id="id-{{$index}}" class="collapse hide">
+                              <p ng-repeat="highlight in case.case_highlight" ng-bind-html="highlight"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </tbody>
+              </table>
+
+                <div class="align-items-center m-2">
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination align-items-center m-1" ng-repeat="q in numButtons" style="list-style: none; display:inline;">
+                      <li class="page-item p-0" style="float:left">
+                        <a class="page-link" ng-show="search.prevTen" ng-click="search.prevTenPages();">Previous</a>
+                      </li>
+                      <li class="page-item p-0 page-link" ng-click="search.nextPage(q);" style="float:left;">{{ q }}</li>
+                      <li class="page-item p-0" style="float: left;">
+                        <a class="page-link" ng-show="search.nextTen" ng-click="search.nextTenPages();">Next</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+            </div>
+      </section>
+    </div>
+
+    <div class="col-md-7 pr-3 p-0">
+      <section ng-controller="search.displayCase" class="card card-cascade narrower p-0 m-0" style="height:800px; overflow-y:auto; border-radius:0px;">
+        <div class="card-header">
+          <a href="" class="white-text">{{ search.casename }}</a>
+        </div>
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-text-tab" data-toggle="tab" href="#nav-text" role="tab" aria-controls="nav-text" aria-selected="true">Text</a>
+            <a class="nav-item nav-link" id="nav-insights-tab" data-toggle="tab" href="#nav-insights" role="tab" aria-controls="nav-insights" aria-selected="false">Insights</a>
+          </div>
+        </nav>
+        <div class="card-body">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
+            <div class="card-text" ng-bind-html="search.doctext">
+
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-insights" role="tabpanel" aria-labelledby="nav-insights-tab"></div>
+        </div>
+      </div>
+      </section>
+    </div>
+
+  </section>
+
+</div> -->
+
+
+<div class="container-fluid" ng-show="!search.main_search_bar">
+
+  <section class="mt-2 p-0">
+    <div class="card w-100" style="border-radius:0px;">
+    <div class="card-body">
+      <form ng-submit="search.searchData(data);" class="form-inline">
+        <input ng-model="search.data.query" class="form-control mr-sm-2 w-25" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+    </div>
+  </section>
+
+  <section class="row mt-2 mb-2 p-0" ng-controller="panelCtrl as panel">
+
+    <div class="col-md-5 pr-2">
+      <section class="card card-cascade narrower p-0 m-0" style="height:800px; overflow-y:auto; border-radius:0px;">
+            <div class="card-header">
+              <a href="" class="white-text">Results</a>
+            </div>
+
+            <div class="card-body p-0">
+
+              <table class="table-responsive">
+                  <tbody>
+                      <div class="card w-100 show-hide-message alert alert-danger" ng-show="search.noResults" style="border-radius:0px;">
+                          <h4>Sorry, we couldn't find any documents based on your query.</h4>
+                      </div>
+                      <div ng-repeat="case in pageResults" class="card w-100" style="border-radius:0px;">
+                        <div class="card-body">
+                          <div clas="card-title">
+                            <p class="h5 m-0"><a href="" ng-click="panel.selectResult(true, case)" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">{{ case.case_name }}</a></p>
+                          </div>
+                          <div class="card-text">
+                            <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><b> Court:</b> {{ case.case_court }} <b> Date:</b> {{ case.case_datefiled }}</p>
+                            <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                              <i class="fas fa-angle-down"></i> More...
+                            </button>
+                            <div id="id-{{$index}}" class="collapse hide">
+                              <p ng-repeat="highlight in case.case_highlight" ng-bind-html="highlight"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </tbody>
+              </table>
+
+                <div class="align-items-center m-2">
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination align-items-center m-1" ng-repeat="q in numButtons" style="list-style: none; display:inline;">
+                      <li class="page-item p-0" style="float:left">
+                        <a class="page-link" ng-show="search.prevTen" ng-click="search.prevTenPages();">Previous</a>
+                      </li>
+                      <li class="page-item p-0 page-link" ng-click="search.nextPage(q);" style="float:left;">{{ q }}</li>
+                      <li class="page-item p-0" style="float: left;">
+                        <a class="page-link" ng-show="search.nextTen" ng-click="search.nextTenPages();">Next</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+            </div>
+      </section>
+    </div>
+
+    <div class="col-md-7 pr-3 p-0" ng-show="panel.showPanel">
+      <section class="card card-cascade narrower p-0 m-0" style="height:800px; overflow-y:auto; border-radius:0px;">
+        <div class="card-header">
+          <a href="" class="white-text">{{ panel.result.case_name }}</a>
+        </div>
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-text-tab" data-toggle="tab" href="#nav-text" role="tab" aria-controls="nav-text" aria-selected="true">Text</a>
+            <!-- <a class="nav-item nav-link" id="nav-insights-tab" data-toggle="tab" href="#nav-insights" role="tab" aria-controls="nav-insights" aria-selected="false">Insights</a> -->
+          </div>
+        </nav>
+        <div class="card-body">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
+            <div class="card-text" ng-bind-html="panel.result.case_html"></div>
+          </div>
+          <!-- <div class="tab-pane fade" id="nav-insights" role="tabpanel" aria-labelledby="nav-insights-tab"></div> -->
+        </div>
+      </div>
+      </section>
+    </div>
+
+  </section>
+
 </div>

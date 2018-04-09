@@ -130,6 +130,10 @@ searchControllers
       } else {
         return "No highlights";
       }
+    },
+    getCleanedHtml:function(i_watson_html) {
+      html = i_watson_html.replace(/[^\x00-\x7F]/g, "");
+      return html;
     }
   }
 })
@@ -183,7 +187,7 @@ searchControllers
         filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_rank":"' + (i + 1) + '" }';
         query_results[i] = JSON.parse(filtered_result);
         query_results[i]['case_text'] = watson_results[i].text;
-        query_results[i]['case_html'] = watson_results[i].html;
+        query_results[i]['case_html'] = myService.getCleanedHtml(watson_results[i].html);
         query_results[i]['case_highlight'] = i_highlight;
       }
       $scope.results = query_results;
@@ -435,4 +439,15 @@ searchControllers
       });
     }
   };
+});
+
+// Abizer New controller
+// This control displays each case in a new panel
+searchControllers.controller("panelCtrl", function($scope) {
+  this.result;
+  this.showPanel = false;
+  this.selectResult = function(showPanel, result) {
+    this.showPanel = showPanel;
+    this.result = result;
+  }
 });
