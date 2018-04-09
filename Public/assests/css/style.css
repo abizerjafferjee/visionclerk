@@ -154,9 +154,6 @@ body {
 
 /* Abizer Additions */
 /* Index Page */
-.col-xs-12 #intro-text {
-  width:200px;
-}
 
 #main-content-row1 {
   padding:20px;
@@ -164,6 +161,7 @@ body {
   background: -webkit-linear-gradient(to right, #363795, #005C97);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #363795, #005C97); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
 
 #main-content-features {
   background: #ECE9E6;

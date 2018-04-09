@@ -99,18 +99,24 @@
         <div id="main-content-row1" class="row align-items-center">
           <div class="col-sm-1"></div>
 
-          <div class="col-xs-12 col-sm-10" style="margin-right:5px; padding:20px; text-align:center; color:white">
-            <p class="h2 m-1" style="font-weight:300; font-family:Lucida Sans Unicode;">AI Powered Legal Search & Analytics</p1>
+          <div class="col-xs-12 col-sm-10 mt-2" style="margin-right:5px; text-align:center; color:white">
+            <p class="h1 m-1" style="font-weight:200; font-family:arial;">AI Powered Legal Search & Analytics</p1>
 
-            <div id="intro-text" class="wrapper" style="margin:auto; width:500px;">
-              <p class="h4 m-3 text-center"><small style="color:silver;">VisionClerk is an intelligent legal research platform that offers unprecedented research efficiency to help attorneys achieve successful outcomes for their clients.</small></p>
+            <div class="row" style="margin:auto;">
+              <div class="col-sm-4"></div>
+              <div class="col-xs-12 col-sm-4">
+              <p class="h4 text-center"><small style="color:silver;">VisionClerk is an intelligent legal research platform that offers unprecedented research efficiency to help attorneys achieve successful outcomes for their clients.</small></p>
+              </div>
+              <div class="col-sm-4"></div>
             </div>
 
-            <div class="text-center m-4">
+            <div class="text-center mb-4">
             <a href="/register" ng-click="main.doNOTshowLanding();">
               <button id="landing_resgister" class="btn btn-primary btn-lg" style="border-radius:25px" type="button">Get Started</button>
             </a>
             </div>
+            <img class="m-0 p-0" src="assests/images/capture11.png" alt="nothing" class="img-responsive" style="width:50%; height:50%;"></img>
+
           </div>
 
           <div class="col-sm-1"></div>
@@ -233,19 +239,17 @@
     <div ng-view></div>
     <!-- FOOTER -->
     <footer ng-show="main.registering" class="page-footer bg-light">
-      <div class="row">
+      <div class="row pt-4">
         <div class="col-md-2"></div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <br><br>
+        <div class="col-xs-12 col-sm-6 col-md-4 text-center">
           <h2>About Us</h2>
-          <p style="margin-right: 50px;">VisionClerk is focused on enhancing a Lawyer's ability by creating tools which aim to minimize the amount of time spent on finding and evaluating the highest quality information.</p>
+          <p>VisionClerk is focused on enhancing a Lawyer's ability by creating tools which aim to minimize the amount of time spent on finding and evaluating the highest quality information.</p>
         </div>
-        <div id="vertical_line" class="col-xs-12 col-sm-6 col-md-4">
-          <br><br>
+        <div id="vertical_line" class="col-xs-12 col-sm-6 col-md-4 text-center">
           <h2>Contact Information</h2>
-          <p>600 Queens Quay West, Suite 232 Toronto On M5V3M3</p>
-          <p>Phone: +1 647-936-1140</p>
-          <p>Email: info@visionclerk.com</p>
+          <p><i class="fas fa-map-marker"></i> Toronto, Ontario, Canada</p>
+          <p><i class="fas fa-mobile"></i> +1 647-936-1140</p>
+          <p><i class="fas fa-envelope"></i> info@visionclerk.com</p>
         </div>
         <div class="col-md-2"></div>
       </div>
