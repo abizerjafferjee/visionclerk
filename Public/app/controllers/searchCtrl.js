@@ -118,11 +118,8 @@ searchControllers
     //Abizer's Changes
     getCaseHighlightsFromWatsonResults:function(i_watson_result) {
       if ("highlight" in i_watson_result) {
-        if ("text" in i_watson_result["highlight"]) {
+        if ("html" in i_watson_result["highlight"]) {
           results = i_watson_result["highlight"]["html"];
-          for (var i=0; i < results.length; i++) {
-            results[i] = results[i].replace(/[^\x00-\x7F]/g, "");
-          }
           return results;
         } else {
           return "No highlights";
@@ -131,9 +128,43 @@ searchControllers
         return "No highlights";
       }
     },
+    getTextHighlightsFromWatsonResults:function(i_watson_result) {
+      if ("highlight" in i_watson_result) {
+        if ("text" in i_watson_result["highlight"]) {
+          results = i_watson_result["highlight"]["text"];
+          return results;
+        } else {
+          return "No highlights";
+        }
+      } else {
+        return "No highlights";
+      }
+    },
+    addHighlightstoHtml: function(i_watson_highlights, i_watson_html) {
+      if (i_watson_highlights === "No highlights") {
+        return i_watson_html;
+      }
+      for (var i=0; i < i_watson_highlights.length; i++) {
+        var div = document.createElement("div");
+        div.innerHTML = i_watson_highlights[i];
+        highlight = div.innerText;
+        if (i_watson_html.indexOf(highlight) != -1) {
+          i_watson_html = i_watson_html.replace(highlight, "<mark>"+highlight+"</mark>");
+        }
+      }
+      return i_watson_html;
+    },
     getCleanedHtml:function(i_watson_html) {
       html = i_watson_html.replace(/[^\x00-\x7F]/g, "");
+      // html = html.replace("\n\n", "");
+      // html = html.replace("\n", "<br>");
       return html;
+    },
+    getCleanedHighlights: function(i_watson_highlights) {
+      for (var i=0; i < i_watson_highlights.length; i++) {
+        i_watson_highlights[i] = i_watson_highlights[i].replace(/[^\x00-\x7F]/g, "");
+      }
+      return i_watson_highlights;
     }
   }
 })
@@ -182,13 +213,13 @@ searchControllers
         var i_court = myService.getCaseCourtFromWatsonResults(watson_results[i]);
         var i_datefiled = myService.getCaseDateFiledFromWatsonResults(watson_results[i]);
         //Abizer Highlight
-        var i_highlight = myService.getCaseHighlightsFromWatsonResults(watson_results[i]);
-        //filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_text":"' + i_text + '", "case_html":"' + i_html + '"}';
+        var i_highlights = myService.getCaseHighlightsFromWatsonResults(watson_results[i]);
+        var i_text_highlights = myService.getTextHighlightsFromWatsonResults(watson_results[i]);
         filtered_result = '{"case_name":"' + i_name + '", "case_id":"' + i_id + '", "case_court":"' + i_court + '", "case_datefiled":"' + i_datefiled + '", "case_rank":"' + (i + 1) + '" }';
         query_results[i] = JSON.parse(filtered_result);
         query_results[i]['case_text'] = watson_results[i].text;
-        query_results[i]['case_html'] = myService.getCleanedHtml(watson_results[i].html);
-        query_results[i]['case_highlight'] = i_highlight;
+        query_results[i]['case_html'] = myService.getCleanedHtml(myService.addHighlightstoHtml(i_text_highlights, watson_results[i].html));
+        query_results[i]['case_highlight'] = myService.getCleanedHighlights(i_highlights);
       }
       $scope.results = query_results;
       myService.setUserQuery($scope.search.data.query);
