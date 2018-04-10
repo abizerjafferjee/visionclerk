@@ -70,6 +70,9 @@
             <span class="icon-bar"></span>
           </button> -->
           <a  class="navbar-brand" href="/" ng-click="main.showLanding();"><img src="assests/images/visionclerk-logo.png" alt="VisionClerk Logo" width="300" height="50"></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavBar">
+            <i class="fas fa-chevron-down"></i>
+          </button>
         </div>
         <div class="collapse navbar-collapse" id="mainNavBar">
           <ul class="nav navbar-nav mr-auto">
@@ -77,8 +80,8 @@
           </ul>
           <ul class="nav navbar-nav ml-auto reset">
             <!-- <li class="nav-item"><a class="nav-link" href="/profile" ng-click="main.doNOTshowLanding();"> {{ main.username }}<span class="sr-only">(current)</span></a></li> -->
+            <li class="nav-item"><a class="nav-link" href="/login" ng-show="!main.isLoggedIn" ng-click="main.doNOTshowLanding();" style="color:light-blue;">Login<span class="sr-only">(current)</span></a></li>
             <li class="nav-item"><a class="nav-link" href="/register" ng-click="main.doNOTshowLanding();" ng-show="!main.isLoggedIn"><button type="button" class="btn btn-outline-primary btn-rounded waves-effect btn-lg" style="border-radius:25px">Sign Up<span class="sr-only">(current)</span></button></a></li>
-            <li class="nav-item"><a class="nav-link" href="/login" ng-show="!main.isLoggedIn" ng-click="main.doNOTshowLanding();" style="color:light-blue;"><span class="oi oi-account-login"></span> Login<span class="sr-only">(current)</span></a></li>
             <!-- <li class="nav-item"><a class="nav-link" href="#" ng-click="main.logout(); main.showLanding();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a></li> -->
 
             <li class="nav-item dropdown"  ng-show="main.isLoggedIn" style="color:black;">
