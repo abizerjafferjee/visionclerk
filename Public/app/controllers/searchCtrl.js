@@ -156,9 +156,20 @@ searchControllers
     },
     getCleanedHtml:function(i_watson_html) {
       html = i_watson_html.replace(/[^\x00-\x7F]/g, "");
-      // html = html.replace("\n\n", "");
-      // html = html.replace("\n", "<br>");
-      return html;
+      html = html.replace("no title", "");
+      console.log(html);
+      endOfHead = html.indexOf("</head>");
+      head = html.substring(0, endOfHead);
+      body = html.substring(endOfHead, html.length);
+      body = body.replace(/\n\n\n\n/g, "\n\n");
+      body = body.replace(/\n\n\n/g, "\n\n");
+      body = body.replace(/\n\n/g, "<br><br>");
+      body = body.replace(/\n/g, "<br>");
+      body = body.replace(/<br><br><br><br>/g, "<br><br>");
+      body = body.replace(/<br><br><br>/g, "<br><br>");
+
+      all = head + body;
+      return all;
     },
     getCleanedHighlights: function(i_watson_highlights) {
       for (var i=0; i < i_watson_highlights.length; i++) {
