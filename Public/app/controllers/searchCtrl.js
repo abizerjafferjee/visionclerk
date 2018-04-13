@@ -157,7 +157,6 @@ searchControllers
     getCleanedHtml:function(i_watson_html) {
       html = i_watson_html.replace(/[^\x00-\x7F]/g, "");
       html = html.replace("no title", "");
-      console.log(html);
       endOfHead = html.indexOf("</head>");
       head = html.substring(0, endOfHead);
       body = html.substring(endOfHead, html.length);
@@ -176,6 +175,35 @@ searchControllers
         i_watson_highlights[i] = i_watson_highlights[i].replace(/[^\x00-\x7F]/g, "");
       }
       return i_watson_highlights;
+    },
+    getEntities: function(i_watson_result) {
+      if ("entities" in i_watson_result["enriched_text"]) {
+        var entities = i_watson_result["enriched_text"]["entities"];
+        var dict = {};
+        for (var i=0; i<entities.length; i++){
+          type = entities[i]["type"];
+          if (type in dict) {
+            dict[type].push(entities[i]["text"]);
+          } else {
+            dict[type] = [entities[i]["text"]];
+          }
+        }
+        return dict;
+      } else{
+        return {"Entities": "No Information"};
+      }
+    },
+    getConcepts: function(i_watson_result) {
+      if ("concepts" in i_watson_result["enriched_text"]) {
+        var concepts = i_watson_result["enriched_text"]["concepts"];
+        var dict = {"Law Topics":[]};
+        for (var i=0; i<concepts.length; i++) {
+          dict["Law Topics"].push(concepts[i]["text"]);
+        }
+        return dict;
+      } else {
+        return {"Law Topics": "No Information"};
+      }
     }
   }
 })
@@ -231,6 +259,8 @@ searchControllers
         query_results[i]['case_text'] = watson_results[i].text;
         query_results[i]['case_html'] = myService.getCleanedHtml(myService.addHighlightstoHtml(i_text_highlights, watson_results[i].html));
         query_results[i]['case_highlight'] = myService.getCleanedHighlights(i_highlights);
+        query_results[i]['entities'] = myService.getEntities(watson_results[i]);
+        query_results[i]['law_topics'] = myService.getConcepts(watson_results[i]);
       }
       $scope.results = query_results;
       myService.setUserQuery($scope.search.data.query);
