@@ -4,22 +4,20 @@
     <div class="col-sm-2 col-md-4"></div>
 
     <div id="loginFormStyle" class="col-xs-10 col-sm-8 col-md-4 card">
-      <form ng-submit="main.doLogin(loginData);">
-        <p class="h1 text-center py-4" style="color:white;">Sign In</p>
-
-        <!-- ERROR MESSAGES -->
-        <div class="form-group ml-2 mr-2">
-              <div class="row show-hide-message alert alert-success" ng-show="main.successMsg">{{ main.successMsg }}</div>
-              <div class="row show-hide-message alert alert-danger" ng-show="main.errorMsg">{{ main.errorMsg }} &nbsp
-                <a ng-show="main.expired" href="/resend">
-                  <button class="btn btn-success">Resend Activation Email</button>
-                </a>
-              </div>
-            <div class="jumbotron text-center" ng-show="main.loading">
-              <span class="glyphicon glyphicon-repeat spinner"></span>
-              <p>Loading...</p>
+      <p class="h1 text-center py-4" style="color:white;">Sign In</p>
+      <div class="form-group ml-2 mr-2">
+            <div class="row show-hide-message alert alert-success" ng-show="main.successMsg">{{ main.successMsg }}</div>
+            <div class="row show-hide-message alert alert-danger" ng-show="main.errorMsg">{{ main.errorMsg }} &nbsp
+              <a ng-show="main.expired" href="/resend">
+                <button class="btn btn-success">Resend Activation Email</button>
+              </a>
             </div>
-        </div>
+          <div class="jumbotron text-center" ng-show="main.loading">
+            <span class="glyphicon glyphicon-repeat spinner"></span>
+            <p>Loading...</p>
+          </div>
+      </div>
+      <form ng-submit="main.doLogin(loginData);">
 
         <div class="form-group">
           <label class="form-control-label" for="login-email-input" style="color: white;">Email</label>
@@ -46,56 +44,165 @@
 </div>
 
 
+<!-- Abizer Stuff -->
+<!-- <div class="container-fluid">
 
-<!-- <div  class="row">
-  <div class="col-1"></div>
-  <div class="col-8">
+  <section class="mt-2 p-0">
+    <div class="card w-100" style="border-radius:0px;">
+    <div class="card-body">
+      <form ng-show="!search.main_search_bar" ng-submit="search.searchData(data);" class="form-inline">
+        <input ng-model="search.data.query" class="form-control mr-sm-2 w-25" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+    </div>
+  </section>
 
-    <div class="card w-75 mt-2">
-      <div class="card-body">
-        <div clas="card-title"><p class="h5">Example 1 of Case Title</p></div>
-        <div class="card-text">
+  <section class="row mt-2 mb-2 p-0">
+    <div class="col-md-5 pr-2">
+      <section class="card card-cascade narrower p-0 m-0" style="height:800px; overflow-y:auto; border-radius:0px;">
 
-          <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn <strong> Court:</strong> ontario court <strong> Date filed:</strong> ontario date filed</p>
-          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            <i class="fas fa-angle-down"></i> More Information
-          </button>
-          <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne">
-                <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
+            <div class="card-header">
+              <a href="" class="white-text">Results</a>
+            </div>
+
+            <div class="card-body p-0">
+              <table class="table-responsive">
+                  <tbody>
+                        <div class="card w-100" style="border-radius:0px;">
+                          <div class="card-body">
+                            <div clas="card-title">
+                              <p class="h5 m-0"><a href="#" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">this is a test</a></p>
+                            </div>
+                            <div class="card-text">
+                              <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><bold> Court:</bold> test <bold> Date:</bold> test</p>
+                              <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                                <i class="fas fa-angle-down"></i> More...
+                              </button>
+                              <div id="id-{{$index}}" class="collapse hide">
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card w-100" style="border-radius:0px;">
+                          <div class="card-body">
+                            <div clas="card-title">
+                              <p class="h5 m-0"><a href="#" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">this is a test</a></p>
+                            </div>
+                            <div class="card-text">
+                              <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><bold> Court:</bold> test <bold> Date:</bold> test</p>
+                              <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                                <i class="fas fa-angle-down"></i> More...
+                              </button>
+                              <div id="id-{{$index}}" class="collapse hide">
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card w-100" style="border-radius:0px;">
+                          <div class="card-body">
+                            <div clas="card-title">
+                              <p class="h5 m-0"><a href="#" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">this is a test</a></p>
+                            </div>
+                            <div class="card-text">
+                              <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><bold> Court:</bold> test <bold> Date:</bold> test</p>
+                              <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                                <i class="fas fa-angle-down"></i> More...
+                              </button>
+                              <div id="id-{{$index}}" class="collapse hide">
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card w-100" style="border-radius:0px;">
+                          <div class="card-body">
+                            <div clas="card-title">
+                              <p class="h5 m-0"><a href="#" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">this is a test</a></p>
+                            </div>
+                            <div class="card-text">
+                              <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><bold> Court:</bold> test <bold> Date:</bold> test</p>
+                              <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                                <i class="fas fa-angle-down"></i> More...
+                              </button>
+                              <div id="id-{{$index}}" class="collapse hide">
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card w-100" style="border-radius:0px;">
+                          <div class="card-body">
+                            <div clas="card-title">
+                              <p class="h5 m-0"><a href="#" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">this is a test</a></p>
+                            </div>
+                            <div class="card-text">
+                              <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><bold> Court:</bold> test <bold> Date:</bold> test</p>
+                              <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
+                                <i class="fas fa-angle-down"></i> More...
+                              </button>
+                              <div id="id-{{$index}}" class="collapse hide">
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                                <p class="m-0">test data</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  </tbody>
+              </table>
+
+              <div class="align-items-center my-2">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                    <li class="page-item disabled p-0">
+                      <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item p-0"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item p-0"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item p-0"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item p-0">
+                      <a class="page-link" href="#">Next</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+      </section>
+    </div>
+
+    <div class="col-md-7 pr-3 p-0">
+      <section class="card card-cascade narrower p-0 m-0" style="height:800px; overflow-y:auto; border-radius:0px;">
+        <div class="card-header">
+          <a href="" class="white-text">Document</a>
+        </div>
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-text-tab" data-toggle="tab" href="#nav-text" role="tab" aria-controls="nav-text" aria-selected="true">Text</a>
+            <a class="nav-item nav-link" id="nav-insights-tab" data-toggle="tab" href="#nav-insights" role="tab" aria-controls="nav-insights" aria-selected="false">Insights</a>
           </div>
+        </nav>
+        <div class="card-body">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
+            <div class=card-text>
+              This is test information
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-insights" role="tabpanel" aria-labelledby="nav-insights-tab"></div>
         </div>
       </div>
+      </section>
     </div>
-
-    <div class="card w-75 mt-2">
-      <div class="card-body">
-        <div clas="card-title">Example 1 of Case Title</div>
-        <div class="card-text">
-          <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn, <strong>Court:</strong> ontario court, <strong>Date Filed:</strong> ontario date filed</p>
-          <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="card w-75 mt-2">
-      <div class="card-body">
-        <div clas="card-title">Example 1 of Case Title</div>
-        <div class="card-text">
-          <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn, <strong>Court:</strong> ontario court, <strong>Date Filed:</strong> ontario date filed</p>
-          <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
-        </div>
-      </div>
-    </div>
-
-    <div >
-      <br>
-      <h5>
-        Example 1 of Case Title
-      </h5>
-      <p style="color: black;"><strong>Document Id:</strong> jksfdndjfkn, <strong>Court:</strong> ontario court, <strong>Date Filed:</strong> ontario date filed</p>
-      <p>This is information about the case from parts of the case which would be most relevant to you please read.</p>
-    </div>
-  </div>
-  <div class="col-2"></div>
-</div>
-<div class="col-1"></div> -->
+  </section>
+</div> -->

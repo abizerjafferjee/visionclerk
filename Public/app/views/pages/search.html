@@ -1,22 +1,61 @@
-<div ng-show="search.main_search_bar" style="padding-top: 15%;"></div>
-
-<!-- Main Search bar -->
 <div class="container-fluid" ng-show="search.main_search_bar">
-  <div  class="row">
+<section>
+  <div style="padding-top: 15%;"></div>
+</section>
+<!-- Main Search bar -->
+<section class="row">
     <div class="col-md-2"></div>
-    <div class="col-xs-12 col-md-9">
-      <form class="form-inline" style="text-align: left" ng-submit="search.searchData(data);">
+    <div class="col-md-8 mt-2 p-0">
+      <div class="card w-100" style="border-radius:0px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+          <div class="card-body align-items-center">
+            <form ng-submit="search.searchData(data);" class="form-inline">
+              <input ng-model="search.data.query" class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search" style="width:90%">
+              <div class="input-group-append">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+              </div>
+
+              <div class="loader ml-2" ng-show="search.loading" style="display:inline; width: 30px; height: 30px;"></div>
+            </form>
+            <!-- <form class="form-inline" ng-controller="searchCtrl as search">
+              <div class="form-group">
+                <label for="court">Court</label>
+                <select name= "inputTag" id= "court" class="form-control" placeholder="Tag Type" ng-model="search.data.court">
+                  <option ng-repeat="court in filters" value="{{court}}" >{{court}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="pwd">Topic</label>
+                <input type="text" class="form-control" id="pwd">
+              </div>
+            </form> -->
+          </div>
+      </div>
+      <div class="card w-100" style="border-radius:0px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+          <div class="card-body mt-2">
+          <p class="h5" style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
+          <p style="text-align: center; color: #6b61f4;">Single Offensive Act</p>
+          <p style="text-align: center; color: #6b61f4;">Liability of Parent for Child vandalism</p>
+          <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
+          </div>
+      </div>
+    </div>
+    <!-- <div class="card col-xs-12 col-md-8 align-items-center">
+      <form class="form-inline" ng-submit="search.searchData(data);">
             <input class="form-control w-75 mr-3" type="search" ng-model="search.data.query">
             <button class="btn btn-primary" type="submit">Search</button>
       </form>
-      <div class="row">
-          <div class="col-xs-12 col-md-10 mt-3" ng-show="search.search_examples">
+      <section class="row align-items-center">
+          <div class-"col-md-2"></div>
+          <div class="card col-xs-12 col-md-8 mt-3" ng-show="search.search_examples">
+            <div class="card-body">
             <p class="h5" style="text-align: center; text-decoration: underline; color: #6b61f4;">A Few Examples</p>
             <p style="text-align: center; color: #6b61f4;">Single Offensive Act</p>
             <p style="text-align: center; color: #6b61f4;">Liability of Parent for Child vandalism</p>
             <p style="text-align: center; color: #6b61f4;">Breach of Employment Contract Specified Term Damages</p>
+            </div>
           </div>
-        </div>
+          <div class-"col-md-2"></div>
+      </section>
         <div class="row">
           <div class="col-xs-2 col-md-5"></div>
           <div class="col-xs-8 col-md-2">
@@ -24,12 +63,10 @@
           </div>
           <div class="col-xs-2 col-md-5"></div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-1"></div>
-  </div>
+    </div> -->
+    <div class="col-md-2"></div>
+</section>
 </div>
-
 
 
 <!-- <div class="container-fluid" ng-show="search.main_search_bar">
@@ -230,7 +267,21 @@
     <div class="card-body">
       <form ng-submit="search.searchData(data);" class="form-inline">
         <input ng-model="search.data.query" class="form-control mr-sm-2 w-50" type="search" placeholder="Search" aria-label="Search">
+        <!-- <div class="input-group mx-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Court</div>
+          </div>
+          <select class="custom-select" name= "inputTag" id= "court" class="form-control" placeholder="Tag Type" ng-model="search.data.court">
+            <option ng-repeat="court in filters" value="{{court}}" >{{court}}</option>
+          </select>
+        </div> -->
+        <!-- <input ng-model="search.data.court" class="form-control mr-sm-2 w-50" type="search" placeholder="filter" aria-label=""> -->
         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        <div class="loader ml-2" ng-show="search.loading" style="display:inline; width: 30px; height: 30px;"></div>
+        <!-- <label for="court" class="mx-2">Court</label>
+        <select name= "inputTag" id= "court" class="form-control" placeholder="Tag Type" ng-model="search.data.court">
+          <option ng-repeat="court in filters" value="{{court}}" >{{court}}</option>
+        </select> -->
       </form>
     </div>
     </div>
@@ -257,10 +308,23 @@
                             <p class="h5 m-0"><a href="" ng-click="panel.selectResult(true, case)" style="color:blue; font-size: 25px; font-family:arial; text-decoration:underline;">{{ case.case_name }}</a></p>
                           </div>
                           <div class="card-text">
-                            <p style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><b> Court:</b> {{ case.case_court }} <b> Date:</b> {{ case.case_datefiled }}</p>
+                            <p class="m-0 p-0" style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><b> Court:</b> {{ case.case_court }}</p>
+                            <p class="m-0 p-0" style="color: black; font-size: 18px; font-family:arial; font-weight:100;"><b> Date:</b> {{ case.case_datefiled }}</p>
+                            <div class="d-flex justify-content-xl-between">
                             <button class="btn btn-link m-0 p-0" data-toggle="collapse" data-target="#id-{{$index}}" style="color: grey; font-size: 15px; font-family:arial; font-weight:100;">
                               <i class="fas fa-angle-down"></i> More...
                             </button>
+                            <form class="form-inline" ng-show="search.feedback_submitted">
+                              <div class="form-group">
+                                <button class="btn btn-rounded" ng-click="search.userFeedback(10, case.case_id); search.getDateTimeLocation();">
+                                  <i class="far fa-thumbs-up"></i>
+                                </button>
+                                <button class="btn btn-rounded" ng-click="search.userFeedback(0, case.case_id); search.getDateTimeLocation();">
+                                  <i class="far fa-thumbs-down"></i>
+                                </button>
+                              </div>
+                            </form>
+                            </div>
                             <div id="id-{{$index}}" class="collapse hide">
                               <p ng-repeat="highlight in case.case_highlight" ng-bind-html="highlight"></p>
                             </div>

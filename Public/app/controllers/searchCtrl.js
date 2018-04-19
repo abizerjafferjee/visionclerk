@@ -1,3 +1,14 @@
+//Global Variables
+var courts_key = {"Canada":[{"Federal":[{"Supreme Court of Canada":["Supreme Court of Canada"]}, {"Federal Court of Appeal":["Federal Court of Appeal (Canada)"]}]},
+	   {"Ontario":[{"Ontario Superior Court of Justice":["Ontario Superior Court of Justice", "Superior court", "Ontario Court of Justice"]}, {"Court of Appeal for Ontario":["Court of Appeal for Ontario"]}]},
+	   {"British Columbia":[{"British Columbia Court of Appeal":["British Columbia Court of Appeal"]}]},
+           {"Alberta":[{"Court of Appeal of Alberta":["Court of Appeal of Alberta"]}]},
+           {"Quebec":[{"Quebec Court of Appeal":["Quebec Court of Appeal"]}]},
+           {"Manitoba":[{"Manitoba Court of Appeal":["Manitoba Court of Appeal"]}]},
+           {"Saskatchewan":[{"Court of Appeal for Saskatchewan":["Court of Appeal for Saskatchewan"]}]}]};
+
+var courts_list = ["Supreme Court of Canada", "Federal Court of Appeal (Canada)", "Ontario Superior Court of Justice", "Superior court", "Ontario Court of Justice", "Court of Appeal for Ontario", "British Columbia Court of Appeal", "Court of Appeal of Alberta", "Manitoba Court of Appeal", "Quebec Court of Appeal", "Court of Appeal for Saskatchewan"];
+
 var searchControllers = angular.module('searchControllers', ['ngSanitize']);
 
 searchControllers
@@ -97,8 +108,13 @@ searchControllers
       } else {
         return file_name.replace(/.html/ig, '').replace(/.pdf/ig, '');
       }
-
     },
+
+    getTitleFromWatsonResults:function(i_watson_result) {
+      title = i_watson_result["extracted_metadata"]["title"];
+      return title;
+    },
+    
     getCaseCourtFromWatsonResults:function(i_watson_result) {
       for (i = 0; i < i_watson_result['enriched_text'].entities.length; i++) {
         if ((i_watson_result['enriched_text'].entities[i]['type'] == 'Organization') && (i_watson_result['enriched_text'].entities[i]['text'].includes('Court'))) {
@@ -218,7 +234,9 @@ searchControllers
 
   var app = this;
   var results_per_page = 10;
-
+  var filters = ["Supreme Court of Canada", "Federal Court of Appeal", "Ontario Superior Court of Justice", "Court of Appeal for Ontario", "British Columbia Court of Appeal", "Court of Appeal of Alberta", "Manitoba Court of Appeal", "Quebec Court of Appeal", "Court of Appeal for Saskatchewan"];
+  $scope.filters = filters;
+  var user_filters = {"court":""};
   // AESTHETICS
   app.main_search_bar = true;
   app.search_examples = true;
@@ -242,9 +260,6 @@ searchControllers
         $scope.numButtons = [0];
       }
       var watson_results = watson_response.data.results;
-      //console.log(watson_results);
-      // Need to filter out extra information i.e create simpler results just with data needed
-      // Data needed: case_name, case_id, case_court, case_datefiled, case_text, case_html
       var query_results = [];
       for (var i=0; i<watson_results.length; i++){
         var i_name = myService.getCaseNameFromWatsonResults(watson_results[i]);
@@ -465,14 +480,14 @@ searchControllers
     $scope.query = myService.getUserQuery();
   };
 
-  this.userFeedback = function(relevance) {
+  this.userFeedback = function(relevance, case_id) {
     /*app.rel_score = relevance;
     app.user_name = $scope.main.username;
     app.docID = myService.getDocID();
     app.caseId = myService.getCaseId();*/
-    var case_id = myService.getCaseId();
+    // var case_id = myService.getCaseId();
     //var docID = myService.getDocID();
-    var feedback = '{"username":"' + $scope.main.username + '", "query":"' + app.userquery + '", "docid":"' + case_id + '", "score":"' + relevance + '"}';
+    var feedback = '{"username":"' + $scope.main.username + '", "query":"' + myService.getUserQuery() + '", "docid":"' + case_id + '", "score":"' + relevance + '"}';
     app.userfeedback = JSON.parse(JSON.stringify(feedback));
 
     // data to send: ix | username | query | id | docid | score(0,1)
