@@ -1,13 +1,14 @@
-var express    = require('express');
-var app        = express();
-var port       = process.env.PORT || 8080;
-var morgan     = require('morgan');
-var mongoose   = require('mongoose');
-var pg         = require('pg');
-var router     = express.Router();
-var appRoutes  = require('./App/Routes/api.js')(router);
-var path       = require('path');
-var favicon    = require('serve-favicon');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
+var morgan = require('morgan');
+var mongoose = require('mongoose');
+// noinspection JSUnusedLocalSymbols
+var pg = require('pg');
+var router = express.Router();
+var appRoutes = require('./App/Routes/api.js')(router);
+var path = require('path');
+var favicon = require('serve-favicon');
 
 // TRYING MONGOCLIENG
 var mongoClient = require('mongodb').MongoClient;
@@ -28,18 +29,20 @@ mongoose.connect('mongodb://admin:password@localhost:27017/legalx_db?authSource=
     console.log('Successfully connected to MongoDB');
   }
 });*/
-mongoose.connect('mongodb://legalx_admin:legalx1234@ds125198.mlab.com:25198/legalx_db', function(err){
-  if (err) {
-    console.log('Not connected to Database: ' + err);
-  } else {
-    console.log('Successfully connected to MongoDB');
-  }
+// noinspection JSIgnoredPromiseFromCall
+mongoose.connect('mongodb://legalx_admin:legalx1234@ds125198.mlab.com:25198/legalx_db', function (err) {
+    if (err) {
+        console.log('Not connected to Database: ' + err);
+    } else {
+        console.log('Successfully connected to MongoDB');
+    }
 });
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/Public/app/views/index.html'));
+// noinspection JSUnresolvedFunction
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname + '/Public/app/views/index.html'));
 });
 
-app.listen(process.env.PORT || port, function() {
-  console.log('Server is running on port: ' + port);
+app.listen(process.env.PORT || port, function () {
+    console.log('Server is running on port: ' + port);
 });

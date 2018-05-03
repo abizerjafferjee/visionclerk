@@ -4,7 +4,7 @@ userControllers.controller('regCtrl', function($http, $location, $timeout, User)
 
   var app = this;
 
-  this.regUser = function(regData){
+  this.regUser = function(){
     app.disabled = true;
     app.loading = true;
     app.errorMsg = false;
@@ -28,9 +28,9 @@ userControllers.controller('regCtrl', function($http, $location, $timeout, User)
   };
 })
 
-.controller('deleteaccountCtrl', function(User, $routeParams){
+.controller('deleteaccountCtrl', function(User){
 
-  app = this;
+  var app = this;
 
   app.deleteAccount = function(email) {
     app.errorMsg = false;
