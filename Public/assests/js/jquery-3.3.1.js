@@ -792,7 +792,7 @@ function Sizzle( selector, context, results, seed ) {
 			// Take advantage of querySelectorAll
 			if ( support.qsa &&
 				!compilerCache[ selector + " " ] &&
-				(!rbuggyQSA || !rbuggyQSA.test( selector )) ) {
+				(!rbuggyQSA || !Doc.test( selector )) ) {
 
 				if ( nodeType !== 1 ) {
 					newContext = context;
@@ -1485,8 +1485,8 @@ Sizzle.matchesSelector = function( elem, expr ) {
 
 	if ( support.matchesSelector && documentIsHTML &&
 		!compilerCache[ expr + " " ] &&
-		( !rbuggyMatches || !rbuggyMatches.test( expr ) ) &&
-		( !rbuggyQSA     || !rbuggyQSA.test( expr ) ) ) {
+		( !rbuggyMatches || !Doc.test( expr ) ) &&
+		( !rbuggyQSA     || !Doc.test( expr ) ) ) {
 
 		try {
 			var ret = matches.call( elem, expr );
@@ -1679,7 +1679,7 @@ Expr = Sizzle.selectors = {
 			var excess,
 				unquoted = !match[6] && match[2];
 
-			if ( matchExpr["CHILD"].test( match[0] ) ) {
+			if ( Doc.test( match[0] ) ) {
 				return null;
 			}
 
@@ -2643,7 +2643,7 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 		}
 
 		// Fetch a seed set for right-to-left matching
-		i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
+		i = Doc.test( selector ) ? 0 : tokens.length;
 		while ( i-- ) {
 			token = tokens[i];
 
@@ -5174,7 +5174,7 @@ jQuery.event = {
 
 				// Triggered event must either 1) have no namespace, or 2) have namespace(s)
 				// a subset or equal to those in the bound event (both can have no namespace).
-				if ( !event.rnamespace || event.rnamespace.test( handleObj.namespace ) ) {
+				if ( !event.rnamespace || Doc.test( handleObj.namespace ) ) {
 
 					event.handleObj = handleObj;
 					event.data = handleObj.data;
@@ -8663,7 +8663,7 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	// Check if we're dealing with a known content-type
 	if ( ct ) {
 		for ( type in contents ) {
-			if ( contents[ type ] && contents[ type ].test( ct ) ) {
+			if ( contents[ type ] && Doc.test( ct ) ) {
 				dataTypes.unshift( type );
 				break;
 			}

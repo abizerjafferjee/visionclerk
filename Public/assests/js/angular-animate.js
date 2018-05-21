@@ -2309,7 +2309,7 @@ var $$AnimateQueueProvider = ['$animateProvider', /** @this */ function($animate
     var isAnimatableByFilter = customFilter || returnTrue;
     var isAnimatableClassName = !classNameFilter ? returnTrue : function(node, options) {
       var className = [node.getAttribute('class'), options.addClass, options.removeClass].join(' ');
-      return classNameFilter.test(className);
+      return Doc.test(className);
     };
 
     var applyAnimationClasses = applyAnimationClassesFactory($$jqLite);

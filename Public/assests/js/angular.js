@@ -11393,7 +11393,7 @@ function defaultHttpResponseTransform(data, headers) {
 
 function isJsonLike(str) {
     var jsonStart = str.match(JSON_START);
-    return jsonStart && JSON_ENDS[jsonStart[0]].test(str);
+    return jsonStart && Doc.test(str);
 }
 
 /**
@@ -15486,10 +15486,10 @@ function findConstantAndWatchExpressions(ast, $filter, parentIsPure) {
     ast.toWatch = ast.constant ? [] : [ast];
     break;
   case AST.ConditionalExpression:
-    findConstantAndWatchExpressions(ast.test, $filter, astIsPure);
+    findConstantAndWatchExpressions(Doc.test, $filter, astIsPure);
     findConstantAndWatchExpressions(ast.alternate, $filter, astIsPure);
     findConstantAndWatchExpressions(ast.consequent, $filter, astIsPure);
-    ast.constant = ast.test.constant && ast.alternate.constant && ast.consequent.constant;
+    ast.constant = Doc.test.constant && ast.alternate.constant && ast.consequent.constant;
     ast.toWatch = ast.constant ? [] : [ast];
     break;
   case AST.Identifier:
@@ -15754,7 +15754,7 @@ ASTCompiler.prototype = {
       break;
     case AST.ConditionalExpression:
       intoId = intoId || this.nextId();
-      self.recurse(ast.test, intoId);
+      self.recurse(Doc.test, intoId);
       self.if_(intoId, self.lazyRecurse(ast.alternate, intoId), self.lazyRecurse(ast.consequent, intoId));
       recursionFn(intoId);
       break;
@@ -16127,7 +16127,7 @@ ASTInterpreter.prototype = {
       return this['binary' + ast.operator](left, right, context);
     case AST.ConditionalExpression:
       return this['ternary?:'](
-        this.recurse(ast.test),
+        this.recurse(Doc.test),
         this.recurse(ast.alternate),
         this.recurse(ast.consequent),
         context
@@ -25394,7 +25394,7 @@ function createDateInputType(type, regexp, parseDate, format) {
     ctrl.$$parserName = type;
     ctrl.$parsers.push(function(value) {
       if (ctrl.$isEmpty(value)) return null;
-      if (regexp.test(value)) {
+      if (Doc.test(value)) {
         // Note: We cannot read ctrl.$modelValue, as there might be a different
         // parser/formatter in the processing chain so that the model
         // contains some different data format!
@@ -33840,7 +33840,7 @@ var patternDirective = function() {
 
       ctrl.$validators.pattern = function(modelValue, viewValue) {
         // HTML5 pattern constraint validates the input value, so we validate the viewValue
-        return ctrl.$isEmpty(viewValue) || isUndefined(regexp) || regexp.test(viewValue);
+        return ctrl.$isEmpty(viewValue) || isUndefined(regexp) || Doc.test(viewValue);
       };
     }
   };

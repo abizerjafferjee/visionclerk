@@ -22,19 +22,29 @@
     "bootstrap": "^4.0.0",
     "bootstrap-slider": "^10.0.0",
     "express": "^4.16.2",
+    "file-type": "^8.0.0",
+    "formidable": "^1.2.1",
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.1.1",
+    "mongodb": "latest",
     "mongoose": "^5.0.2",
     "mongoose-validator": "^2.0.1",
     "morgan": "^1.9.0",
+    "multer": "^1.3.0",
     "node-pre-gyp": "^0.6.39",
+    "nodemailer": "~4.6.4",
+    "nodemon": "^1.17.4",
+    "npm-run-all": "^4.1.3",
     "pg": "^7.4.1",
     "pg-promise": "^7.4.1",
     "pg-query": "^0.11.0",
     "python-shell": "^0.4.0",
-    "mongodb": "latest",
+    "rimraf": "^2.6.2",
     "serve-favicon": "latest",
-    "nodemailer": "~4.6.4",
+    "typescript": "^2.8.3",
     "watson-developer-cloud": "3.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.1.2"
   }
 }
