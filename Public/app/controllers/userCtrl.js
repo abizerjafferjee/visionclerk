@@ -26,9 +26,9 @@ userControllers.controller('regCtrl', function($http, $location, $timeout, User)
       }
     });
   };
-})
+});
 
-.controller('deleteaccountCtrl', function(User, $routeParams){
+userControllers.controller('deleteaccountCtrl', function(User, $routeParams){
 
   app = this;
 

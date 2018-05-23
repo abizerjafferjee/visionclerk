@@ -9,11 +9,6 @@
     <meta name="description" content="VisionClerk is a legal research engine for Canadian caselaw powered by artificial intelligence. VisionClerk is focused on enhancing a Lawyer's ability by creating tools which aim to minimize the amount of time spent on finding and evaluating the highest quality information.">
     <meta name="keywords" content="legal research, canadian caselaw, judge, court, lawyer, litigator, law, court decisions, caselaw, legal, legal services, litigation, artificial intelligence, natural language processing, machine learning">
 
-    <!-- Cascade Style Sheets -->
-    <!-- <link rel="stylesheet" href="assests/css/bootstrap.css"> -->
-    <!-- Latest compiled and minified CSS -->
-
-    <!-- Abizer added the 4 links below and commented out the 2 links below the 4 and the 3 links below footer -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <!-- jQuery library -->
@@ -25,8 +20,6 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.1/css/bootstrap-slider.css" /> -->
     <link rel="stylesheet" type="text/css" href="assests/css/animate.css">
     <link rel="stylesheet" type="text/css" href="assests/css/style.css">
 
@@ -42,14 +35,15 @@
     <script src="app/routes.js"></script>
 
     <!-- Angular Controllers -->
-    <script src="app/controllers/userCtrl.js"></script>
-    <script src="app/controllers/searchCtrl.js"></script>
-    <script src="app/controllers/mainCtrl.js"></script>
-    <script src="app/controllers/emailCtrl.js"></script>
+    <script src="app/controllers/authControllers.js"></script>
+    <script src="app/controllers/fileControllers.js"></script>
 
     <!-- Angular Services -->
-    <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
+    <script src="app/services/fileServices.js"></script>
+
+    <!-- Angular Directives -->
+    <script src="app/directives/fileDirectives.js"></script>
 
     <!-- Icons -->
     <script defer src="/assests/js/fontawesome-all.js"></script>
@@ -58,214 +52,36 @@
     <title>VisionClerk - Legal Research Engine Powered By Artificial Intelligence</title>
   </head>
 
-  <body ng-app='userApp' ng-controller="mainCtrl as main" ng-show="main.loadme" ng-clock id="main-content-features">
+  <body ng-app='userApp'>
 
-    <!-- NAVIGATION BAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <div class="navbar-header">
-          <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button> -->
-          <a  class="navbar-brand" href="/" ng-click="main.showLanding();"><img src="assests/images/visionclerk-logo.png" alt="VisionClerk Logo" width="300" height="50"></a>
+          <a  class="navbar-brand" href="/">VisionClerk</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavBar">
             <i class="fas fa-chevron-down"></i>
           </button>
         </div>
         <div class="collapse navbar-collapse" id="mainNavBar">
-          <ul class="nav navbar-nav mr-auto">
-              <li class="nav-item"><a class="nav-link" href="/search" ng-click="main.doNOTshowLanding();" ng-show="main.isLoggedIn"><button type="button" class="btn btn-primary btn-rounded waves-effect">Search<span class="sr-only">(current)</span></button></a></li>
-          </ul>
-          <ul class="nav navbar-nav ml-auto reset">
-            <!-- <li class="nav-item"><a class="nav-link" href="/profile" ng-click="main.doNOTshowLanding();"> {{ main.username }}<span class="sr-only">(current)</span></a></li> -->
-            <li class="nav-item"><a class="nav-link" href="/login" ng-show="!main.isLoggedIn" ng-click="main.doNOTshowLanding();" style="color:light-blue;">Login<span class="sr-only">(current)</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="/register" ng-click="main.doNOTshowLanding();" ng-show="!main.isLoggedIn"><button type="button" class="btn btn-outline-primary btn-rounded waves-effect btn-lg" style="border-radius:25px">Sign Up<span class="sr-only">(current)</span></button></a></li>
-            <!-- <li class="nav-item"><a class="nav-link" href="#" ng-click="main.logout(); main.showLanding();" ng-show="main.isLoggedIn">Logout<span class="sr-only">(current)</span></a></li> -->
-
-            <li class="nav-item dropdown"  ng-show="main.isLoggedIn" style="color:black;">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user-circle"></i> {{main.username}}<span class="sr-only">(current)</span></a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/profile" ng-click="main.doNOTshowLanding();" ng-show="main.isLoggedIn" style="color:black;">Profile<span class="sr-only">(current)</span></a>
-                <a class="dropdown-item" href="#" ng-click="main.logout(); main.showLanding();" ng-show="main.isLoggedIn" style="color:black;">Logout<span class="sr-only">(current)</span></a>
-              </div>
-            </li>
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+            <li class="nav-item"><a class="nav-link" ng-controller="logoutController" ng-click="logout()">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="/upload">Upload</a></li>
+            <li class="nav-item"><a class="nav-link" ng-show="isLoggedIn">{{user.username}}</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
-    <div class = "container-fluid" id="main-content" ng-show="main.registering">
-        <div id="main-content-row1" class="row align-items-center">
-          <div class="col-sm-1"></div>
-
-          <div class="col-xs-12 col-sm-10 mt-2" style="margin-right:5px; text-align:center; color:white">
-            <p class="h1 m-1" style="font-weight:200; font-family:arial;">AI Powered Legal Search & Analytics</p1>
-
-            <div class="row" style="margin:auto;">
-              <div class="col-sm-4"></div>
-              <div class="col-xs-12 col-sm-4">
-              <p class="h4 text-center"><small style="color:silver;">VisionClerk is an intelligent legal research platform that offers unprecedented research efficiency to help attorneys achieve successful outcomes for their clients.</small></p>
-              </div>
-              <div class="col-sm-4"></div>
-            </div>
-
-            <div class="text-center mb-4">
-            <a href="/register" ng-click="main.doNOTshowLanding();">
-              <button id="landing_resgister" class="btn btn-primary btn-lg" style="border-radius:25px" type="button">Get Started</button>
-            </a>
-            </div>
-            <img class="m-0 p-0" src="assests/images/capture11.png" alt="nothing" class="img-responsive" style="width:50%; height:50%;"></img>
-
-          </div>
-
-          <div class="col-sm-1"></div>
-        </div>
-
-        <div id="main-content-row2" class="row" style="color:white; background: green; padding:5px;">
-            <small class="text-center">Sign up for the <b>free beta</b>. Our current coverage is for Ontario Courts. Please send us an email at <b>info@visionclerk.com</b> with your feedback.</small>
-        </div>
-
-        <div id="main-content-row3" class="row align-items-center">
-          <div class="col-md-2"></div>
-          <div class="col-xs-12 col-md-8">
-            <div class="text-center">
-            <p class="h3 m-3" style="font-weight:300; font-family:Lucida Sans Unicode;">CURRENT FEATURES</p1>
-            </div>
-            <div class="row align-items-center m-3">
-              <div class="col-xs-12 col-md-6 align-items-center text-center p-3">
-                <div class="media">
-                  <div class="media-object align-self-center mr-3"><img src="assests/images/query.png" alt="nothing"></img></div>
-                <h5 class="media-body" style="text-align:justify; color:grey;">Easy Query:
-                <small>Search using plain language. You can ask questions, state specific fact patterns, search up on how a particular rule or principle of law is applied, and so much more...</small>
-              </h5></div>
-              </div>
-              <div class="col-xs-12 col-md-6 align-items-center text-center p-3">
-                <div class="media">
-                  <div class="align-self-center mr-3"><img src="assests/images/search.png" alt="nothing"></img></div>
-                <h5 class="media-body" style="text-align:justify; color:grey;">Intelligent Search:
-                <small>Our AI compares features of the query and documents by examining multiple dimensions. We retrieve documents with the strongest correlations and the greatest contextual relevance.</small>
-              </h5></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2"></div>
-        </div>
-
-        <div id="main-content-row4" class="row align-items-center">
-          <div class="col-md-2"></div>
-          <div class="col-xs-12 col-md-8">
-            <div class="text-center">
-            <p class="h3 m-3" style="font-weight:300; font-family:Lucida Sans Unicode;">COMING SOON</p1>
-            </div>
-            <div class="row align-items-center m-3">
-              <div class="col-xs-12 col-md-6 align-items-center text-center p-3">
-                <div class="media">
-                  <div class="media-object align-self-center mr-3" style="font-size:2em"><i class="fas fa-bullseye"></i></div>
-                <h5 class="media-body" style="text-align:justify; color:grey;">Targeted Excerpts:
-                <small>Retrieve extracted excerpts from the text, for each search result, to quickly zero in on the most relevant results.</small>
-              </h5></div>
-              </div>
-              <div class="col-xs-12 col-md-6 align-items-center text-center p-3">
-                <div class="media">
-                  <div class="align-self-center mr-3" style="font-size:2em"><i class="fas fa-filter"></i></div>
-                <h5 class="media-body" style="text-align:justify; color:grey;">Advanced Filters:
-                <small>Refine your results based on key case attributes including Entities, Appealing Parties, Disposition, Court, Date, Judge, and Procedural Posture.</small>
-              </h5></div>
-              </div>
-            </div>
-            <div class="row align-items-center m-3">
-              <div class="col-xs-12 col-md-6 align-items-center text-center p-3">
-                <div class="media">
-                  <div class="media-object align-self-center mr-3" style="font-size:2em"><i class="fas fa-angle-double-left"></i></div>
-                <h5 class="media-body" style="text-align:justify; color:grey;">Precision Highlighting:
-                <small>Read key points of law, from multiple parts of a case, which highlight the legal issues within the case as they relate to your query.</small>
-              </h5></div>
-              </div>
-              <div class="col-xs-12 col-md-6 align-items-center text-center p-3">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2"></div>
-        </div>
-
-
-        <!-- <div id="main-content-row4" class="row align-items-center">
-          <div class="col-sm-2"></div>
-
-          <div class="col-sm-8">
-            <div class="text-center mb-3">
-            <p class="h3 m-3" style="font-weight:300; font-family:Lucida Sans Unicode;">COMING SOON</p1>
-            </div>
-            <div class="card-deck">
-
-              <div class="card">
-                <div class="card-body">
-                  <div class="text-center" style="font-size:3em; color:White">
-                  <i class="fas fa-bullseye"></i>
-                  </div>
-                  <h5 class="card-title text-center">Targeted Excerpts</h5>
-                  <p class="card-text" style="color:silver;">Retrieve extracted excerpts from the text, for each search result, to quickly zero in on the most relevant results.</p>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="text-center" style="font-size:3em; color:White">
-                  <i class="fas fa-filter"></i>
-                  </div>
-                  <h5 class="card-title text-center">Advanced Filters</h5>
-                  <p class="card-text" style="color:silver;">Refine your results based on key case attributes including Entities, Appealing Parties, Disposition, Court, Date, Judge, and Procedural Posture.</p>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="text-center" style="font-size:3em; color:White">
-                  <i class="fas fa-angle-double-left"></i>
-                  <i class="fas fa-angle-double-right"></i>
-                  </div>
-                  <h5 class="card-title text-center">Precision Highlighting</h5>
-                  <p class="card-text" style="color:silver;">Read key points of law, from multiple parts of a case, which highlight the legal issues within the case as they relate to your query.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-2"></div>
-        </div> -->
-
-    </div>
-
-
     <div ng-view></div>
+
     <!-- FOOTER -->
-    <footer ng-show="main.registering" class="page-footer bg-light">
-      <div class="row pt-4">
-        <div class="col-md-2"></div>
-        <div class="col-xs-12 col-sm-6 col-md-4 text-center">
-          <h2>About Us</h2>
-          <p>VisionClerk is focused on enhancing a Lawyer's ability by creating tools which aim to minimize the amount of time spent on finding and evaluating the highest quality information.</p>
-        </div>
-        <div id="vertical_line" class="col-xs-12 col-sm-6 col-md-4 text-center">
-          <h2>Contact Information</h2>
-          <p><i class="fas fa-map-marker"></i> Toronto, Ontario, Canada</p>
-          <p><i class="fas fa-mobile"></i> +1 647-936-1140</p>
-          <p><i class="fas fa-envelope"></i> info@visionclerk.com</p>
-        </div>
-        <div class="col-md-2"></div>
-      </div>
-      <br>
-      <br>
-      <hr class="teal accent-3 mb-4 mt-0 d-inline-block mx-auto" style="width: 100%;">
-      <div class="footer-copyright py-3 text-center">
+    <footer class="page-footer bg-dark m-0">
+      <div class="footer-copyright py-3 text-center" style="color: white;">
           © 2018 VisionClerk. All Rights Reserved.
       </div>
     </footer>
 
-    <!-- <script src="assests/js/jquery-3.3.1.js"></script>
-    <script src="assests/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.1/bootstrap-slider.js"></script> -->
   </body>
 </html>
