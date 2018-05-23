@@ -4,7 +4,7 @@ var passport = require('passport');
 var async = require('async');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
-var User = require('../models/user.js');
+var User = require('../Models/user.js');
 
 // register user
 router.post('/register', function(req, res) {

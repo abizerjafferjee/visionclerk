@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var multer = require('multer');
-var File = require('../models/file.js');
-var FileExtract = require('../models/fileExtract.js');
+var File = require('../Models/file.js');
+var FileExtract = require('../Models/fileExtract.js');
 var Discovery = require('watson-developer-cloud/discovery/v1');
 var fs = require('fs');
 
