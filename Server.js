@@ -1,45 +1,84 @@
-var express    = require('express');
-var app        = express();
-var port       = process.env.PORT || 8080;
-var morgan     = require('morgan');
-var mongoose   = require('mongoose');
-var pg         = require('pg');
-var router     = express.Router();
-var appRoutes  = require('./App/Routes/api.js')(router);
-var path       = require('path');
-var favicon    = require('serve-favicon');
+var express = require('express');
+var path = require('path');
+var favicon = require('static-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var localStrategy = require('passport-local' ).Strategy;
+var bcrypt = require('bcrypt-nodejs');
+var flash = require('express-flash');
+var port = process.env.PORT || 8080;
 
-// TRYING MONGOCLIENG
-var mongoClient = require('mongodb').MongoClient;
+// mongoose connect mongo
+mongoose.connect('mongodb://localhost/visionclerk_users');
 
-app.use(morgan('dev')); // morgan logs web app requests
-app.use(express.urlencoded()); // parse application/x-www-form-urlencoded
-app.use(express.json()); // parse application/json
-app.use(express.static(__dirname + '/Public'));
-app.use(favicon(__dirname + '/Public/assests/images/favicon.ico'));
-app.use('/api', appRoutes);
+// configure passport
+passport.use(new localStrategy(function(username, password, done) {
+  User.findOne({username: username}, function(err, user) {
+    if (err) return done(err);
+    if (!user) return done(null, false, {message: 'Incorrect username.'});
+    user.comparePassword(password, function(err, isMatch) {
+      if (isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false, {message: 'Incorrect password.'});
+      }
+    });
+  });
+}));
 
-// Mongo db used to store user information
-/*
-mongoose.connect('mongodb://admin:password@localhost:27017/legalx_db?authSource=admin', function(err){
-  if (err) {
-    console.log('Not connected to Database: ' + err);
-  } else {
-    console.log('Successfully connected to MongoDB');
-  }
-});*/
-mongoose.connect('mongodb://legalx_admin:legalx1234@ds125198.mlab.com:25198/legalx_db', function(err){
-  if (err) {
-    console.log('Not connected to Database: ' + err);
-  } else {
-    console.log('Successfully connected to MongoDB');
-  }
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
 });
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/Public/app/views/index.html'));
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
 });
 
-app.listen(process.env.PORT || port, function() {
+// user schema/model
+var User = require('./app/models/user.js');
+
+// create instance of express
+var app = express();
+
+// require routes
+var authRoutes = require('./app/routes/auth.js');
+var uploadRoutes = require('./app/routes/upload.js');
+
+// middleware
+app.use(express.static(path.join(__dirname)));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// routes
+
+// app.use(function(req, res, next) {
+//   res.locals.currentUser = req.user;
+//   next();
+// });
+
+app.use('/user/', authRoutes);
+app.use(uploadRoutes);
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '/Public/app/views/index.html'));
+});
+
+app.listen(process.env.PORT || port, process.env.IP, function() {
   console.log('Server is running on port: ' + port);
 });
