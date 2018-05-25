@@ -61,4 +61,28 @@ userApp.controller('fileUploadController', function ($scope, fileUploadService) 
           console.log(error);
         });
     }
+
+    $scope.displayContracts = function() {
+      fileUploadService.getContracts()
+        .then(function(response) {
+          console.log(response.data);
+          if (response.data.length !== 0) {
+            $scope.contracts = response.data;
+          }
+        }, function(error) {
+          console.log(error);
+        });
+    }
+
+    $scope.refreshData = function() {
+      fileUploadService.extractFromFiles()
+        .then(function(response) {
+          if (response.data.success) {
+            $scope.displayFiles();
+            $scope.displayContracts();
+          }
+        }, function(error) {
+          console.log(error);
+        });
+    }
 });
