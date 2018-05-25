@@ -1,6 +1,9 @@
 var userApp = angular.module('userApp', ['ngRoute']);
 
-userApp.run(function($rootScope, $location, $route, AuthService) {
+userApp.run(['$rootScope', '$location', '$route', 'AuthService', '$window', function($rootScope, $location, $route, AuthService, $window) {
+
+  AuthService.setUsername();
+
   $rootScope.$on('$routeChangeStart', function(event, next, current) {
     AuthService.getUserStatus()
     .then(function(){
@@ -10,4 +13,20 @@ userApp.run(function($rootScope, $location, $route, AuthService) {
       }
     });
   });
-});
+
+  // $rootScope.user = function() {
+  //   AuthService.getUserStatus()
+  //     .then(function() {
+  //       if (AuthService.isLoggedIn() === true) {
+  //         $rootScope.isLoggedIn = true;
+  //         return $window.sessionStorage.getItem("user")
+  //       } else {
+  //         $rootScope.isLoggedIn = false;
+  //       }
+  //     });
+  // }
+
+  // console.log($window.sessionStorage.getItem("user").userName);
+
+
+}]);
