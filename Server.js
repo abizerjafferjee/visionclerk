@@ -40,7 +40,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 // user schema/model
-var User = require('./app/models/user.js');
+var User = require('./app/Models/user.js');
 
 // create instance of express
 var app = express();
@@ -74,6 +74,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user/', authRoutes);
 app.use(uploadRoutes);
+
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '/Public/app/views/index.html'));
+})
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '/Public/app/views/index.html'));

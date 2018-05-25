@@ -81,6 +81,8 @@ router.post('/upload', function(req, res) {
           fileRecord["fileName"] = req.files[i].filename;
           fileRecord["size"] = req.files[i].size;
           fileRecord["user"] = req.user;
+          fileRecord["date"] = Date.now();
+          // Date.day();
           fileRecord["fileExtracted"] = false;
 
           response.files.push({filename: originalName});
@@ -151,7 +153,16 @@ router.get('/extract', function(req, res) {
 
             if (data.matching_results !== 0) {
 
-              FileExtract.create({watsonId:data.results[0].id, file:thisFile, user:req.user}, function(err, fileExtract) {
+              var extractRecord = {};
+
+              extractRecord.watsonId = data.results[0].id;
+              extractRecord.file = thisFile;
+              extractRecord.user = req.user;
+              extractRecord.fileName = originalName;
+              extractRecord.company = data.results[0].extracted_metadata.author;
+              extractRecord.publicationDate = data.results[0].extracted_metadata.publicationdate;
+
+              FileExtract.create(extractRecord, function(err, fileExtract) {
 
                 if (err) {
                   console.log(err);
@@ -160,7 +171,7 @@ router.get('/extract', function(req, res) {
 
                     if (err) {
                       console.log(err);
-                      res.json({success:false});
+                      // res.json({success:false});
                     } else {
                       updateFile.file = fileExtract;
                       updateFile.fileExtracted = true;
@@ -190,5 +201,10 @@ router.get('/files', function(req, res) {
   });
 });
 
+router.get('/contracts', function(req, res) {
+  FileExtract.find({user:req.user}, function(err, contracts) {
+    res.send(contracts);
+  });
+});
 
 module.exports = router;
