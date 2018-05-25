@@ -1,6 +1,6 @@
 userApp.factory('AuthService',
-  ['$q', '$timeout', '$http',
-  function ($q, $timeout, $http) {
+  ['$q', '$timeout', '$http', '$rootScope', '$window',
+  function ($q, $timeout, $http, $rootScope, $window) {
 
     // create user variable
     var user = null;
@@ -13,7 +13,8 @@ userApp.factory('AuthService',
       logout: logout,
       register: register,
       forgotPassword: forgotPassword,
-      resetPassword: resetPassword
+      resetPassword: resetPassword,
+      setUsername: setUsername
     });
 
     function isLoggedIn() {
@@ -147,6 +148,16 @@ userApp.factory('AuthService',
 
       return deferred.promise;
 
+    }
+
+    function setUsername() {
+      getUserStatus()
+        .then(function() {
+          if (isLoggedIn()) {
+            $rootScope.user = $window.localStorage.getItem("username");
+            $rootScope.showUser = true;
+          }
+        });
     }
 
 }]);

@@ -53,4 +53,16 @@ userApp.service('fileUploadService', function ($http, $q) {
       return deffered.promise;
     }
 
+    this.getContracts = function() {
+
+      var deffered = $q.defer();
+      $http.get('/contracts')
+        .then(function(response) {
+          deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+      return deffered.promise;
+    }
 });
