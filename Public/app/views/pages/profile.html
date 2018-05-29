@@ -1,0 +1,117 @@
+<div class="container-fluid">
+  <div class="row p-2">
+    <div class="col-md-2 p-0">
+      <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile">
+          Profile
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" id="nav-editprofile-tab" data-toggle="tab" data-target="#nav-editprofile">Edit Profile</a>
+        <a href="#" class="list-group-item list-group-item-action"></a>
+      <!-- <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a> -->
+      <!-- <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a> -->
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-body">
+            <div class="tab-content" id="nav-tabContent">
+
+              <div ng-init="displayProfile()" class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <table>
+                  <thead>
+                    <h4>Account Details</h4>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Full Name</th>
+                      <td>{{ account.firstName + ' ' + account.lastName }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">User Name</th>
+                      <td>{{ account.userName }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Organization</th>
+                      <td>{{ account.organizationName }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Organization Role</th>
+                      <td>{{ account.organizationRole }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Phone Number</th>
+                      <td>{{ account.phoneNumber }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Email Address</th>
+                      <td>{{ account.emailAddress }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">User Role</th>
+                      <td>{{ account.role }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Account Plan</th>
+                      <td>{{ account.plan }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="tab-pane fade" id="nav-editprofile" role="tabpanel" aria-labelledby="nav-editprofile-tab">
+
+                <div ng-show="showEditMessage" class="alert alert-light alert-dismissible fade show" role="alert">{{ editMessage }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button></div>
+
+
+                <h4>Edit Profile</h4>
+                <form>
+                  <div class="form-group row">
+                    <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="firstName" ng-model="firstName" value="{{account.firstName}}">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="lastName" ng-model="lastName" value="{{account.lasttName}}">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="organizationName" class="col-sm-2 col-form-label">Organization Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="organizationName" ng-model="organizationName" value="{{account.organizationName}}">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="organizationRole" class="col-sm-2 col-form-label">Organization Role</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="organizationRole" ng-model="organizationRole" value="{{account.organizationRole}}">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="staticEmail" ng-model="emailAddress" value="{{account.emailAddress}}">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="phoneNumber" class="col-sm-2 col-form-label">Phone Number</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="phoneNumber" ng-model="phoneNumber" value="{{account.phoneNumber}}">
+                    </div>
+                  </div>
+                  <button ng-click="updateProfile()" type="submit" class="btn btn-primary mb-2">Submit</button>
+                </form>
+
+              </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
