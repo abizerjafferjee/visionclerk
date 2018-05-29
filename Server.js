@@ -48,6 +48,7 @@ var app = express();
 // require routes
 var authRoutes = require('./app/routes/auth.js');
 var uploadRoutes = require('./app/routes/upload.js');
+var accountRoutes = require('./app/routes/account.js');
 
 // middleware
 app.use(express.static(path.join(__dirname)));
@@ -74,6 +75,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user/', authRoutes);
 app.use(uploadRoutes);
+app.use(accountRoutes);
 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, '/Public/app/views/index.html'));

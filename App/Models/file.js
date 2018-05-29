@@ -1,7 +1,5 @@
 var mongoose = require("mongoose");
 var validate = require('mongoose-validator');
-var bcrypt   = require('bcrypt-nodejs');
-
 
 var fileSchema = new mongoose.Schema({
   fileName: {type: String, required: true},

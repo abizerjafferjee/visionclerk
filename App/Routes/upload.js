@@ -110,6 +110,14 @@ router.post('/upload', function(req, res) {
                     console.log(response);
 
                     var extractRecord = {
+                      organization: [],
+                      party: [],
+                      party: [],
+                      identifier: [],
+                      item: [],
+                      quantity: [],
+                      events: [],
+                      other: [],
                       originalFile: {
                         fileName: currentFile.originalName,
                         fileRef: currentFile,
@@ -121,21 +129,20 @@ router.post('/upload', function(req, res) {
 
                     for (var i=0; i<entities.length; i++) {
                       var entity = entities[i];
-                      console.log("this is the type", entity.type);
                       if (['Company', 'Facility', 'Broadcaster', 'Organization', 'PrintMedia'].includes(entity.type)) {
-                        extractRecord['organization'] = entity.text;
+                        extractRecord['organization'].push(entity.text);
                       } else if (['Person', 'MusicGroup', 'TelevisionShow'].includes(entity.type)) {
-                        extractRecord['party'] = entity.text;
+                        extractRecord['party'].push(entity.text);
                       } else if (['EmailAddress', 'IPAddress', 'Location', 'GeographicFeature', 'JobTitle'].includes(entity.type)) {
-                        extractRecord['identifier'] = entity.text;
+                        extractRecord['identifier'].push(entity.text);
                       } else if (['Anatomy', 'Drug', 'HealthCondition'].includes(entity.type)) {
-                        extractRecord['item'] = entity.text;
+                        extractRecord['item'].push(entity.text);
                       } else if (['Quantity'].includes(entity.type)) {
-                        extractRecord['quantity'] = entity.text;
+                        extractRecord['quantity'].push(entity.text);
                       } else if (['SportingEvent', 'Sport', 'Crime', 'NaturalEvent'].includes(entity.type)) {
-                        extractRecord['event'] = entity.text;
+                        extractRecord['events'].push(entity.text);
                       } else {
-                        extractRecord['other'] = entity.text;
+                        extractRecord['other'].push(entity.text);
                       }
                     }
 

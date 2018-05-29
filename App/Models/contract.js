@@ -4,13 +4,14 @@ var bcrypt   = require('bcrypt-nodejs');
 
 
 var contractSchema = new mongoose.Schema({
-  organization: {type: String},
-  party: {type: String},
-  identifier: {type: String},
-  item: {type: String},
-  quantity: {type: String},
-  event: {type: String},
-  other: {type: String},
+  organization: [String],
+  party: [String],
+  party: [String],
+  identifier: [String],
+  item: [String],
+  quantity: [String],
+  events: [String],
+  other: [String],
   originalFile: {
     fileName: {type: String},
     fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"File"}

@@ -37,10 +37,12 @@
     <!-- Angular Controllers -->
     <script src="app/controllers/authControllers.js"></script>
     <script src="app/controllers/fileControllers.js"></script>
+    <script src="app/controllers/accountControllers.js"></script>
 
     <!-- Angular Services -->
     <script src="app/services/authServices.js"></script>
     <script src="app/services/fileServices.js"></script>
+    <script src="app/services/accountServices.js"></script>
 
     <!-- Angular Directives -->
     <script src="app/directives/fileDirectives.js"></script>
@@ -73,7 +75,7 @@
                 {{user}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="/profile" ng-show="showUser">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" ng-controller="logoutController" ng-click="logout()">Logout</a>
               </div>

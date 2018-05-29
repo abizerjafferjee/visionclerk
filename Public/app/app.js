@@ -13,20 +13,5 @@ userApp.run(['$rootScope', '$location', '$route', 'AuthService', '$window', func
       }
     });
   });
-
-  // $rootScope.user = function() {
-  //   AuthService.getUserStatus()
-  //     .then(function() {
-  //       if (AuthService.isLoggedIn() === true) {
-  //         $rootScope.isLoggedIn = true;
-  //         return $window.sessionStorage.getItem("user")
-  //       } else {
-  //         $rootScope.isLoggedIn = false;
-  //       }
-  //     });
-  // }
-
-  // console.log($window.sessionStorage.getItem("user").userName);
-
-
+  
 }]);

@@ -121,11 +121,12 @@
             <thead>
               <tr>
                 <th scope="col"></th>
-                <th scope="col">Organization</th>
-                <th scope="col">Party</th>
-                <th scope="col">Item</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Identifier</th>
+                <th scope="col">Organizations</th>
+                <th scope="col">Parties</th>
+                <th scope="col">Items</th>
+                <th scope="col">Quantities</th>
+                <th scope="col">Identifiers</th>
+                <th scope="col">Events</th>
                 <th scope="col">Other Details</th>
                 <th scope="col">filename</th>
                 <th scope="col"></th>
@@ -139,6 +140,7 @@
                 <td>{{ row.item }}</td>
                 <td>{{ row.quantity }}</td>
                 <td>{{ row.identifier }}</td>
+                <td>{{ row.events }}</td>
                 <td>{{ row.other }}</td>
                 <td>{{ row.originalFile.fileName }}</td>
                 <td><a href="" ng-click="deleteContract(row._id)"><i class="fas fa-trash"></i></a></td>

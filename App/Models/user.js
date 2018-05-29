@@ -7,7 +7,8 @@ var userSchema = new mongoose.Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   resetPasswordToken: String,
-  resetPasswordExpires: Date
+  resetPasswordExpires: Date,
+  // account: {type: mongoose.Schema.Types.ObjectId, ref:"Account", required: true}
 });
 
 userSchema.pre('save', function(next) {
