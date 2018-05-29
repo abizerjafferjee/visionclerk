@@ -5,6 +5,7 @@ var async = require('async');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var User = require('../Models/user.js');
+var Account = require('../Models/account.js');
 
 // register user
 router.post('/register', function(req, res) {
@@ -17,10 +18,25 @@ router.post('/register', function(req, res) {
   user.save(function(err) {
     req.logIn(user, function(err) {
       if(err) {
+        console.log("ERRR");
         return res.status(500).json({
           err: err
         });
       }
+
+      // create user info account
+      var account = new Account({
+        userName: user.username,
+        emailAddress: user.email,
+        role: 'Analyst',
+        plan: 'Basic',
+        user: user
+      }).save(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+
       res.status(200).json({
         status: 'Registration successful'
       });
@@ -218,337 +234,3 @@ router.post('/reset/:token', function(req, res) {
 
 
 module.exports = router;
-
-// OLD CHANGES
-
-// var pg            = require('pg');
-// var PythonShell   = require('python-shell');
-// var jwt           = require('jsonwebtoken');
-// var secret        = 'mySecret';
-// var nodemailer    = require('nodemailer');
-// var request       = require('request');
-// var util          = require('util');
-//
-// // EMAIL CREDENTIALS
-// var transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   secure: false,
-//   port: 25,
-//   auth: {
-//     user: 'legalxstartup@gmail.com',
-//     pass: 'legalx1234'
-//   }
-// });
-//
-//
-// // USER REGISTRATION ROUTE
-// router.post('/users', function(req, res){
-//   var user = new User();
-//   user.username = req.body.username;
-//   user.password = req.body.password;
-//   user.email = req.body.email;
-//   user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
-//   if (user.username == null || user.username == ''){
-//     res.json({ success: false, message:'Please provide an Username'});
-//   } else if (user.password == null || user.password == '') {
-//     res.json({ success: false, message:'Please provide a Password'});
-//   } else if (user.email == null || user.email == '') {
-//     res.json({ success: false, message:'Please provide a email'});
-//   } else {
-//     user.save(function(err){
-//       if (err) {
-//
-//         if (err.errors != null) {
-//           if (err.errors.email) {
-//             res.json({ success: false, message: err.errors.email.message });
-//           } else if (err.errors.username) {
-//             res.json({ success: false, message: err.errors.username.message });
-//           } else if (err.errors.password) {
-//             res.json({ success: false, message: err.errors.password.message });
-//           } else {
-//             res.json({ success: false, message: err });
-//           }
-//         } else if (err) {
-//           if (err.code == 11000) {
-//             res.json({ success: false, message: 'Username or E-mail already taken' });
-//           } else {
-//             res.json({ success: false, message: err });
-//           }
-//         }
-//       } else {
-//         var mailOptions = {
-//           from: 'VisonClerk Staff <legalxstartup@gmail.com>',
-//           to: user.email,
-//           subject: 'VisonClerk Account Activation link',
-//           text: 'Hello ' + user.username + ', Thank you for registering at VisonClerk.com. Please click on the link below to complete your activation: http://www.visionclerk.com/activate/' + user.temporarytoken,
-//           html: 'Hello <strong> ' + user.username + '</strong>,<br><br>Thank you for registering at VisonClerk.com. Please click on the link below to complete your activation.<br><br><a href="http://www.visionclerk.com/activate/' + user.temporarytoken + '">http://www.visionclerk.com/activate/</a>'
-//         };
-//
-//         transporter.sendMail(mailOptions, function(err, info){
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log('Email sent');
-//           }
-//         });
-//         res.json({ success: true, message:'Account registered! Please check your email for activation link.' });
-//       }
-//     });
-//   }
-// });
-//
-// // USER LOGIN ROUTE
-// // http://localhost:8080/api/authenticate
-// router.post('/authenticate', function(req, res){
-//   User.findOne({ email: req.body.email })
-//   .select('email username password active')
-//   .exec(function(err, user){
-//     if (err) throw err;
-//     if (!user) {
-//       res.json({ success: false, message: 'Could not authenticate user'});
-//     } else if (user) {
-//       if (req.body.password) {
-//         var validPassword = user.comparePassword(req.body.password);
-//       } else {
-//         res.json({ success: false, message: 'No password provided'});
-//       }
-//       if (!validPassword) {
-//         res.json({ success: false, message: 'Could not authenticate password'});
-//       } else if (!user.active) {
-//         res.json({ success: false, message: 'Account is not yet activated. Please check your email for activation link.', expired: true });
-//       } else {
-//         var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
-//         res.json({ success: true, message: 'User authenticated!', token: token });
-//       }
-//     }
-//   });
-// });
-//
-// router.put('/activate/:token', function(req, res) {
-//   User.findOne({ temporarytoken: req.params.token }, function(err, user) {
-//     if (err) throw err;
-//     var token = req.params.token;
-//     jwt.verify(token, secret, function(err, decoded){
-//       if (err) {
-//         console.log(err);
-//         res.json({ success: false, message: 'Activation link has expired.'});
-//       } else if (!user) {
-//         res.json({ success: false, message: 'Activation link has expired.'});
-//       } else {
-//         user.temporarytoken = false;
-//         user.active = true;
-//         user.save(function(err) {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//
-//
-//             var mailOptions = {
-//               from: 'VisonClerk Staff <legalxstartup@gmail.com>',
-//               to: user.email,
-//               subject: 'VisonClerk Account Activation link',
-//               text: 'Hello' + user.username + ', Your account has been successfully activated!',
-//               html: 'Hello<strong> ' + user.username + '</strong>,<br><br> Your VisonClerk account has been successfully activated!'
-//             };
-//
-//             transporter.sendMail(mailOptions, function(err, info){
-//               if (err) {
-//                 console.log(err);
-//               } else {
-//                 console.log('Email sent');
-//               }
-//             });
-//             res.json({ success: true, message: 'Account activated!'});
-//           }
-//         });
-//       }
-//     });
-//   });
-// });
-//
-// router.post('/resend', function(req, res){
-//   User.findOne({ email: req.body.email })
-//   .select('email password active')
-//   .exec(function(err, user){
-//     if (err) throw err;
-//     if (!user) {
-//       res.json({ success: false, message: 'Could not authenticate user'});
-//     } else if (user) {
-//       if (req.body.password) {
-//         var validPassword = user.comparePassword(req.body.password);
-//       } else {
-//         res.json({ success: false, message: 'No password provided'});
-//       }
-//       if (!validPassword) {
-//         res.json({ success: false, message: 'Could not authenticate password'});
-//       } else if (user.active) {
-//         res.json({ success: false, message: 'Account is already activated.' });
-//       } else {
-//         res.json({ success: true, user: user });
-//       }
-//     }
-//   });
-// });
-//
-// router.put('/resend', function(req, res) {
-//   User.findOne({ email: req.body.email })
-//   .select('username email temporarytoken')
-//   .exec(function(err, user) {
-//     if (err) throw err;
-//     user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
-//     user.save(function(err) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         var mailOptions = {
-//           from: 'VisonClerk Staff <legalxstartup@gmail.com>',
-//           to: user.email,
-//           subject: 'VisonClerk Account Activation link Request',
-//           text: 'Hello ' + user.username + ', you recently requested a new account activation link at VisonClerk.com. Please click on the link below to complete your activation: http://www.visionclerk.com/activate/' + user.temporarytoken,
-//           html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a new account activation link at VisonClerk.com. Please click on the link below to complete your activation.<br><br><a href="http://www.visionclerk.com/activate/' + user.temporarytoken + '">http://www.visionclerk.com/activate/</a>'
-//         };
-//
-//         transporter.sendMail(mailOptions, function(err, info){
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log('Email sent');
-//           }
-//         });
-//         res.json({ success: true, message: 'Activation link has been sent to: ' + user.email + '!'});
-//       }
-//     })
-//   })
-// });
-//
-// router.get('/resetusername/:email', function(req, res) {
-//   User.findOne({ email: req.params.email }).select('email username').exec(function(err, user) {
-//     if (err) {
-//       res.json({ success: false, message: err });
-//     } else {
-//       if (!req.params.email) {
-//         res.json({ success: false, message: 'No Email was provided' });
-//       } else {
-//         if (!user){
-//           res.json({ success: false, message: 'E-mail was not found!' });
-//         } else {
-//           var mailOptions = {
-//             from: 'VisonClerk Staff <legalxstartup@gmail.com>',
-//             to: user.email,
-//             subject: 'VisonClerk Username Request',
-//             text: 'Hello ' + user.username + ', you recently requested your username! Your username is: ' + user.username,
-//             html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested your username! Your username is: ' + user.username
-//           };
-//
-//           transporter.sendMail(mailOptions, function(err, info){
-//             if (err) {
-//               console.log(err);
-//             } else {
-//               console.log('Email sent');
-//             }
-//           });
-//
-//           res.json({ success: true, message: 'Username has been sent to Email!' });
-//         }
-//       }
-//     }
-//   });
-// });
-//
-// router.put('/resetpassword', function(req, res) {
-//   User.findOne({ email: req.body.email })
-//   .select('username active email resettoken')
-//   .exec(function(err, user) {
-//     if (err) throw err;
-//     if (!user) {
-//       res.json({ success: false, message: 'Email was not found!'})
-//     } else if (!user.active) {
-//       res.json({ success: false, message: 'Account has not yet been activated, Please check your Email!' })
-//     } else {
-//       user.resettoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn: '3d' });
-//       user.save(function(err) {
-//         if (err) {
-//           res.json({ success: false, message: err });
-//         } else {
-//           var mailOptions = {
-//             from: 'VisonClerk Staff <legalxstartup@gmail.com>',
-//             to: user.email,
-//             subject: 'VisonClerk Reset Password Request',
-//             text: 'Hello ' + user.username + ', you recently requested a password reset link. Please click on the link below to reset your password: href="http://www.visionclerk.com/newpassword/' + user.resettoken,
-//             html: 'Hello <strong> ' + user.username + '</strong>,<br><br>You recently requested a password reset link. Please click on the link below to reset your password:<br><br><a href="http://www.visionclerk.com/newpassword/' + user.resettoken + '">http://www.visionclerk.com/newpassword/</a>'
-//           };
-//
-//           transporter.sendMail(mailOptions, function(err, info){
-//             if (err) {
-//               console.log(err);
-//             } else {
-//               console.log('Email sent');
-//             }
-//           });
-//
-//           res.json({ success: true, message: 'Please check your Email for the password reset link.' })
-//         }
-//       });
-//     }
-//   });
-// });
-//
-// router.get('/resetpassword/:token', function(req, res) {
-//   User.findOne({ resettoken: req.params.token })
-//   .select()
-//   .exec(function(err, user) {
-//     if (err) throw err;
-//     var token = req.params.token;
-//     // function to verify token
-//     jwt.verify(token, secret, function(err, decoded){
-//       if (err) {
-//         console.log(err);
-//         res.json({ success: false, message: 'Reset Password link has expired!' });
-//       } else {
-//         if (!user) {
-//           res.json({ success:false, message: 'Password link has expired!' });
-//         } else {
-//           res.json({ success: true, user: user });
-//         }
-//       }
-//     });
-//   });
-// });
-//
-// router.put('/savepassword', function(req, res) {
-//   User.findOne({ email: req.body.email })
-//   .select('username email password resettoken')
-//   .exec(function(err, user) {
-//     if (err) throw err;
-//     if (req.body.password == null || req.body.password == '') {
-//       res.json({ success: false, message: 'Password not provided' });
-//     } else {
-//       user.password = req.body.password;
-//       user.resettoken = false;
-//       user.save(function(err) {
-//         if (err) {
-//           res.json({ success: false, message: err});
-//         } else {
-//           var mailOptions = {
-//             from: 'VisonClerk Staff <legalxstartup@gmail.com>',
-//             to: user.email,
-//             subject: 'VisonClerk Reset Password',
-//             text: 'Hello ' + user.username + ', this Email is to notify you that your password was recently reset at VisonClerk.com',
-//             html: 'Hello <strong> ' + user.username + '</strong>,<br><br> This Email is to notify you that your password was recently reset at VisonClerk.com'
-//           };
-//
-//           transporter.sendMail(mailOptions, function(err, info){
-//             if (err) {
-//               console.log(err);
-//             } else {
-//               console.log('Email sent');
-//             }
-//           });
-//           res.json({ success: true, message: 'Password has been reset!' });
-//         }
-//       });
-//     }
-//   });
-// });
-//
-// module.exports = router;

@@ -1,6 +1,9 @@
 var userApp = angular.module('userApp', ['ngRoute']);
 
-userApp.run(function($rootScope, $location, $route, AuthService) {
+userApp.run(['$rootScope', '$location', '$route', 'AuthService', '$window', function($rootScope, $location, $route, AuthService, $window) {
+
+  AuthService.setUsername();
+
   $rootScope.$on('$routeChangeStart', function(event, next, current) {
     AuthService.getUserStatus()
     .then(function(){
@@ -10,4 +13,5 @@ userApp.run(function($rootScope, $location, $route, AuthService) {
       }
     });
   });
-});
+  
+}]);

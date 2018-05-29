@@ -25,25 +25,64 @@ userApp.service('fileUploadService', function ($http, $q) {
         return deffered.promise;
     }
 
+    // THIS IS WHAT I USED WITH DISCOVERY
+    // this.extractFromFiles = function() {
+    //
+    //   var deffered = $q.defer();
+    //   $http.get('/newextract').
+    //     then(function(response) {
+    //       deffered.resolve(response);
+    //     }, function(error) {
+    //       deffered.reject();
+    //     });
+    //
+    //   return deffered.promise;
+    //
+    // }
 
-    this.extractFromFiles = function() {
+    this.getFiles = function() {
 
       var deffered = $q.defer();
-      $http.get('/extract').
-        then(function(response) {
+      $http.get('/files')
+        .then(function(response) {
           deffered.resolve(response);
         }, function(error) {
           deffered.reject();
         });
 
       return deffered.promise;
-
     }
 
-    this.getFiles = function() {
+    this.getContracts = function() {
 
       var deffered = $q.defer();
-      $http.get('/files')
+      $http.get('/contracts')
+        .then(function(response) {
+          deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+      return deffered.promise;
+    }
+
+    this.deleteFile = function(fileId) {
+
+      var deffered = $q.defer();
+      $http.post('/deleteFile', {fileId: fileId})
+        .then(function(response) {
+          deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+      return deffered.promise;
+    }
+
+    this.deleteContract = function(contractId) {
+
+      var deffered = $q.defer();
+      $http.post('/deleteContract', {contractId: contractId})
         .then(function(response) {
           deffered.resolve(response);
         }, function(error) {

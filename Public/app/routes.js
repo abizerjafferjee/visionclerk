@@ -43,6 +43,12 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: true}
   })
 
+  .when('/profile', {
+    templateUrl: 'app/views/pages/profile.html',
+    controller: 'accountController',
+    access: {restricted: true}
+  })
+
   .otherwise({
     redirectTo: '/',
     access: {restricted: false}

@@ -37,10 +37,12 @@
     <!-- Angular Controllers -->
     <script src="app/controllers/authControllers.js"></script>
     <script src="app/controllers/fileControllers.js"></script>
+    <script src="app/controllers/accountControllers.js"></script>
 
     <!-- Angular Services -->
     <script src="app/services/authServices.js"></script>
     <script src="app/services/fileServices.js"></script>
+    <script src="app/services/accountServices.js"></script>
 
     <!-- Angular Directives -->
     <script src="app/directives/fileDirectives.js"></script>
@@ -49,7 +51,7 @@
     <script defer src="/assets/js/fontawesome-all.js"></script>
     <link href="/assets/font/css/open-iconic-bootstrap.css" rel="stylesheet">
 
-    <title>VisionClerk - Legal Research Engine Powered By Artificial Intelligence</title>
+    <title>VisionClerk - Procurement & Spend Analytics</title>
   </head>
 
   <body ng-app='userApp'>
@@ -64,17 +66,27 @@
         </div>
         <div class="collapse navbar-collapse" id="mainNavBar">
           <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-            <li class="nav-item"><a class="nav-link" ng-controller="logoutController" ng-click="logout()">Logout</a></li>
-            <li class="nav-item"><a class="nav-link" href="/upload">Upload</a></li>
-            <li class="nav-item"><a class="nav-link" ng-show="isLoggedIn">{{user.username}}</a></li>
+            <li class="nav-item"><a class="nav-link" href="/login" ng-show="!showUser">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register" ng-show="!showUser">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="/upload" ng-show="showUser">Upload</a></li>
+
+            <li class="nav-item dropdown" ng-show="showUser">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{user}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/profile" ng-show="showUser">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" ng-controller="logoutController" ng-click="logout()">Logout</a>
+              </div>
+            </li>
+
           </ul>
         </div>
       </div>
     </nav>
 
-    <div ng-view></div>
+    <div style="background-color:#D3D3D3;" ng-view></div>
 
     <!-- FOOTER -->
     <footer class="page-footer bg-dark m-0">

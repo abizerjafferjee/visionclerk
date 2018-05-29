@@ -1,6 +1,6 @@
 userApp.controller('loginController',
-  ['$scope', '$location', 'AuthService', '$rootScope',
-  function ($scope, $location, AuthService, $rootScope) {
+  ['$scope', '$location', 'AuthService', '$window', '$rootScope',
+  function ($scope, $location, AuthService, $window, $rootScope) {
 
     $scope.login = function () {
 
@@ -12,8 +12,12 @@ userApp.controller('loginController',
       AuthService.login($scope.loginForm.username, $scope.loginForm.password)
         // handle success
         .then(function (response) {
-          $rootScope.isLoggedIn = true;
-          $rootScope.user = response.data.user;
+
+          // set username in local storage and show user
+          $window.localStorage.setItem("username", response.data.user.username);
+          $rootScope.user = $window.localStorage.getItem("username");
+          $rootScope.showUser = true;
+
           $location.path('/');
           $scope.disabled = false;
           $scope.loginForm = {};
@@ -31,16 +35,17 @@ userApp.controller('loginController',
 }]);
 
 userApp.controller('logoutController',
-  ['$scope', '$location', 'AuthService', '$rootScope',
-  function ($scope, $location, AuthService, $rootScope) {
+  ['$scope', '$location', 'AuthService', '$window', '$rootScope',
+  function ($scope, $location, AuthService, $window, $rootScope) {
 
     $scope.logout = function () {
 
       // call logout from service
       AuthService.logout()
         .then(function () {
-          $rootScope.isLoggedIn = false;
-          $rootScope.user = null;
+          // do not show user
+          $rootScope.showUser = false;
+
           $location.path('/login');
         });
     };
