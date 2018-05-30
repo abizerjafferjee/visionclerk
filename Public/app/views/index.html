@@ -89,7 +89,27 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="/login" ng-hide="showUser">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="/register" ng-hide="showUser">Register</a></li>
-            <li class="nav-item"><a class="nav-link" href="/upload" ng-hide="!showUser">Contracts</a></li>
+
+            <li class="nav-item dropdown" ng-hide="!showUser">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Analytics
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Category</a>
+                <a class="dropdown-item" href="#">Vendor</a>
+                <a class="dropdown-item" href="#">Vendor Profiles</a>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown" ng-hide="!showUser">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Data
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/upload">Contracts</a>
+                <a class="dropdown-item" href="#">Spend</a>
+              </div>
+            </li>
 
             <li class="nav-item dropdown" ng-hide="!showUser">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
