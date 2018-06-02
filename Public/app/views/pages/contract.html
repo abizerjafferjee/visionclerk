@@ -1,0 +1,131 @@
+
+<div class="container-fluid m-0 p-2">
+
+  <div class="row">
+
+    <div class="col-md-8">
+
+      <div class="card w-100" style="height:300px; overflow-y:auto;">
+        <h5 class="card-header">Contract Data</h5>
+        <div class="card-body">
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="card-title"><h4>Upload Contracts</h4></div>
+              <div class="progress" ng-show="uploading">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+              </div>
+
+
+              <form>
+                  <div class="form-group">
+                      <!-- <label for="myFileField">Upload</label> -->
+                      <input type="file" file-model="myFiles" name="myFiles" class="form-control w-75" id ="myFiles" multiple/>
+                      <button ng-click="uploadFiles()" class="btn btn-primary m-1">Upload</button>
+                  </div>
+              </form>
+
+              <div ng-show="showMessage && success" class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+              <div ng-show="showMessage && !success" class="alert alert-danger alert-dismissible fade show" role="alert">{{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card-title">
+                <h4>Contract Details</h4>
+              </div>
+              <p>{{ fileCount }} Documents</p>
+              <p>Last Upload: {{ lastUploaded }}</p>
+            </div>
+
+            <div class="col-md-4">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+      <div class="card w-100" style="height:300px; overflow-y:auto;">
+        <h5 class="card-header">Contract Data</h5>
+          <div class="card-body">
+            <p ng-hide="showFilesTable">{{ filesMessage }}</p>
+            <table ng-table="filesTable" ng-hide="!showFilesTable" class="table" ng-init="displayFiles()">
+              <tbody>
+                <tr ng-repeat="row in $data">
+                  <td title="'File Name'" sortable="'originalName'" filter="{originalName: 'text'}">{{ row.originalName }}</td>
+                  <td title="'Date Uploaded'">{{ row.date }}</td>
+                  <td title="'Processed'">{{ row.processedFile.contract.extracted }}</td>
+                  <td><a href="" ng-click="deleteFile(row._id)"><i class="fas fa-trash"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </h5>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12 col-sm-12 mt-2">
+      <div class="card">
+        <h5 class="card-header">All Contracts</h5>
+        <!-- <button type="button" class="btn btn-success" ng-click="refreshData()" style="float:right;">Refresh</button> -->
+        <input class="w-25" type="text" id="contractInput" ng-model="contractSearch" ng-change="searchContracts()" placeholder="Search for names..">
+        <div class="card-body m-0">
+          <p ng-hide="showContractsTable">{{ contractsMessage }}</p>
+          <table ng-hide="!showContractsTable" class="table" ng-init="displayContracts()">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Organizations</th>
+                <th scope="col">Parties</th>
+                <th scope="col">Items</th>
+                <th scope="col">Quantities</th>
+                <th scope="col">Identifiers</th>
+                <th scope="col">Events</th>
+                <th scope="col">Other Details</th>
+                <th scope="col">filename</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="row in contracts">
+                <th scope="row">{{ $index + 1 }}</th>
+                <td><ul><li ng-repeat="org in row.organization">{{ org}}</li></ul></td>
+                <td><ul><li ng-repeat="pty in row.party">{{ pty }}</li></ul></td>
+                <td><ul><li ng-repeat="itm in row.item">{{ itm }}</li></ul></td>
+                <td><ul><li ng-repeat="qt in row.quantity">{{ qt }}</li></ul></td>
+                <td><ul><li ng-repeat="idt in row.identifier">{{ idt }}</li></ul></td>
+                <td><ul><li ng-repeat="evt in row.events">{{ evt }}</li></ul></td>
+                <td><ul><li ng-repeat="oth in row.other">{{ oth }}</li></ul></td>
+                <td>{{ row.originalFile.fileName }}</td>
+                <td><a href="" ng-click="deleteContract(row._id)"><i class="fas fa-trash"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12 mt-2">
+      <div class="card">
+        <h5 class="card-header">Contract Analytics</h5>
+        Opportunities and stuff
+      </div>
+    </div>
+  </div>
+
+</div>

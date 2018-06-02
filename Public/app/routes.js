@@ -37,9 +37,15 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: false}
   })
 
-  .when('/upload', {
-    templateUrl: 'app/views/pages/uploads.html',
-    controller: 'fileUploadController',
+  .when('/contract', {
+    templateUrl: 'app/views/pages/contract.html',
+    controller: 'contractFileController',
+    access: {restricted: true}
+  })
+
+  .when('/spend', {
+    templateUrl: 'app/views/pages/invoice.html',
+    controller: 'invoiceFileController',
     access: {restricted: true}
   })
 
@@ -54,73 +60,3 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: false}
   });
 });
-
-  // .when('/search', {
-  //   templateUrl : 'app/views/pages/search.html',
-  //   controller : 'searchCtrl',
-  //   controllerAs : 'search'
-  // })
-  //
-  // .when('/results', {
-  //   templateUrl : 'app/views/pages/users/search_results.html',
-  //   controller : 'searchCtrl',
-  //   controllerAs : 'search_results'
-  // })
-
-  // .when('/profile', {
-  //   templateUrl : 'app/views/pages/users/profile.html'
-  // })
-  //
-  // .when('/displaycase', {
-  //   templateUrl : 'app/views/pages/users/displayCase.html',
-  //   controller : 'searchCtrl',
-  //   controllerAs : 'search'
-  // })
-  //
-  // .when('/displaycase/:case_id', {
-  //   templateUrl : 'app/views/pages/users/displayCase.html',
-  //   controller : 'searchCtrl',
-  //   controllerAs : 'search'
-  // })
-  //
-  // .when('/activate/:token', {
-  //   templateUrl : 'app/views/pages/users/activation/activate.html',
-  //   controller : 'emailCtrl',
-  //   controllerAs : 'email',
-  //   authenticate : false
-  // })
-  //
-  // .when('/resend', {
-  //   templateUrl : 'app/views/pages/users/activation/resend.html',
-  //   controller : 'resendCtrl',
-  //   controllerAs : 'resend',
-  //   authenticate : false
-  // })
-  //
-  // .when('/resetusername', {
-  //   templateUrl : 'app/views/pages/users/reset/reset_username.html',
-  //   controller : 'resetusernameCtrl',
-  //   controllerAs : 'resetusername',
-  //   authenticated : false
-  // })
-  //
-  // .when('/resetpassword', {
-  //   templateUrl : 'app/views/pages/users/reset/reset_password.html',
-  //   controller : 'resetpasswordCtrl',
-  //   controllerAs : 'resetpassword',
-  //   authenticate : false
-  // })
-  //
-  // .when('/newpassword/:token', {
-  //   templateUrl : 'app/views/pages/users/reset/newpassword.html',
-  //   controller : 'newpasswordCtrl',
-  //   controllerAs : 'newpassword',
-  //   authenticate : false
-  // })
-  //
-  // .when('/deleteaccount', {
-  //   templateUrl : 'app/views/pages/users/activation/delete_account.html',
-  //   controller : 'deleteaccountCtrl',
-  //   controllerAs : 'deleteaccount',
-  //   authenticate : false
-  // })

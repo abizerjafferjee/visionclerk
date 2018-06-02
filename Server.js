@@ -47,7 +47,8 @@ var app = express();
 
 // require routes
 var authRoutes = require('./app/routes/auth.js');
-var uploadRoutes = require('./app/routes/upload.js');
+var contractRoutes = require('./app/routes/contract.js');
+var invoiceRoutes = require('./app/routes/invoice.js');
 var accountRoutes = require('./app/routes/account.js');
 
 // middleware
@@ -74,7 +75,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.use('/user/', authRoutes);
-app.use(uploadRoutes);
+app.use('/contract/', contractRoutes);
+app.use('/invoice/', invoiceRoutes);
 app.use(accountRoutes);
 
 app.get('*', function(req, res) {

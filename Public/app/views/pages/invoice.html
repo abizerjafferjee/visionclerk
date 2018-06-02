@@ -1,0 +1,140 @@
+<div class="container-fluid m-0 p-2">
+
+  <div class="row">
+
+    <div class="col-md-8">
+
+      <div class="card w-100" style="height:400px; overflow-y:auto;">
+        <h5 class="card-header">Spend Data</h5>
+        <div class="card-body">
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="card-title"><h4>Upload Invoices</h4></div>
+              <ul>
+                <li>PNG and PDF files are accepted.</li>
+              </ul>
+              <div class="progress" ng-show="uploading">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+              </div>
+              <form>
+                  <div class="form-group">
+                      <input type="file" file-model="invoices" name="invoices" class="form-control w-75" id ="invoices" multiple/>
+                      <button ng-click="uploadFiles()" class="btn btn-primary m-1">Upload</button>
+                  </div>
+              </form>
+
+              <p>Message/ Errors will appear here once upload process completes</p>
+              <div ng-show="showMessage && success" class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+              <div ng-show="showMessage && !success" class="alert alert-danger alert-dismissible fade show" role="alert">{{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+
+            </div>
+
+            <div class="col-md-4">
+
+              <div class="card-title"><h4>Process Files</h4></div>
+              <ul>
+                <li>Click process a few seconds after you've completed all your uploads</li>
+                <li>If logs show that all files are not processed, wait a few seconds and click process again</li>
+              </ul>
+              <button ng-click="processFiles()" class="btn btn-primary m-1">Process</button>
+              <div ng-show="showProcessMessage" class="alert alert-success alert-dismissible fade show" role="alert">{{ processMessage}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card-title">
+                <h4>Invoice Details</h4>
+              </div>
+              <p>{{ fileCount }} Documents</p>
+              <p>Last Upload: {{ lastUploaded }}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+      <div class="card w-100" style="height:400px; overflow-y:auto;">
+        <h5 class="card-header">All Files</h5>
+        <div class="card-body">
+          <div class="col-md-3">
+            <table ng-table="filesTable" ng-hide="!showFilesTable" class="table table-condensed table-bordered table-striped" ng-init="displayFiles()">
+              <tbody>
+                <tr ng-repeat="row in $data">
+                  <td title="'file_name'" sortable="'originalName'" filter="{originalName: 'text'}">{{ row.originalName }}</td>
+                  <td title="'date_uploaded'" sortable="'date'">{{ row.date }}</td>
+                  <td title="'processed'">{{ row.processedFile.invoice.extracted }}</td>
+                  <td><a href="" ng-click="deleteFile(row._id)"><i class="fas fa-trash"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12 col-sm-12 mt-2">
+      <div class="card">
+        <h5 class="card-header">Validate Data</h5>
+        <div class="card-body m-0" style="max-width: 100%; overflow-x: auto;">
+          <ul>
+            <li>Click view to view image of your invoice.</li>
+            <li>Validate the extractions for each column and make edits if necessary.</li>
+            <li>Click confirm on the right once changes are made</li>
+            <li>Click on the checkbox below each cell if it incorrect.</li>
+            <li>Click complete once you have verified the data.</li>
+          </ul>
+          <p ng-hide="showInvoicesTable">{{ invoicesMessage }}</p>
+          <table ng-table="invoiceTable" ng-hide="!showInvoicesTable" class="table table-condensed table-bordered table-striped" ng-init="displayInvoices()">
+            <tbody>
+              <tr ng-repeat="row in $data">
+                <td title="'file name'">{{ row.originalFile.fileName }}</td>
+                <td title="'currency'"><input ng-model="row.currency"/> <input type="checkbox" ng-click="feedback(row._id, 'currency')"></td>
+                <td title="'amount_total'"><input ng-model="row.fields.amount_total[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'amount_total')"></td>
+                <td title="'amount_due'"><input ng-model="row.fields.amount_due[0].value" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'amount_due')"></td>
+                <td title="'amount_total_tax'"><input ng-model="row.fields.amount_total_tax[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'amount_total_tax')"></td>
+                <!-- <td title="'amount_total_base'"><input ng-model="row.fields.amount_total_base"/></td> -->
+                <!-- <td title="'amount_rounding'"><input ng-model="row.fields.amount_rounding"/></td> -->
+                <!-- <td title="'amount_paid'"><input ng-model="row.fields.amount_paid"/></td> -->
+                <!-- <td title="'tax_detail'"><input ng-model="row.fields.tax_details"/></td> -->
+                <!-- <td title="'tax_detail_base'"><input ng-model="row.fields.tax_details_base"/></td> -->
+                <!-- <td title="'tax_detail_rate'"><input ng-model="row.fields.tax_detail_rate"/></td> -->
+                <!-- <td title="'tax_detail_tax'"><input ng-model="row.fields.tax_detail_tax"/></td> -->
+                <!-- <td title="'tax_detail_total'"><input ng-model="row.fields.tax_detail_total"/></td> -->
+                <!-- <td title="'invoice_id'"><input ng-model="row.fields.invoice_id"/></td> -->
+                <!-- <td title="'order_id'"><input ng-model="row.fields.order_id"/></td> -->
+                <!-- <td title="'customer_id'"><input ng-model="row.fields.customer_id"/></td> -->
+                <td title="'date_issue'"><input ng-model="row.fields.date_issue[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'date_issue')"></td>
+                <td title="'date_due'"><input ng-model="row.fields.date_due[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'date_due')"></td>
+                <td title="'terms'"><input ng-repeat="i in row.fields.terms" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'terms')"></td>
+                <td title="'sender_name'"><input ng-repeat="i in row.fields.sender_name" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'sender_name')"></td>
+                <td title="'sender_addrline'"><input ng-repeat="i in row.fields.sender_addrline" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'sender_addrline')"></td>
+                <!-- <td title="'sender_dic'"><input ng-model="row.fields.sender_dic"/></td> -->
+                <td title="'recipient_name'"><input ng-repeat="i in row.fields.recipient_name" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'recipient_name')"></td>
+                <td title="'recipeint_addrline'"><input ng-repeat="i in row.fields.recipient_addrline" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'recipeint_addrline')"></td>
+                <td title="'edit row'"><a href="" ng-click="editInvoice(row)">Confirm</a></td>
+                <td title="'delete row'"><a href="" ng-click="deleteContract(row._id)"><i class="fas fa-trash"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

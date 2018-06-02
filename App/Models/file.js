@@ -8,11 +8,13 @@ var fileSchema = new mongoose.Schema({
   size: {type: Number},
   date: {type: Date, required: true},
   processedFile: {
+    type: {type:String},
     contract: {
       fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"Contract"},
       extracted: {type: Boolean}
     },
     invoice: {
+      fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"Invoice"},
       extracted: {type: Boolean}
     }
   },
