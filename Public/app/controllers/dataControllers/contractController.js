@@ -1,3 +1,7 @@
+// POST Data
+// GET Data
+// PUT Data
+// GET data
 userApp.controller('contractFileController', function ($scope, contractFileService, NgTableParams) {
 
     $scope.myFiles = {};
@@ -14,47 +18,44 @@ userApp.controller('contractFileController', function ($scope, contractFileServi
               $scope.success = true;
               $scope.uploading = false;
               $scope.showMessage = true;
-              // $scope.uploadedFiles = response.data.files;
               $scope.message = response.data.message;
               $scope.fileCount += response.data.files;
               $scope.myFile = {};
 
               var date = new Date();
-              var dt = date.getDate() + "/" + (date.getMonth()+1)  + "/" + date.getFullYear() + " @ "
+              $scope.lastUploaded = date.getDate() + "/" + (date.getMonth()+1)  + "/" + date.getFullYear() + " @ "
                 + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
-              $scope.lastUploaded = dt;
-
-              // processFiles();
-              $scope.displayFiles();
-              $scope.displayContracts();
+              $scope.getFiles();
+              $scope.getUnvalidatedContracts();
+              $scope.getContracts();
 
             } else {
               $scope.success = false;
-              $scope.showMessage = true;
               $scope.uploading = false;
+              $scope.showMessage = true;
               $scope.message = response.data.message;
               $scope.myFile = {};
             }
           }, function (error) {
+            $scope.success = false;
             $scope.uploading = false;
             $scope.showMessage = true;
             $scope.message = 'An error has occurred';
+            $scope.myFile = {};
           });
     };
 
-    $scope.displayFiles = function() {
+    // gets files from server
+    // sets files, filecount, lastupdated
+    // uses displayFiles functio to set files table
+    $scope.getFiles = function() {
       contractFileService.getFiles()
         .then(function(response) {
           if (response.data.length !== 0) {
-            $scope.showFilesTable = true;
-            $scope.allFiles = response.data;
-            $scope.table = $scope.allFiles;
-            // console.log(response.data[0].file._id);
+            $scope.files = response.data;
+            $scope.showFiles = true;
             $scope.fileCount = response.data.length;
-
-            $scope.filesTable = new NgTableParams({}, { dataset: response.data });
-
 
             // set last uploaded date
             var dt = new Date(response.data[0].date);
@@ -67,39 +68,138 @@ userApp.controller('contractFileController', function ($scope, contractFileServi
             $scope.lastUploaded = dt.getDate() + "/" + (dt.getMonth()+1)  + "/" + dt.getFullYear() + " @ "
               + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
+            displayFiles();
+
           } else {
-            $scope.showFilesTable = false;
+            $scope.files = [];
+            $scope.showFiles = false;
             $scope.filesMessage = "No files to display";
             $scope.fileCount = 0;
           }
+        }, function(error) {
+          $scope.files = [];
+          $scope.showFiles = false;
+          $scope.filesMessage = "No files to display";
+          $scope.fileCount = 0;
+        });
+    };
 
+    // creates a new array of data for ngtable
+    function displayFiles() {
+      var filesDf = [];
+      for (var i=0; i<$scope.files.length; i++) {
+        var file = {
+          id: $scope.files[i]._id,
+          fileName: $scope.files[i].originalName,
+          date: $scope.files[i].date,
+          processed: $scope.files[i].processedFile.contract.extracted,
+          contractId: $scope.files[i].processedFile.contract.fileRef
+        };
+        filesDf.push(file);
+      }
+
+      $scope.filesTable = new NgTableParams({}, { dataset: filesDf });
+
+    };
+
+    // gets contracts from server
+    // sets contracts
+    // uses displayContracts function to create contracts table
+    $scope.getContracts = function() {
+      contractFileService.getContracts()
+        .then(function(response) {
+          if (response.data.length !== 0) {
+            $scope.contracts = response.data;
+            $scope.showContracts = true;
+            displayContracts();
+          } else {
+            $scope.showContracts = false;
+            $scope.contractsMessage = "No contracts to display";
+          }
+        }, function(error) {
+          $scope.showContracts = false;
+          $scope.contractsMessage = "No contracts to display";
+        });
+    };
+
+    // creates a new array of contract data for ngtables
+    function displayContracts() {
+      var contractsDf = [];
+      for (var i=0; i<$scope.contracts.length; i++) {
+        var contract = {
+          id: $scope.contracts[i]._id,
+          organization: $scope.contracts[i].organization,
+          party: $scope.contracts[i].party,
+          item: $scope.contracts[i].item,
+          quantity: $scope.contracts[i].quantity,
+          identifier: $scope.contracts[i].identifier,
+          events: $scope.contracts[i].events,
+          other: $scope.contracts[i].other,
+          fileRef: $scope.contracts[i].originalFile.fileRef,
+          fileName: $scope.contracts[i].originalFile.fileName
+        };
+        contractsDf.push(contract);
+      }
+
+      $scope.contractsTable = new NgTableParams({}, { dataset: contractsDf });
+
+    };
+
+    // gets contracts from server
+    // sets contracts
+    // uses displayContracts function to create contracts table
+    $scope.getUnvalidatedContracts = function() {
+      contractFileService.getUnvalidatedContracts()
+        .then(function(response) {
+          if (response.data.length !== 0) {
+            $scope.unvalidatedContracts = response.data;
+            $scope.showUnvalidatedContracts = true;
+            $scope.unvalidatedContractsTable = new NgTableParams({}, { dataset: $scope.unvalidatedContracts});
+
+          } else {
+            $scope.showUnvalidatedContracts = false;
+            $scope.unvalidatedContractsMessage = "All Contracts Validated";
+          }
+        }, function(error) {
+          $scope.showUnvalidatedContracts = false;
+          $scope.unvalidatedContractsMessage = "All Contracts Validated";
+        });
+    };
+
+    $scope.validateContract = function(contractId) {
+      contractFileService.validateContract(contractId)
+        .then(function(response) {
+          if (response.data.success) {
+            $scope.getUnvalidatedContracts();
+            $scope.getContracts();
+          } else {
+            console.log(response);
+          }
         }, function(error) {
           console.log(error);
         });
     };
 
-    $scope.displayContracts = function() {
-      contractFileService.getContracts()
+    $scope.save = function(contract) {
+      contractFileService.editContract(contract)
         .then(function(response) {
-          if (response.data.length !== 0) {
-            $scope.allContracts = response.data;
-            $scope.contracts = $scope.allContracts;
-            $scope.showContractsTable = true;
+          if (response.data.success) {
+            $scope.getUnvalidatedContracts();
           } else {
-            $scope.showContractsTable = false;
-            $scope.contractsMessage = "No contracts to display";
+            console.log(response);
           }
         }, function(error) {
           console.log(error);
         });
-    }
+    };
 
     $scope.deleteFile = function(fileId) {
       contractFileService.deleteFile(fileId)
         .then(function(response) {
           if (response.data.success) {
-            $scope.displayFiles();
-            $scope.displayContracts();
+            $scope.getFiles();
+            $scope.getContracts();
+            $scope.getUnvalidatedContracts();
           }
         }, function(error) {
           console.log(error);
@@ -110,28 +210,13 @@ userApp.controller('contractFileController', function ($scope, contractFileServi
       contractFileService.deleteContract(contractId)
         .then(function(response) {
           if (response.data.success) {
-            $scope.displayFiles();
-            $scope.displayContracts();
+            $scope.getFiles();
+            $scope.getContracts();
+            $scope.getUnvalidatedContracts();
           }
         }, function(error) {
           console.log(error);
         });
-    }
-
-    $scope.searchContracts = function() {
-      if ($scope.contractSearch === "") {
-        $scope.contracts = $scope.allContracts;
-      } else{
-        var contractName = $scope.contractSearch;
-        var currentTable = $scope.allContracts;
-        var newTable = [];
-        for (var i=0; i<currentTable.length; i++) {
-          if ((currentTable[i].organization !== undefined) && (currentTable[i].organization.toLowerCase().includes(contractName.toLowerCase()))) {
-            newTable.push(currentTable[i]);
-          }
-        }
-        $scope.contracts = newTable;
-      }
     }
 
 });

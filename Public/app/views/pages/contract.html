@@ -5,7 +5,7 @@
 
     <div class="col-md-8">
 
-      <div class="card w-100" style="height:300px; overflow-y:auto;">
+      <div class="card w-100" style="height:400px; overflow-y:auto;">
         <h5 class="card-header">Contract Data</h5>
         <div class="card-body">
           <div class="row">
@@ -53,17 +53,17 @@
     </div>
 
     <div class="col-md-4">
-      <div class="card w-100" style="height:300px; overflow-y:auto;">
-        <h5 class="card-header">Contract Data</h5>
+      <div class="card w-100" style="height:400px; overflow-y:auto;">
+        <h5 class="card-header">All Files</h5>
           <div class="card-body">
-            <p ng-hide="showFilesTable">{{ filesMessage }}</p>
-            <table ng-table="filesTable" ng-hide="!showFilesTable" class="table" ng-init="displayFiles()">
+            <p ng-hide="showFiles">{{ filesMessage }}</p>
+            <table ng-table="filesTable" ng-hide="!showFiles" class="table table-condensed table-bordered table-striped" ng-init="getFiles()">
               <tbody>
                 <tr ng-repeat="row in $data">
-                  <td title="'File Name'" sortable="'originalName'" filter="{originalName: 'text'}">{{ row.originalName }}</td>
-                  <td title="'Date Uploaded'">{{ row.date }}</td>
-                  <td title="'Processed'">{{ row.processedFile.contract.extracted }}</td>
-                  <td><a href="" ng-click="deleteFile(row._id)"><i class="fas fa-trash"></i></a></td>
+                  <td title="'File Name'" sortable="'originalName'" filter="{fileName: 'text'}">{{ row.fileName }}</td>
+                  <td title="'Date Uploaded'" sortable="'date'" filter="{date: 'text'}">{{ row.date }}</td>
+                  <td title="'Processed'" filter="{processed: 'text'}">{{ row.processed }}</td>
+                  <td><a href="" ng-click="deleteFile(row.id)"><i class="fas fa-trash"></i></a></td>
                 </tr>
               </tbody>
             </table>
@@ -78,38 +78,92 @@
 
     <div class="col-md-12 col-sm-12 mt-2">
       <div class="card">
-        <h5 class="card-header">All Contracts</h5>
-        <!-- <button type="button" class="btn btn-success" ng-click="refreshData()" style="float:right;">Refresh</button> -->
-        <input class="w-25" type="text" id="contractInput" ng-model="contractSearch" ng-change="searchContracts()" placeholder="Search for names..">
+        <h5 class="card-header">Validate Contracts</h5>
         <div class="card-body m-0">
-          <p ng-hide="showContractsTable">{{ contractsMessage }}</p>
-          <table ng-hide="!showContractsTable" class="table" ng-init="displayContracts()">
-            <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Organizations</th>
-                <th scope="col">Parties</th>
-                <th scope="col">Items</th>
-                <th scope="col">Quantities</th>
-                <th scope="col">Identifiers</th>
-                <th scope="col">Events</th>
-                <th scope="col">Other Details</th>
-                <th scope="col">filename</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
+          <p ng-hide="showUnvalidatedContracts">{{ unvalidatedContractsMessage }}</p>
+          <table ng-table="unvalidatedContractsTable" ng-hide="!showUnvalidatedContracts" class="table table-condensed table-bordered table-striped" ng-init="getUnvalidatedContracts()">
             <tbody>
-              <tr ng-repeat="row in contracts">
-                <th scope="row">{{ $index + 1 }}</th>
-                <td><ul><li ng-repeat="org in row.organization">{{ org}}</li></ul></td>
-                <td><ul><li ng-repeat="pty in row.party">{{ pty }}</li></ul></td>
-                <td><ul><li ng-repeat="itm in row.item">{{ itm }}</li></ul></td>
-                <td><ul><li ng-repeat="qt in row.quantity">{{ qt }}</li></ul></td>
-                <td><ul><li ng-repeat="idt in row.identifier">{{ idt }}</li></ul></td>
-                <td><ul><li ng-repeat="evt in row.events">{{ evt }}</li></ul></td>
-                <td><ul><li ng-repeat="oth in row.other">{{ oth }}</li></ul></td>
-                <td>{{ row.originalFile.fileName }}</td>
-                <td><a href="" ng-click="deleteContract(row._id)"><i class="fas fa-trash"></i></a></td>
+              <tr ng-repeat="row in $data">
+                <td title="'file_name'" filter="{fileName: 'text'}">{{ row.originalFile.fileName }}</td>
+                <td title="'organization'" ng-switch="row.isEditing" filter="{organization: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.organization }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.organization" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'party'" ng-switch="row.isEditing" filter="{party: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.party }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.party" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'item'" ng-switch="row.isEditing" filter="{item: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.item }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.item" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'quantity'" ng-switch="row.isEditing" filter="{quantity: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.quantity }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.quantity" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'identifier'" ng-switch="row.isEditing" filter="{identifier: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.identifier }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.identifier" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'events'" ng-switch="row.isEditing" filter="{events: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.events }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.events" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'other'" ng-switch="row.isEditing" filter="{other: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.other }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.other" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-primary btn-sm" ng-click="save(row)" ng-if="row.isEditing">Confirm</button>
+                  <button class="btn btn-default btn-sm" ng-click="getUnvalidatedContracts()" ng-if="row.isEditing">Remove</button>
+                  <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing">Edit</button>
+                  <button class="btn btn-danger btn-sm" ng-click="deleteContract(row._id)" ng-if="!row.isEditing"><i class="fas fa-trash"></i></a></button>
+                </td>
+                <td ng-click="">View</td>
+                <td ng-click="validateContract(row._id)">Verify</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12 col-sm-12 mt-2">
+      <div class="card">
+        <h5 class="card-header">All Contracts</h5>
+        <div class="card-body m-0">
+          <p ng-hide="showContracts">{{ contractsMessage }}</p>
+          <table ng-table="contractsTable" ng-hide="!showContracts" class="table table-condensed table-bordered table-striped" ng-init="getContracts()">
+            <tbody>
+              <tr ng-repeat="row in $data">
+                <td title="'organization'" filter="{organization: 'text'}">{{ row.organization }}</td>
+                <td title="'party'" filter="{party: 'text'}">{{ row.party }}</td>
+                <td title="'item'" filter="{item: 'text'}">{{ row.item }}</td>
+                <td title="'quantity'" filter="{quantity: 'text'}">{{ row.quantity }}</td>
+                <td title="'identifier'" filter="{identifier: 'text'}">{{ row.identifier }}</td>
+                <td title="'events'" filter="{events: 'text'}">{{ row.events }}</td>
+                <td title="'other'" filter="{other: 'text'}">{{ row.other }}</td>
+                <td title="'fileName'" filter="{fileName: 'text'}">{{ row.fileName }}</td>
+                <td><a href="" ng-click="deleteContract(row.id)"><i class="fas fa-trash"></i></a></td>
               </tr>
             </tbody>
           </table>

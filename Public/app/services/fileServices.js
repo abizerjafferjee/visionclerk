@@ -48,6 +48,43 @@ userApp.service('contractFileService', function ($http, $q) {
       return deffered.promise;
     }
 
+    this.getUnvalidatedContracts = function() {
+
+      var deffered = $q.defer();
+      $http.get('/contract/unvalidatedContracts')
+        .then(function(response) {
+          deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+      return deffered.promise;
+    }
+
+    this.validateContract = function(contractId) {
+      var deffered = $q.defer();
+      $http.post('/contract/validate', {id: contractId})
+        .then(function(response) {
+          deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+      return deffered.promise;
+    }
+
+    this.editContract = function(contract) {
+      var deffered = $q.defer();
+      $http.post('/contract/edit', {contract: contract})
+        .then(function(response) {
+          deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+      return deffered.promise;
+    }
+
     this.deleteFile = function(fileId) {
 
       var deffered = $q.defer();
