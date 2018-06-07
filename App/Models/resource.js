@@ -1,11 +1,10 @@
-var mongoose = require("mongoose");
-var validate = require("mongoose-validator");
+import mongoose from 'mongoose';
 
-var resourceSchema = new mongoose.Schema({	
+let resourceSchema = new mongoose.Schema({
 	uid: {type: Number},
 	_user_f_key: {type: Number},
 	_pointer: {type: Object},
 	owner: {type: String}
 });
 
-module.exports = mongoose.model("Resource", resourceSchema);
+export default mongoose.model("Resource", resourceSchema);

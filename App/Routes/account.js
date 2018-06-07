@@ -21,6 +21,6 @@ router.post('/account', function(req, res) {
       res.json({success: true, message: "Profile updated"});
     }
   });
-})
+});
 
 module.exports = router;
