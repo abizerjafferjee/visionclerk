@@ -26,8 +26,7 @@
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script> -->
-
+  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script> -->
 
     <!-- OTHER SCRIPTS -->
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
@@ -65,13 +64,188 @@
     <script defer src="/assets/js/fontawesome-all.js"></script>
     <link href="/assets/font/css/open-iconic-bootstrap.css" rel="stylesheet">
 
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("mySidenav").style.zIndex = "100";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+
+    <style>
+
+      .sidenav {
+          height: 100%;
+          width: 0;
+          position: fixed;
+          z-index: 1;
+          top: 0;
+          left: 0;
+          background-color: #111;
+          overflow-x: hidden;
+          transition: 0.5s;
+          padding-top: 60px;
+          font-family: "Lato", sans-serif;
+      }
+
+      .sidenav a {
+          padding: 8px 8px 8px 32px;
+          text-decoration: none;
+          font-size: 25px;
+          color: white;
+          display: block;
+          transition: 0.3s;
+      }
+
+      .sidenav a:hover {
+          color: #f1f1f1;
+      }
+
+      .sidenav .closebtn {
+          position: absolute;
+          top: 0;
+          right: 25px;
+          font-size: 36px;
+          margin-left: 50px;
+      }
+
+      #sideBarHeader {
+
+          font-family: "Lato", sans-serif;
+          color: white;
+
+      }
+
+      .sideNavContent:hover {
+
+          background-color: black;
+          border: 1px solid grey;
+          border-radius: 25px;
+
+      }
+
+      #sideNavDivider {
+
+          display: block;
+          height: 1px;
+          border: 0;
+          padding: 0;
+          border-top: 1px solid grey;
+
+      }
+
+      #homeIcon {
+
+          margin-right: 9px;
+
+      }
+
+      #loginIcon {
+
+          margin-right: 9px;
+
+      }
+
+      #contactIcon {
+
+          margin-right: 9px;
+
+      }
+
+      #companyIcon {
+
+          margin-right: 9px;
+
+      }
+
+      #registerIcon {
+
+          margin-right: 9px;
+
+      }
+
+      #sideNavLogo {
+
+          height: 35px;
+          width: 55px;
+          margin-right: 3px;
+
+      }
+
+      #analyticsIcon {
+
+          margin-right: 9px;
+
+      }
+
+      #dataIcon {
+
+          margin-right: 9px;
+
+      }
+
+      @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+      }
+    </style>
+
     <title>VisionClerk - Procurement & Spend Analytics</title>
   </head>
 
   <body ng-app='userApp'>
 
+<!-- SIDE NAVIGATION BEGIN -->
+<div id="mySidenav" class="sidenav bg-dark">
+  <h3 id="sideBarHeader" class="text-center"><span><img src="Logo.png" id="sideNavLogo"></span>VisionClerk</h3>
+  <hr id="sideNavDivider">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="/" class="sideNavContent" onclick="closeNav()"><i class="fas fa-home" id="homeIcon"></i>Home<span style="float: right; color: white;">&#62;</span></a>
+  <a href="/login" class="sideNavContent" onclick="closeNav()" ng-hide="showUser"><i class="fas fa-user" id="loginIcon"></i>Login<span style="float: right; color: white;">&#62;</span></a>
+  <a href="/register" class="sideNavContent" onclick="closeNav()" ng-hide="showUser"><i class="fas fa-sign-in-alt" id="registerIcon"></i>Register<span style="float: right; color: white;">&#62;</span></a>
+  <a href="/about" class="sideNavContent" onclick="closeNav()" ng-hide="showUser"><i class="fas fa-address-card" id="companyIcon"></i>Company<span style="float: right; color: white;">&#62;</span></a>
+  <a href="/contact" class="sideNavContent" onclick="closeNav()" ng-hide="showUser"><i class="fas fa-phone" id="contactIcon"></i>Contact<span style="float: right; color: white;">&#62;</span></a>
+
+<div class="nav-item dropdown" ng-hide="!showUser">
+  <a class="nav-link dropdown-toggle sideNavContent" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-chart-bar" id="analyticsIcon"></i>Analytics
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Category</a>
+    <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Vendor</a>
+    <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Vendor Profiles</a>
+  </div>
+</div>
+
+<div class="nav-item dropdown" ng-hide="!showUser">
+  <a class="nav-link dropdown-toggle sideNavContent" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-database" id="dataIcon"></i>Data
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="/contract" style="color: black;" onclick="closeNav()">Contracts</a>
+    <a class="dropdown-item" href="/spend" style="color: black;" onclick="closeNav()">Spend</a>
+  </div>
+</div>
+
+<div class="nav-item dropdown" ng-hide="!showUser">
+  <a class="nav-link dropdown-toggle sideNavContent" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{user}}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="/profile" style="color: black;" onclick="closeNav()">Profile</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="#" ng-controller="logoutController" ng-click="logout()" style="color: black;" onclick="closeNav()">Logout</a>
+  </div>
+</div>
+
+</div>
+<!-- SIDE NAVIGATION END -->
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <span style="font-size:30px;cursor:pointer;color: white;" onclick="openNav()">&#9776;</span>
       <div class="container-fluid">
         <div class="navbar-header">
           <a  class="navbar-brand" href="/">VisionClerk</a>
@@ -83,6 +257,10 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="/login" ng-hide="showUser">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="/register" ng-hide="showUser">Register</a></li>
+
+            <li class="nav-item"><a class="nav-link" href="/about" ng-hide="showUser">Company</a></li>
+
+            <li class="nav-item"><a class="nav-link" href="/contact" ng-hide="showUser">Contact</a></li>
 
             <li class="nav-item dropdown" ng-hide="!showUser">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -106,7 +284,7 @@
             </li>
 
             <li class="nav-item dropdown" ng-hide="!showUser">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" ng-hide="!showUser" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{user}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -121,14 +299,91 @@
       </div>
     </nav>
 
+
+
     <div style="background-color:#D3D3D3; min-height: 100vh; margin:0px;" ng-view></div>
 
     <!-- FOOTER -->
+    <!--
     <footer class="page-footer bg-dark m-0">
       <div class="footer-copyright py-3 text-center" style="color: white;">
           © 2018 VisionClerk. All Rights Reserved.
       </div>
     </footer>
+-->
+<!-- Footer -->
+<footer class="page-footer font-small bg-dark pt-4 mt-4">
+
+  <!-- Footer Links -->
+  <div class="container text-center text-md-left">
+
+    <!-- Footer links -->
+    <div class="row text-center text-md-left mt-3 pb-3">
+
+      <!-- Grid column -->
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h3 class="mb-4 font-weight-bold"><span><img src="Logo.png" id="sideNavLogo"></span>VisionClerk</h3>
+        <p></p>
+      </div>
+      <!-- Grid column -->
+
+      <hr class="w-100 clearfix d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h4 class="text-uppercase mb-1 font-weight-bold">Product</h4>
+        <hr class="bg-light mb-4 mt-0 d-inline-block mx-auto" style="width: 80px;">
+        <p><a href="/home">Home</a></p>
+        <p><a href="/login">Login</a></p>
+        <p><a href="/register">Register</a></p>
+      </div>
+      <!-- Grid column -->
+
+      <hr class="w-100 clearfix d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h4 class="text-uppercase mb-1 font-weight-bold">Useful links</h4>
+        <hr class="bg-light mb-4 mt-0 d-inline-block mx-auto" style="width: 80px;">
+        <p><a href="/about">About Us</a></p>
+        <p><a href="/contact">Contact Us</a></p>
+      </div>
+
+      <!-- Grid column -->
+      <hr class="w-100 clearfix d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h4 class="text-uppercase mb-1 font-weight-bold">Contact</h4>
+        <hr class="bg-light mb-4 mt-0 d-inline-block mx-auto" style="width: 80px;">
+        <p><i class="fa fa-location-arrow mr-3"></i> Toronto, Ontario, Canada</p>
+        <p><i class="fa fa-home mr-3"></i> 10 Dundas Street East</p>
+        <p><i class="fa fa-phone mr-3"></i> 437-345-0526</p>
+      </div>
+      <!-- Grid column -->
+
+    </div>
+    <!-- Footer links -->
+
+    <hr>
+
+    <!-- Grid row -->
+
+
+      <!-- Grid column -->
+      <div class="py-3 text-center pb-3" style="color: white;">
+          © 2018 VisionClerk. All Rights Reserved.
+      </div>
+      <!-- Grid column -->
+
+
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+</footer>
+<!-- Footer -->
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
   </body>

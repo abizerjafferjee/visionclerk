@@ -55,6 +55,16 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: true}
   })
 
+  .when('/about', {
+    templateUrl: 'app/views/pages/about.html',
+    access: {restricted: false}
+  })
+
+  .when('/contact', {
+    templateUrl: 'app/views/pages/contact.html',
+    access: {restricted: false}
+  })
+
   .otherwise({
     redirectTo: '/',
     access: {restricted: false}
