@@ -1,11 +1,83 @@
+
 <div class="container-fluid m-0 p-2">
 
+  <div class="row pt-2 pb-2">
+    <div class="col-md-8">
+        <div class="card w-100" style="height:400px; overflow-y:auto;">
+          <h5 class="card-header">Spend Data</h5>
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card-title"><h4>Upload Files</h4></div>
+                <hr>
+                <h5>File Type:</h5>
+                <form>
+                  <input type="radio" name="gender" value="male" id="invoiceRadio" checked> PDF, PNG, HTML, Word<br>
+                  <input type="radio" name="gender" value="female" id="accountPayableRadio"> Excel
+                </form>
+
+                <div class="progress" ng-show="uploading">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <input type="file" file-model="invoices" name="invoices" class="form-control w-75" id ="invoices" multiple/>
+                        <button ng-click="typeOfFileUploaded()" class="btn btn-primary m-1">Upload</button>
+                    </div>
+                </form>
+
+                <p>Message/ Errors will appear here once upload process completes</p>
+                <div ng-show="showMessage && success" class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button></div>
+                <div ng-show="showMessage && !success" class="alert alert-danger alert-dismissible fade show" role="alert">{{message}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button></div>
+
+            </div>
+
+            <div class="col-md-4">
+
+              <div class="card-title"><h4>Process Files</h4></div>
+              <hr>
+              <ul>
+                <li>Click process a few seconds after you've completed all your uploads</li>
+                <li>If logs show that all files are not processed, wait a few seconds and click process again</li>
+              </ul>
+              <button ng-click="processFiles()" class="btn btn-primary m-1">Process</button>
+              <div ng-show="showProcessMessage" class="alert alert-success alert-dismissible fade show" role="alert">{{ processMessage}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card-title">
+                <h4>Details</h4>
+                <hr>
+              </div>
+              <p>{{ fileCount }} Documents</p>
+              <p>Last Upload: {{ lastUploaded }}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!--
   <div class="row">
 
     <div class="col-md-8">
 
       <div class="card w-100" style="height:400px; overflow-y:auto;">
-        <h5 class="card-header">Spend Data</h5>
+        <h5 class="card-header">Invoice Spend Data</h5>
         <div class="card-body">
           <div class="row">
 
@@ -63,7 +135,7 @@
       </div>
 
     </div>
-
+-->
     <div class="col-md-4">
       <div class="card w-100" style="height:400px; overflow-y:auto;">
         <h5 class="card-header">All Files</h5>
@@ -84,6 +156,71 @@
       </div>
     </div>
   </div>
+<!--
+  <div class="row pt-2 pb-2">
+    <div class="col-md-8">
+        <div class="card w-100" style="height:400px; overflow-y:auto;">
+          <h5 class="card-header">Accounts Payable Spend Data</h5>
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card-title"><h4>Upload Accounts Payable</h4></div>
+                <ul>
+                  <li>Excel files are accepted.</li>
+                </ul>
+
+                <div class="progress" ng-show="uploadingAccountsPayable">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <input type="file" file-model="invoices" name="invoices" class="form-control w-75" id ="invoices" multiple/>
+                        <button ng-click="uploadFilesAccountsPayable()" class="btn btn-primary m-1">Upload</button>
+                    </div>
+                </form>
+
+                <p>Message/ Errors will appear here once upload process completes</p>
+                <div ng-show="showMessageAccountsPayable && successAccountsPayable" class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button></div>
+                <div ng-show="showMessageAccountsPayable && !successAccountsPayable" class="alert alert-danger alert-dismissible fade show" role="alert">{{message}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button></div>
+
+            </div>
+
+            <div class="col-md-4">
+
+              <div class="card-title"><h4>Process Files</h4></div>
+              <ul>
+                <li>Click process a few seconds after you've completed all your uploads</li>
+                <li>If logs show that all files are not processed, wait a few seconds and click process again</li>
+              </ul>
+              <button ng-click="processFilesAccountsPayable()" class="btn btn-primary m-1">Process</button>
+              <div ng-show="showProcessMessageAccountsPayable" class="alert alert-success alert-dismissible fade show" role="alert">{{ processMessageAccountsPayable}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card-title">
+                <h4>Accounts Payable Details</h4>
+              </div>
+              <p>{{ fileCountAccountsPayable }} Documents</p>
+              <p>Last Upload: {{ lastUploadedAccountsPayable }}</p>
+            </div>
+
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+-->
 
   <div class="row">
 
