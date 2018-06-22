@@ -93,10 +93,8 @@ router.post('/upload', function(req, res) {
                   var invoiceRecord = {
                     processingId: resp.id,
                     processStatus: false,
-                    originalFile: {
-                      fileName: currentFile.originalName,
-                      fileRef: currentFile
-                    },
+                    originalFileName: currentFile.originalName,
+                    fileRef: currentFile,
                     user: req.user
                   };
 
@@ -155,17 +153,24 @@ router.get('/process', function(req, res) {
               // set extract fields
               responseFields = response.fields;
               for (var i=0; i < responseFields.length; i++) {
-                var values = {
-                  title: responseFields[i].title,
-                  content: responseFields[i].content,
-                  value: responseFields[i].value,
-                  value_type: responseFields[i].value_type
-                };
-                currentInvoice.fields[responseFields[i].name].push(values);
+                if (['terms', 'sender_name', 'sender_addrline', 'sender_dic', 'recipient_name', 'recipient_addrline'].includes(responseFields[i].name)){
+                  if (currentInvoice[responseFields[i].name] == undefined) {
+                    currentInvoice[responseFields[i].name] = responseFields[i].value;
+                  } else {
+                    currentInvoice[responseFields[i].name] += ', ' + responseFields[i].value;
+                  }
+                } else {
+                  if (currentInvoice[responseFields[i].name] == undefined) {
+                    currentInvoice[responseFields[i].name] = responseFields[i].value;
+                  }
+                }
                 if (responseFields[i].name == "tax_details") {
                   console.log(responseFields[i].content)
                 }
               }
+
+              // set validated false
+              currentInvoice.validated = false;
 
               // set full text
               var full_text = response.full_text.content.join(' ');
@@ -177,7 +182,7 @@ router.get('/process', function(req, res) {
               currentInvoice.save();
 
               // file set invoice processed equals true
-              File.findById(currentInvoice.originalFile.fileRef, function(err, file) {
+              File.findById(currentInvoice.fileRef, function(err, file) {
                 file.processedFile.invoice.extracted = true;
                 file.save();
               });
@@ -207,10 +212,17 @@ router.get('/files', function(req, res) {
 });
 
 router.get('/invoices', function(req, res) {
-  Invoice.find({user:req.user}, function(err, invoices) {
+  Invoice.find({user:req.user, validated: true}, function(err, invoices) {
     res.send(invoices);
   });
 });
+
+router.get('/unvalidatedInvoices', function(req, res) {
+  Invoice.find({user:req.user, validated: false}, function(err, invoices) {
+    res.send(invoices);
+  });
+});
+
 
 router.post('/deleteFile', function(req, res) {
   File.findOne({_id:req.body.fileId}, function(err, file) {
@@ -252,6 +264,19 @@ router.post('/deleteContract', function(req, res) {
 router.post('/edit', function(req, res) {
   console.log(req.body.invoice);
   Invoice.findByIdAndUpdate({_id: req.body.invoice._id}, req.body.invoice, function(err, newInvoice) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(newInvoice);
+    }
+    res.json({success:"done"});
+  });
+
+});
+
+router.post('/validate', function(req, res) {
+  console.log(req.body.invoice);
+  Invoice.findByIdAndUpdate({_id: req.body.id}, {$set:{validated: true}}, function(err, newInvoice) {
     if(err) {
       console.log(err);
     } else {
