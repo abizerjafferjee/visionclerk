@@ -27,7 +27,8 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
 
             // processFiles();
             $scope.displayFiles();
-            // $scope.displayContracts();
+            $scope.getUnvalidatedInvoices();
+            $scope.getInvoices();
 
           } else {
             $scope.success = false;
@@ -50,6 +51,7 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
       if (response.data.success) {
         $scope.showProcessMessage = true;
         $scope.processMessage = "processed";
+        $scope.getUnvalidatedInvoices();
       }
 
     });
@@ -88,38 +90,71 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
       });
   };
 
-  $scope.displayInvoices = function() {
+  $scope.getInvoices = function() {
     invoiceFileService.getInvoices()
-      .then(function(response) {
-        if (response.data.length !== 0) {
-          $scope.showInvoicesTable = true;
-          // $scope.invoiceTable = response.data;
+    .then(function(response) {
+      if (response.data.length !== 0) {
+        $scope.showInvoices = true;
+        $scope.invoices = response.data;
+        displayInvoices();
 
-          console.log(response.data);
+      } else {
+        $scope.showInvoices = false;
+        $scope.invoicesMessage = "No contracts to display";
+      }
+    }, function(error) {
+      $scope.showInvoices = false;
+      $scope.invoicesMessage = "Something went wrong";
+    });
+  }
 
-          $scope.invoiceTable = new NgTableParams({}, { dataset: response.data });
-
-        } else {
-          $scope.showInvoicesTable = false;
-          $scope.invoicesMessage = "No contracts to display";
-        }
-      }, function(error) {
-        console.log(error);
-      });
+  function displayInvoices() {
+    $scope.invoiceTable = new NgTableParams({}, { dataset: $scope.invoices });
   };
 
-  $scope.editInvoice = function(newInvoice) {
-    console.log(newInvoice);
-    invoiceFileService.editInvoice(newInvoice)
+  $scope.getUnvalidatedInvoices = function() {
+    invoiceFileService.getUnvalidatedInvoices()
+    .then(function(response) {
+      if (response.data.length !== 0) {
+        $scope.showUnvalidatedInvoices = true;
+        $scope.unvalidatedInvoices = response.data;
+        displayUnvalidatedInvoices();
+
+      } else {
+        $scope.showUnvalidatedInvoices = false;
+        $scope.unvalidatedInvoicesMessage = "All invoices validated";
+      }
+    }, function(error) {
+      $scope.showUnvalidatedInvoices = false;
+      $scope.unvalidatedInvoicesMessage = "All invoices validated";
+    });
+  }
+
+  function displayUnvalidatedInvoices() {
+    $scope.unvalidatedInvoiceTable = new NgTableParams({}, { dataset: $scope.unvalidatedInvoices });
+  };
+
+  $scope.saveInvoice = function(invoice) {
+    invoiceFileService.editInvoice(invoice)
       .then(function(response) {
         console.log(response);
       }, function(error) {
         console.log(error);
       });
-  };
+  }
+
+  $scope.validateInvoice = function(invoiceId) {
+    invoiceFileService.validateInvoice(invoiceId)
+      .then(function(response) {
+        $scope.getInvoices();
+        $scope.getUnvalidatedInvoices();
+      }, function(error) {
+        console.log(error);
+      });
+  }
+
 
   $scope.feedback = function(invoiceId, field) {
-
     invoiceFileService.sendFeedback(invoiceId, field)
       .then(function(response) {
         console.log(response);
@@ -128,9 +163,5 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
       });
 
   };
-
-
-
-
 
 });

@@ -89,24 +89,48 @@
 
     <div class="col-md-12 col-sm-12 mt-2">
       <div class="card">
-        <h5 class="card-header">Validate Data</h5>
+        <h5 class="card-header">Validate Invoices</h5>
         <div class="card-body m-0" style="max-width: 100%; overflow-x: auto;">
-          <ul>
+          <ul ng-hide="!showUnvalidatedInvoices">
             <li>Click view to view image of your invoice.</li>
             <li>Validate the extractions for each column and make edits if necessary.</li>
             <li>Click confirm on the right once changes are made</li>
             <li>Click on the checkbox below each cell if it incorrect.</li>
             <li>Click complete once you have verified the data.</li>
           </ul>
-          <p ng-hide="showInvoicesTable">{{ invoicesMessage }}</p>
-          <table ng-table="invoiceTable" ng-hide="!showInvoicesTable" class="table table-condensed table-bordered table-striped" ng-init="displayInvoices()">
+          <p ng-hide="showUnvalidatedInvoices">{{ unvalidatedInvoicesMessage }}</p>
+          <table ng-table="unvalidatedInvoiceTable" ng-hide="!showUnvalidatedInvoices" class="table table-condensed table-bordered table-striped" ng-init="getUnvalidatedInvoices()">
             <tbody>
               <tr ng-repeat="row in $data">
-                <td title="'file name'">{{ row.originalFile.fileName }}</td>
-                <td title="'currency'"><input ng-model="row.currency"/> <input type="checkbox" ng-click="feedback(row._id, 'currency')"></td>
-                <td title="'amount_total'"><input ng-model="row.fields.amount_total[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'amount_total')"></td>
-                <td title="'amount_due'"><input ng-model="row.fields.amount_due[0].value" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'amount_due')"></td>
-                <td title="'amount_total_tax'"><input ng-model="row.fields.amount_total_tax[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'amount_total_tax')"></td>
+                <td title="'file name'">{{ row.originalFileName }}</td>
+                <td title="'currency'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.currency }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.currency" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'currency')">
+                  </div>
+                </td>
+                <td title="'amount_total'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.amount_total }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.amount_total" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'amount_total')">
+                  </div>
+                </td>
+                <td title="'amount_due'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.amount_due }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.amount_due" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'amount_due')">
+                  </div>
+                </td>
+                <td title="'amount_total_tax'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.amount_total_tax }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.amount_total_tax" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'amount_total_tax')">
+                  </div>
+                </td>
                 <!-- <td title="'amount_total_base'"><input ng-model="row.fields.amount_total_base"/></td> -->
                 <!-- <td title="'amount_rounding'"><input ng-model="row.fields.amount_rounding"/></td> -->
                 <!-- <td title="'amount_paid'"><input ng-model="row.fields.amount_paid"/></td> -->
@@ -118,15 +142,108 @@
                 <!-- <td title="'invoice_id'"><input ng-model="row.fields.invoice_id"/></td> -->
                 <!-- <td title="'order_id'"><input ng-model="row.fields.order_id"/></td> -->
                 <!-- <td title="'customer_id'"><input ng-model="row.fields.customer_id"/></td> -->
-                <td title="'date_issue'"><input ng-model="row.fields.date_issue[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'date_issue')"></td>
-                <td title="'date_due'"><input ng-model="row.fields.date_due[0].value"/> <input type="checkbox" ng-click="feedback(row._id, 'date_due')"></td>
-                <td title="'terms'"><input ng-repeat="i in row.fields.terms" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'terms')"></td>
-                <td title="'sender_name'"><input ng-repeat="i in row.fields.sender_name" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'sender_name')"></td>
-                <td title="'sender_addrline'"><input ng-repeat="i in row.fields.sender_addrline" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'sender_addrline')"></td>
+                <td title="'date_issue'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{row.date_issue}}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.date_issue" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'date_issue')">
+                  </div>
+                </td>
+                <td title="'date_due'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{row.date_due}}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.date_due" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'date_due')">
+                  </div>
+                </td>
+                <td title="'terms'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.terms }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.terms" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'terms')">
+                  </div>
+                </td>
+                <td title="'sender_name'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.sender_name }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.sender_name" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'sender_name')">
+                  </div>
+                </td>
+                <td title="'sender_addrline'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.sender_addrline }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.sender_addrline" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'sender_addrline')">
+                  </div>
+                </td>
                 <!-- <td title="'sender_dic'"><input ng-model="row.fields.sender_dic"/></td> -->
-                <td title="'recipient_name'"><input ng-repeat="i in row.fields.recipient_name" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'recipient_name')"></td>
-                <td title="'recipeint_addrline'"><input ng-repeat="i in row.fields.recipient_addrline" ng-model="i.value"/> <input type="checkbox" ng-click="feedback(row._id, 'recipeint_addrline')"></td>
-                <td title="'edit row'"><a href="" ng-click="editInvoice(row)">Confirm</a></td>
+                <td title="'recipient_name'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.recipient_name }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.recipient_name" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'recipient_name')">
+                  </div>
+                </td>
+                <td title="'recipient_addrline'" ng-switch="row.isEditing">
+                  <span ng-switch-default class="editable-text">{{ row.recipient_addrline }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.recipient_addrline" class="editable-input form-control input-sm" />
+                    <input type="checkbox" ng-click="feedback(row._id, 'recipient_addrline')">
+                  </div>
+                </td>
+                <!-- <td title="'edit row'"><a href="" ng-click="editInvoice(row)">Confirm</a></td> -->
+                <td>
+                  <button class="btn btn-primary btn-sm" ng-click="(row.isEditing = false); saveInvoice(row)" ng-if="row.isEditing">Done</button>
+                  <!-- <button class="btn btn-default btn-sm" ng-click="getUnvalidatedContracts()" ng-if="row.isEditing">Remove</button> -->
+                  <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing">Edit</button>
+                  <button class="btn btn-primary btn-sm" ng-click="viewInvoice(row._id)">View</button>
+                </td>
+                <td><button class="btn btn-primary btn-sm" ng-click="validateInvoice(row._id)">Verify</button>
+                <td><a href="" ng-click="deleteInvoice(row._id)"><i class="fas fa-trash"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12 col-sm-12 mt-2">
+      <div class="card">
+        <h5 class="card-header">All Invoices</h5>
+        <div class="card-body m-0" style="max-width: 100%; overflow-x: auto;">
+          <p ng-hide="showInvoices">{{ invoicesMessage }}</p>
+          <table ng-table="invoiceTable" ng-hide="!showInvoices" class="table table-condensed table-bordered table-striped" ng-init="getInvoices()">
+            <tbody>
+              <tr ng-repeat="row in $data">
+                <td title="'file name'" filter="{originalFileName: 'text'}" sortable="'originalFileName'">{{ row.originalFileName }}</td>
+                <td title="'currency'" filter="{currency: 'text'}" sortable="'currency'">{{ row.currency }}</td>
+                <td title="'amount_total'" filter="{amount_total: 'text'}" sortable="'amount_total'">{{ row.amount_total | number:2 }}</td>
+                <td title="'amount_due'" filter="{amount_due: 'text'}" sortable="'amount_due'">{{ row.amount_due | number:2 }}</td>
+                <td title="'amount_total_tax'" filter="{amount_total_tax: 'text'}" sortable="'amount_total_tax'">{{ row.amount_total_tax | number:2 }}</td>
+                <!-- <td title="'amount_total_base'"><input ng-model="row.fields.amount_total_base"/></td> -->
+                <!-- <td title="'amount_rounding'"><input ng-model="row.fields.amount_rounding"/></td> -->
+                <!-- <td title="'amount_paid'"><input ng-model="row.fields.amount_paid"/></td> -->
+                <!-- <td title="'tax_detail'"><input ng-model="row.fields.tax_details"/></td> -->
+                <!-- <td title="'tax_detail_base'"><input ng-model="row.fields.tax_details_base"/></td> -->
+                <!-- <td title="'tax_detail_rate'"><input ng-model="row.fields.tax_detail_rate"/></td> -->
+                <!-- <td title="'tax_detail_tax'"><input ng-model="row.fields.tax_detail_tax"/></td> -->
+                <!-- <td title="'tax_detail_total'"><input ng-model="row.fields.tax_detail_total"/></td> -->
+                <!-- <td title="'invoice_id'"><input ng-model="row.fields.invoice_id"/></td> -->
+                <!-- <td title="'order_id'"><input ng-model="row.fields.order_id"/></td> -->
+                <!-- <td title="'customer_id'"><input ng-model="row.fields.customer_id"/></td> -->
+                <td title="'date_issue'" filter="{date_issue: 'text'}" sortable="'date_issue'">{{row.date_issue | date}}</td>
+                <td title="'date_due'" filter="{date_due: 'text'}" sortable="'date_due'">{{row.date_due | date}}</td>
+                <td title="'terms'" filter="{terms: 'text'}">{{ row.terms }}</td>
+                <td title="'sender_name'" filter="{sender_name: 'text'}">{{ row.sender_name }}</td>
+                <td title="'sender_addrline'" filter="{sender_addrline: 'text'}">{{ row.sender_addrline }}</td>
+                <!-- <td title="'sender_dic'"><input ng-model="row.fields.sender_dic"/></td> -->
+                <td title="'recipient_name'" filter="{recipient_name: 'text'}">{{ row.recipient_name }}</td>
+                <td title="'recipient_addrline'" filter="{recipient_addrline: 'text'}">{{ row.recipient_addrline }}</td>
                 <td title="'delete row'"><a href="" ng-click="deleteContract(row._id)"><i class="fas fa-trash"></i></a></td>
               </tr>
             </tbody>

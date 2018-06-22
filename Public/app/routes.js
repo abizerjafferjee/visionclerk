@@ -55,6 +55,47 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: true}
   })
 
+  .when('/inventory', {
+    templateUrl: 'app/views/pages/inventory/inventoryManager.html',
+    controller: 'inventoryController',
+    access: {restricted: true}
+  })
+
+  .when('/categories', {
+    templateUrl: 'app/views/pages/inventory/categories.html',
+    controller: 'consoleController',
+    access: {restricted: true}
+  })
+
+  .when('/categories/:category_id', {
+    templateUrl: 'app/views/pages/inventory/category.html',
+    controller: 'categoryController',
+    access: {restricted: true}
+  })
+
+  .when('/inventory/category/update/:category_id', {
+    templateUrl: 'app/views/pages/inventory/updateCategory.html',
+    controller: 'updateCategoryController',
+    access: {restricted: true}
+  })
+
+  .when('/inventory/product/update/:product_id', {
+    templateUrl: 'app/views/pages/inventory/updateProduct.html',
+    controller: 'updateProductController',
+    access: {restricted: true}
+  })
+
+
+  .when('/inventory/category/create', {
+    templateUrl: 'app/views/pages/inventory/createCategory.html',
+    access: {restricted: true}
+  })
+
+  .when('/inventory/product/create', {
+    templateUrl: 'app/views/pages/inventory/createProduct.html',
+    access: {restricted: true}
+  })
+
   .otherwise({
     redirectTo: '/',
     access: {restricted: false}

@@ -33,6 +33,10 @@
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="stylesheet"; href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+    <link rel='stylesheet' type="text/css" href='assets/css/textAngular.css'>
+
+    <!-- RICH TEXT EDITOR -->
+
 
     <!-- Main Angular Files -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -41,6 +45,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-animate.min.js"></script>
     <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.1.2/textAngular.min.js'></script>
 
 
     <!-- Angular config/Routes -->
@@ -52,11 +57,17 @@
     <script src="app/controllers/accountControllers.js"></script>
     <script src="app/controllers/dataControllers/contractController.js"></script>
     <script src="app/controllers/dataControllers/invoiceController.js"></script>
+    <script src="app/controllers/inventoryControllers/inventoryController.js"></script>
+    <script src="app/controllers/inventoryControllers/categoryController.js"></script>
+    <script src="app/controllers/inventoryControllers/consoleController.js"></script>
+    <script src="app/controllers/inventoryControllers/updateCategoryController.js"></script>
+    <script src="app/controllers/inventoryControllers/updateProductController.js"></script>
 
     <!-- Angular Services -->
     <script src="app/services/authServices.js"></script>
     <script src="app/services/fileServices.js"></script>
     <script src="app/services/accountServices.js"></script>
+    <script src="app/services/inventoryServices/inventoryService.js"></script>
 
     <!-- Angular Directives -->
     <script src="app/directives/fileDirectives.js"></script>
@@ -70,7 +81,6 @@
 
   <body ng-app='userApp'>
 
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -83,6 +93,9 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="/login" ng-hide="showUser">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="/register" ng-hide="showUser">Register</a></li>
+
+            <li class="nav-item"><a class="nav-link" href="/inventory" ng-hide="!showUser">Inventory Manager</a></li>
+            <li class="nav-item"><a class="nav-link" href="/categories" ng-hide="!showUser">Categories</a></li>
 
             <li class="nav-item dropdown" ng-hide="!showUser">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -121,7 +134,7 @@
       </div>
     </nav>
 
-    <div style="background-color:#D3D3D3; min-height: 100vh; margin:0px;" ng-view></div>
+    <div style="background-color:#EBFAFF; min-height: 100vh; margin:0px;" ng-view></div>
 
     <!-- FOOTER -->
     <footer class="page-footer bg-dark m-0">
@@ -130,6 +143,6 @@
       </div>
     </footer>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
   </body>
 </html>

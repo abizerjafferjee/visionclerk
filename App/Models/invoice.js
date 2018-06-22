@@ -6,126 +6,38 @@ var bcrypt   = require('bcrypt-nodejs');
 var invoiceSchema = new mongoose.Schema({
   currency: {type: String},
   text: {type: String},
-  fields: {
-    amount_total: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    amount_total_base: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    amount_total_tax: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    amount_rounding: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    amount_paid: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    amount_due: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    tax_details: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    // tax_details_base: [String],
-    // tax_detail_rate: [String],
-    // tax_detail_tax: [String],
-    // tax_detail_total: [String],
-    invoice_id: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    order_id: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    customer_id: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    date_issue: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    date_due: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    terms: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    sender_name: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    sender_addrline: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    sender_dic: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    recipient_name: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }],
-    recipient_addrline: [{
-      title: {type: String},
-      content: {type: String},
-      value: {type: String},
-      value_type: {type: String}
-    }]
-  },
+  amount_total: {type: String},
+  amount_total_base: {type: String},
+  amount_total_tax: {type: String},
+  amount_rounding: {type: String},
+  amount_paid: {type: String},
+  amount_due: {type: String},
+  // tax_details: [{
+  //   title: {type: String},
+  //   content: {type: String},
+  //   value: {type: String},
+  //   value_type: {type: String}
+  // }],
+  // tax_details_base: [String],
+  // tax_detail_rate: [String],
+  // tax_detail_tax: [String],
+  // tax_detail_total: [String],
+  invoice_id: {type: String},
+  order_id: {type: String},
+  customer_id: {type: String},
+  date_issue: {type: String},
+  date_due: {type: String},
+  terms: {type:String},
+  sender_name: {type: String},
+  sender_addrline: {type: String},
+  sender_dic: {type: String},
+  recipient_name: {type: String},
+  recipient_addrline: {type: String},
+  validated: {type: Boolean},
   processingId: {type: String},
   processStatus: {type: Boolean},
-  originalFile: {
-    fileName: {type: String},
-    fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"File"}
-  },
+  originalFileName: {type: String},
+  fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"File"},
   user: {type: mongoose.Schema.Types.ObjectId, ref:"User"}
 });
 

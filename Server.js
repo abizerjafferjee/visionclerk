@@ -50,6 +50,7 @@ var authRoutes = require('./app/routes/auth.js');
 var contractRoutes = require('./app/routes/contract.js');
 var invoiceRoutes = require('./app/routes/invoice.js');
 var accountRoutes = require('./app/routes/account.js');
+var inventoryRoutes = require('./app/routes/inventory.js');
 
 // middleware
 app.use(express.static(path.join(__dirname)));
@@ -78,6 +79,7 @@ app.use('/user/', authRoutes);
 app.use('/contract/', contractRoutes);
 app.use('/invoice/', invoiceRoutes);
 app.use(accountRoutes);
+app.use('/inventory/', inventoryRoutes);
 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, '/Public/app/views/index.html'));

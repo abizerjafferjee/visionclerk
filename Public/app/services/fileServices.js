@@ -176,10 +176,37 @@ userApp.service('invoiceFileService', function ($http, $q) {
     return deffered.promise;
   };
 
+  this.getUnvalidatedInvoices = function() {
+
+    var deffered = $q.defer();
+    $http.get('/invoice/unvalidatedInvoices')
+      .then(function(response) {
+        deffered.resolve(response);
+      }, function(error) {
+        deffered.reject();
+      });
+
+    return deffered.promise;
+  };
+
   this.editInvoice = function(newInvoice) {
 
     var deffered = $q.defer();
     $http.post('/invoice/edit', {invoice:newInvoice})
+      .then(function(response) {
+        deffered.resolve(response);
+      }, function(error) {
+        deffered.reject();
+      });
+
+    return deffered.promise;
+
+  };
+
+  this.validateInvoice = function(invoiceId) {
+
+    var deffered = $q.defer();
+    $http.post('/invoice/validate', {id:invoiceId})
       .then(function(response) {
         deffered.resolve(response);
       }, function(error) {
