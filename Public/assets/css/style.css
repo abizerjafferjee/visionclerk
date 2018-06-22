@@ -1,15 +1,26 @@
+/* html, body { height: 100%; width: 100%; margin: 0; } */
+
 main {
   paddin-top:30px;
 }
 
-header.navbar {
+table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.ng-table-pager {
+    display: none;
+}
+
+/* header.navbar {
   border-radius:0;
 }
 
 li {
   display: inline;
   padding: 0px 20px 0px 30px;
-}
+} */
 
 a {
   color: #6b61f4;
@@ -26,10 +37,10 @@ a:visited {
   text-decoration: none;
 }
 
-body {
+/* body {
   height: 100%;
   min-height: 100%;
-}
+} */
 
 .reset {
   float: right;
@@ -42,60 +53,22 @@ body {
    bottom: 0px;
 }
 
-.button_list {
+/* .button_list {
   background-color: white;
   border: none;
   display: inline;
-}
+} */
 
-.loader {
+/* .loader {
   border: 10px solid #6b61f4;
   border-radius: 50%;
   border-top: 10px solid #2a087a;
   width: 50px;
   height: 50px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
+  -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
-}
-
-.show-hide-message.ng-hide-remove {
-  -webkit-animation:zoomIn 0.3s both ease;
-  -moz-animation: zoomIn 0.3s both ease;
-  animation:zoomIn 0.3s both ease;
-}
-
-.spinner {
-  -webkit-animation:spin 1s infinite;
-  -moz-animation:spin 1s infinite;
-  animation:spin 1s infinite;
-}
-
-@keyframes spin {
-  from {transform: rotate(0deg);}
-  to { transform: rotate(360deg);}
-}
-
-@-webkit-keyframes spin {
-  from {-webkit-transform:rotate(0deg);}
-  to {-webkit-transform:rotate(360deg);}
-}
-
-@-moz-keyframes spin {
-  from {-moz-transform:rotate(0deg);}
-  to {-moz-transform:rotate(360deg);}
-}
-
-/* @landing_resgister {
-  background-color:#3445DB;
-  border-radius: 12px;
-  border: 2px solid #3445DB;
-  color: white;
-  padding: 10px 15px 10px 15px;
 } */
 
-@vertical_line {
-  border-left: thick solid #ff0000;
-}
 
 /* ICOMOON */
 @font-face {
@@ -108,52 +81,6 @@ body {
   font-weight: normal;
   font-style: normal;
 }
-
-[class^="icon-"], [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-checkbox-unchecked:before {
-  content: "\ea53";
-  color: #6b61f4;
-  font-size: 30px;
-}
-.icon-mail4:before {
-  content: "\ea86";
-}
-.icon-google-plus3:before {
-  content: "\ea8d";
-}
-.icon-facebook2:before {
-  content: "\ea91";
-}
-/*Icon for Search engine*/
-.icon-search:before {
-  content: "\e007";
-  color: #6b61f4;
-  font-size: 30px;
-}
-
-/*Icon for Easy query*/
-.icon-genius:before {
-  content: "\e046";
-  color: #6b61f4;
-  font-size: 30px;
-}
-
-/* Abizer Additions */
-/* Index Page */
 
 ::-webkit-scrollbar {
     width: 5px;
