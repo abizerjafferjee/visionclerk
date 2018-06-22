@@ -1,3 +1,4 @@
+
 userApp.config(function($routeProvider, $locationProvider){
   $locationProvider.hashPrefix('');
   $locationProvider.html5Mode(true);
@@ -54,6 +55,16 @@ userApp.config(function($routeProvider, $locationProvider){
     controller: 'accountController',
     access: {restricted: true}
   })
+  
+  .when('/about', {
+    templateUrl: 'app/views/pages/about.html',
+    access: {restricted: false}
+  })
+
+  .when('/contact', {
+    templateUrl: 'app/views/pages/contact.html',
+    access: {restricted: false}
+  })
 
   .when('/inventory', {
     templateUrl: 'app/views/pages/inventory/inventoryManager.html',
@@ -95,9 +106,3 @@ userApp.config(function($routeProvider, $locationProvider){
     templateUrl: 'app/views/pages/inventory/createProduct.html',
     access: {restricted: true}
   })
-
-  .otherwise({
-    redirectTo: '/',
-    access: {restricted: false}
-  });
-});

@@ -233,3 +233,29 @@ userApp.service('invoiceFileService', function ($http, $q) {
 
 
 });
+
+userApp.service('accountsPayableFileService', function ($http, $q) {
+
+  this.uploadFilesToUrl = function (files) {
+
+      var fileFormData = new FormData();
+      for (var i=0; i<files.length; i++) {
+        fileFormData.append("uploads[]", files[i], files[i]['name']);
+      }
+
+      var deffered = $q.defer();
+      //console.log("1");
+      $http.post('/invoice/upload', fileFormData, {
+          transformRequest: angular.identity,
+          headers: {'Content-Type': undefined}
+
+      }).then(function (response) {
+          deffered.resolve(response);
+      }, function(error) {
+        deffered.reject();
+      });
+
+      return deffered.promise;
+  };
+
+});
