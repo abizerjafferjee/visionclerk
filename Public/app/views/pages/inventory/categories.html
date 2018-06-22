@@ -1,0 +1,16 @@
+<div class="container-fluid m-0 p-2" ng-init="getCategories()">
+  <h1 class="text-center p-5">Categories</h1>
+
+      <div class="row">
+        <table ng-table="categoryTable" class="table table-condensed table-hover table-bordered table-active">
+          <tbody class="text-center">
+            <tr ng-repeat="row in $data">
+              <td title="'category'" sortable="'category'" filter="{category: 'text'}"><a href="/categories/{{row._id}}">{{ row.category }}</a></td>
+              <td title="'industry'" sortable="'industry'" filter="{industry: 'text'}">{{ row.industry }}</td>
+              <td title="'count'">{{ row.products.length }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
+<!--<li ng-repeat="a in categoryData">{{a.category}}</li>-->

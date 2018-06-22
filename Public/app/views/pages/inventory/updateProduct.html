@@ -1,0 +1,76 @@
+<div class="container-fluid m-0 p-2" ng-init="getProduct()">
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Product</h1>
+          <p class="lead">Update a product</p>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/inventory">Inventory Manager</a></li>
+            <li class="breadcrumb-item active" aria-current="">Update Product</li>
+          </ol>
+      </div>
+  </div>
+
+  <div class="row m-2">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="card w-100">
+        <div class="card-body">
+          <div ng-show="showProductError" class="alert alert-danger">{{productError}}</div>
+          <div ng-show="showProductMessage" class="alert alert-success">{{productMessage}}</div>
+          <form class="form" ng-submit="createProduct()">
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" class="form-control" name="company" ng-model="productForm.company" list="companies" required>
+              <datalist id="companies">
+                <option ng-repeat="comp in allCompanies">{{ comp }}</option>
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label>Company Logo</label>
+              <input type="text" class="form-control" name="logo" ng-model="productForm.logo">
+            </div>
+            <div class="form-group">
+              <label>Company Description</label>
+              <text-angular name="description" ng-model="productForm.companydesc"></text-angular>
+            </div>
+
+            <div class="form-group">
+              <label>Product Name</label>
+              <input type="text" class="form-control" name="product" ng-model="productForm.product" list="products" required>
+              <datalist id="products">
+                <option ng-repeat="prod in allProducts">{{ prod }}</option>
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label>Product Image</label>
+              <input type="text" class="form-control" name="product" ng-model="productForm.img">
+            </div>
+            <div class="form-group">
+              <label>Product Content</label>
+              <text-angular name="content" ng-model="productForm.content"></text-angular>
+            </div>
+
+            <div class="form-group">
+              <label>Category Name</label>
+              <select name="category" ng-model="productForm.category">
+                <option ng-repeat="cat in allCategories">{{ cat }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Industry Name</label>
+              <select name="industry" ng-model="productForm.industry">
+                <option ng-repeat="ind in allIndustries">{{ ind }}</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary" ng-disabled="disabled" ng-click="updateProduct()">Update</button>
+            </div>
+          </form>
+          <a href="/inventory/product/create"><button class="btn btn-default" ng-disabled="disabled">Add New Product</button></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+</div>

@@ -1,0 +1,51 @@
+<div class="container-fluid m-0 p-2" ng-init="updateCategoryInitial()">
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Category</h1>
+          <p class="lead">Update a category</p>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/inventory">Inventory Manager</a></li>
+            <li class="breadcrumb-item active" aria-current="">Update Category</li>
+          </ol>
+      </div>
+  </div>
+
+  <div class="row m-2">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="card w-100">
+          <div class="card-body">
+            <div ng-show="showError" class="alert alert-danger">{{error}}</div>
+            <div ng-show="showMessage" class="alert alert-success">{{message}}</div>
+            <form class="form" ng-submit="updateCategory()">
+              <div class="form-group">
+                <label>Category Name</label>
+                <!-- <input type="text" class="form-control" ng-model="categoryForm.category" name="category" list="categories"> -->
+                <select ng-model="categoryForm.category">
+                  <option ng-repeat="cat in allCategories">{{ cat }}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Industry Name</label>
+                <!-- <input ty÷÷pe="text" class="form-control" ng-model="categoryForm.industry" placeholder="{{currentIndustry}}" name="industry" list="industries"> -->
+                <select ng-model="categoryForm.industry">
+                  <option ng-repeat="ind in allIndustries">{{ ind }}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Content</label>
+                <text-angular name="htmlcontent" ng-model="categoryForm.content"></text-angular>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-primary" ng-disabled="disabled">Update</button>
+              </div>
+            </form>
+
+            <a href="/inventory/category/create"><button class="btn btn-default">Add New Category</button></a>
+
+          </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
