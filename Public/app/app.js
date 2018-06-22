@@ -1,4 +1,4 @@
-var userApp = angular.module('userApp', ['ngRoute', 'ngTable']);
+var userApp = angular.module('userApp', ['ngRoute', 'ngTable', 'textAngular']);
 
 userApp.run(['$rootScope', '$location', '$route', 'AuthService', '$window', function($rootScope, $location, $route, AuthService, $window) {
 

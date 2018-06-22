@@ -1,0 +1,66 @@
+<div class="container-fluid m-0 p-2">
+
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Inventory Management</h1>
+          <p class="lead">Create, Update and Delete Categories and Products</p>
+      </div>
+  </div>
+
+  <div class="row m-2">
+
+    <div class="card w-100" style="height:800px;">
+      <h5 class="card-header">Manage Categories</h5>
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="mr-auto p-2">{{categoryData.length}} Categories</div>
+            <div class="p-2"><a href="/inventory/category/create"><button type="submit" class="btn btn-default ml-3" ng-disabled="disabled">Create Category</button></a></div>
+          </div>
+          <table ng-table="categoryTable" class="table table-condensed table-bordered table-striped">
+            <tbody>
+
+              <tr ng-repeat="row in $data">
+                <td title="'category'" sortable="'category'" filter="{category: 'text'}">{{ row.category }}</td>
+                <td title="'industry'" sortable="'industry'" filter="{industry: 'text'}">{{ row.industry }}</td>
+                <td title="'count'" sortable="'count'">{{ row.products.length }}</td>
+                <td><a class="btn btn-default btn-sm" href="/inventory/category/update/{{row._id}}">Update</a></td>
+                <td><a ng-click="deleteCategory(row._id)"><i class="fas fa-trash"></i></a></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </h5>
+    </div>
+
+
+  </div>
+
+  <div class="row m-2">
+
+
+      <div class="card w-100" style="height:800px;">
+        <h5 class="card-header">Manage Categories</h5>
+          <div class="card-body">
+            <div class="d-flex">
+              <div class="mr-auto p-2">{{productsData.length}} Products</div>
+              <div class="p-2"><a href="/inventory/product/create"><button type="submit" class="btn btn-default ml-3" ng-disabled="disabled">Create Product</button></a></div>
+            </div>
+            <table ng-table="productsTable" class="table table-condensed table-bordered table-striped">
+              <tbody>
+                <tr ng-repeat="row in $data">
+                  <td title="'company'" sortable="'company'" filter="{company: 'text'}">{{ row.company }}</td>
+                  <td title="'product'" sortable="'product'" filter="{product: 'text'}">{{ row.product }}</td>
+                  <td title="'category'" sortable="'category'" filter="{category: 'text'}">{{ row.category }}</td>
+                  <td><a class="btn btn-default btn-sm" href="/inventory/product/update/{{row._id}}">Update</a></td>
+                  <td><a ng-click="deleteProduct(row._id)"><i class="fas fa-trash"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </h5>
+      </div>
+  </div>
+
+
+</div>
