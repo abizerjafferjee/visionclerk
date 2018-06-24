@@ -95,3 +95,118 @@ a:visited {
 ::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    font-family: "Lato", sans-serif;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#sideBarHeader {
+
+    font-family: "Lato", sans-serif;
+    color: white;
+
+}
+
+.sideNavContent:hover {
+
+    background-color: black;
+    border: 1px solid grey;
+    border-radius: 25px;
+
+}
+
+#sideNavDivider {
+
+    display: block;
+    height: 1px;
+    border: 0;
+    padding: 0;
+    border-top: 1px solid grey;
+
+}
+
+#homeIcon {
+
+    margin-right: 9px;
+
+}
+
+#loginIcon {
+
+    margin-right: 9px;
+
+}
+
+#contactIcon {
+
+    margin-right: 9px;
+
+}
+
+#companyIcon {
+
+    margin-right: 9px;
+
+}
+
+#registerIcon {
+
+    margin-right: 9px;
+
+}
+
+#sideNavLogo {
+
+    height: 35px;
+    width: 55px;
+    margin-right: 3px;
+
+}
+
+#analyticsIcon {
+
+    margin-right: 9px;
+
+}
+
+#dataIcon {
+
+    margin-right: 9px;
+
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

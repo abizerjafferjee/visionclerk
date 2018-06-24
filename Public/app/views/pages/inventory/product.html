@@ -1,0 +1,38 @@
+<div class="container-fluid m-0 p-2">
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+          <div class="media">
+            <img class="mr-3" src="{{product.logo}}" height="64" width="64" alt="Generic placeholder image">
+            <div class="media-body">
+              <h3 class="mt-2">{{ product.company }}</h3>
+            </div>
+          </div>
+          <!-- <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold"></h1> -->
+          <!-- <p class="lead">{{industryName}}</p> -->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Console</a></li>
+            <li class="breadcrumb-item"><a href="/categories">Categories</a></li>
+            <li class="breadcrumb-item"><a href="/categories/{{ product.category_id }}">{{ product.category }}</a></li>
+            <li class="breadcrumb-item active" aria-current="">{{ product.company }}</li>
+          </ol>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-6">
+      <h4>About Company</h4>
+      <p ng-bind-html="product.company_desc"></p>
+      <h4>{{ product.product }}</h4>
+      <p ng-bind-html="product.content"></p>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <img src="{{ product.product_img }}" height="300" width="400">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

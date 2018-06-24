@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 var validate = require('mongoose-validator');
 var bcrypt   = require('bcrypt-nodejs');
 
-
 var contractSchema = new mongoose.Schema({
   organization: {type:String},
   party: {type:String},

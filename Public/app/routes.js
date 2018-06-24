@@ -9,6 +9,12 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: false}
   })
 
+  .when('/admin/register', {
+    templateUrl : 'app/views/pages/users/adminregister.html',
+    controller : 'adminController',
+    access: {restricted: false}
+  })
+
   .when('/register', {
     templateUrl : 'app/views/pages/users/register.html',
     controller : 'registerController',
@@ -55,7 +61,7 @@ userApp.config(function($routeProvider, $locationProvider){
     controller: 'accountController',
     access: {restricted: true}
   })
-  
+
   .when('/about', {
     templateUrl: 'app/views/pages/about.html',
     access: {restricted: false}
@@ -84,6 +90,12 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: true}
   })
 
+  .when('/products/:product_id', {
+    templateUrl: 'app/views/pages/inventory/product.html',
+    controller: 'productController',
+    access: {restricted: true}
+  })
+
   .when('/inventory/category/update/:category_id', {
     templateUrl: 'app/views/pages/inventory/updateCategory.html',
     controller: 'updateCategoryController',
@@ -106,3 +118,10 @@ userApp.config(function($routeProvider, $locationProvider){
     templateUrl: 'app/views/pages/inventory/createProduct.html',
     access: {restricted: true}
   })
+
+  .otherwise({
+    redirectTo: '/',
+    access: {restricted: false}
+  });
+
+});

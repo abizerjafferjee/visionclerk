@@ -8,6 +8,7 @@ var userSchema = new mongoose.Schema({
   password: {type: String, required: true},
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  role: String
   // account: {type: mongoose.Schema.Types.ObjectId, ref:"Account", required: true}
 });
 

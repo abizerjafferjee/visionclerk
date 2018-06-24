@@ -6,19 +6,46 @@ var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var User = require('../Models/user.js');
 var Account = require('../Models/account.js');
+var Access = require('../Models/access.js');
+
+// register user
+router.post('/admin/register', function(req, res) {
+  
+  var user = new User({
+    email: req.body.email,
+    username: req.body.username,
+    password: req.body.password,
+    role: 'admin'
+  });
+
+  user.save(function(err) {
+    req.logIn(user, function(err) {
+      if(err) {
+        return res.status(500).json({
+          err: err
+        });
+      }
+
+      res.status(200).json({
+        status: 'Registration successful'
+      });
+
+    });
+  });
+});
 
 // register user
 router.post('/register', function(req, res) {
   var user = new User({
     email: req.body.email,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    role: 'user'
   });
 
   user.save(function(err) {
     req.logIn(user, function(err) {
       if(err) {
-        console.log("ERRR");
         return res.status(500).json({
           err: err
         });
@@ -28,7 +55,7 @@ router.post('/register', function(req, res) {
       var account = new Account({
         userName: user.username,
         emailAddress: user.email,
-        role: 'Analyst',
+        role: 'user',
         plan: 'Basic',
         user: user
       }).save(function(err) {

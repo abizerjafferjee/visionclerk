@@ -39,6 +39,8 @@ userApp.controller('inventoryController', function ($scope, inventoryService, Ng
             $scope.allIndustries.push(response.data.categories[i]["industry"]);
           }
         }
+      } else {
+        // No permissions Response
       }
 
     });
@@ -51,6 +53,8 @@ userApp.controller('inventoryController', function ($scope, inventoryService, Ng
     .then(function(response) {
       if (response.data.success) {
         $scope.getCategories();
+      } else {
+        // No permission response
       }
     });
   }
@@ -100,6 +104,8 @@ userApp.controller('inventoryController', function ($scope, inventoryService, Ng
           $scope.productsTable = new NgTableParams({}, { dataset: response.data.data });
           $scope.allCompanies = response.data.data.map(x => x['company']);
           $scope.allProducts = response.data.data.map(x => x['product']);
+        } else {
+          // no permissions response
         }
       });
   };
@@ -111,6 +117,8 @@ userApp.controller('inventoryController', function ($scope, inventoryService, Ng
     .then(function(response) {
       if (response.data.success) {
         $scope.getProducts();
+      } else {
+        // no permissions response
       }
     });
   }
