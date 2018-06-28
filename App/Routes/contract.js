@@ -8,6 +8,7 @@ var Discovery = require('watson-developer-cloud/discovery/v1');
 var NaturalLanguageUnderstanding = require('watson-developer-cloud/natural-language-understanding/v1');
 var fs = require('fs');
 var pdf = require('pdf-parse');
+var helpers = require('../Routes/helpers.js');
 
 // Watson NLU configurations
 var nlu = new NaturalLanguageUnderstanding({
@@ -16,32 +17,11 @@ var nlu = new NaturalLanguageUnderstanding({
   password: 'Bv5Vux8OhgB4'
 });
 
-// multer function to store a file
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads/')
-  },
-  filename: function(req, file, cb) {
-    if (!file.originalname.match(/\.(pdf|doc|docx|html)$/)) {
-      var err = new Error();
-      err.code = 'filetype';
-      return cb(err);
-    } else {
-      var fileName = Date.now() + '_' + file.originalname;
-      var relPath = '/uploads/' + fileName;
-      cb(null, fileName);
-    }
-  }
-});
-
-// multer middleware function for storage and limits configurations
-var upload = multer({storage: storage}).array("uploads[]");
-
 router.post('/upload', function(req, res) {
 
   // upload files uploads file to storage, if successful it uploads to watson
   // and stores in mongo
-  upload(req, res, function(err) {
+  helpers.uploads.contractUpload(req, res, function(err) {
     if(err) {
       if (err.code === 'filetype') {
         res.json({success: false, message: "File type is invalid. Upload pdf, word, html."});
@@ -53,12 +33,12 @@ router.post('/upload', function(req, res) {
         res.json({success: false, message: "No files. Please select files."});
       } else {
 
+        var filesProcessed = req.files.length;
         // if files are uploaded to diskStorage; iterate through each file
         // store file to storage and mongo
         // send to nlu and store call back to mongo
         for (var i=0; i<req.files.length; i++) {
 
-          var filesProcessed = req.files.length;
 
           var filePath = req.files[i].path;
           var originalName = req.files[i].originalname;
@@ -69,107 +49,66 @@ router.post('/upload', function(req, res) {
             filePath: req.files[i].path,
             size: req.files[i].size,
             date: Date.now(),
-            processedFile: {
-              type: "contract",
-              contract: {
-                extracted: false
-              }
-            },
+            type: 'contract',
             user: req.user,
           };
 
           // write to mongo
           File.create(fileRecord, function(err, file) {
             if (err) {
-              console.log(err);
+              filesProcessed =- 1;
             } else {
 
               var currentFile = file;
               var dataBuffer = fs.readFileSync(currentFile.filePath);
-
               // parse pdf
               pdf(dataBuffer).then(function(data) {
 
                 var fileInfo = data.info;
-                var fileText = data.text;
+                var fileText = data.text.replace(/(\r\n\t|\n|\r\t)/gm," ");
                 var parameters = {
                   'text': fileText,
                   'features': {
-                    // 'metadata': {},
                     'entities': {
-                      'mentions': true,
-                      'limit': 4
+                      'model': '10:6f5dc2d7-5dd3-44b2-bd49-924c903df3e8'
                     }
                   }
                 };
-
                 // analyze using watson
                 nlu.analyze(parameters, function(err, response) {
                   if (err) {
-                    console.log(err);
+                    filesProcessed -= 1;
                   } else {
-                    var extractRecord = {
-                      organization: '',
-                      party: '',
-                      party: '',
-                      identifier: '',
-                      item: '',
-                      quantity: '',
-                      events: '',
-                      other: '',
-                      validated: false,
-                      originalFile: {
-                        fileName: currentFile.originalName,
-                        fileRef: currentFile,
-                      },
-                      user: req.user
-                    };
-
-                    var entities = response.entities;
-
-                    for (var i=0; i<entities.length; i++) {
-                      var entity = entities[i];
-                      if (['Company', 'Facility', 'Broadcaster', 'Organization', 'PrintMedia'].includes(entity.type)) {
-                        extractRecord['organization'] += entity.text.toLowerCase() + ', ';
-                      } else if (['Person', 'MusicGroup', 'TelevisionShow'].includes(entity.type)) {
-                        extractRecord['party'] += entity.text.toLowerCase() + ', ';
-                      } else if (['EmailAddress', 'IPAddress', 'Location', 'GeographicFeature', 'JobTitle'].includes(entity.type)) {
-                        extractRecord['identifier'] += entity.text.toLowerCase() + ', ';
-                      } else if (['Anatomy', 'Drug', 'HealthCondition'].includes(entity.type)) {
-                        extractRecord['item'] += entity.text.toLowerCase() + ', ';
-                      } else if (['Quantity'].includes(entity.type)) {
-                        extractRecord['quantity'] += entity.text.toLowerCase() + ', ';
-                      } else if (['SportingEvent', 'Sport', 'Crime', 'NaturalEvent'].includes(entity.type)) {
-                        extractRecord['events'] += entity.text.toLowerCase() + ', ';
-                      } else {
-                        extractRecord['other'] += entity.text.toLowerCase() + ', ';
-                      }
-                    }
-
-                    // add to fileExtract
-                    Contract.create(extractRecord, function(err, extract) {
+                    var contractDoc = helpers.uploads.createContractDoc(req, currentFile, response.entities);
+                    // create Contract Record
+                    Contract.create(contractDoc, function(err, extract) {
                       if (err) {
-                        console.log(err);
+                        filesProcessed -= 1;
                       } else {
                         // update file
-                        File.findById(extract.originalFile.fileRef, function(err, file) {
+                        File.findById(extract.fileRef, function(err, file) {
                           if (err) {
-                            console.log(err);
+                            filesProcessed -= 1;
                           } else {
-                            file.processedFile.contract.fileRef = extract;
-                            file.processedFile.contract.extracted = true;
+                            file.contract = extract;
                             file.save();
+                            filesProcessed -= 1;
                           }
-                          filesProcessed -= 1;
                           if (filesProcessed === 0) {
-                            res.json({success: true, message: "file successfully uploaded"});
+                            res.json({success: true, message: "file uploaded and processed"});
                           }
                         });
                       }
                     });
                   }
+                  if (filesProcessed === 0) {
+                    res.json({success: true, message: "file uploaded and processed"});
+                  }
                 });
               });
+            }
+            if (filesProcessed === 0) {
+              res.json({success: true, message: "file uploaded and processed"});
             }
           });
         }

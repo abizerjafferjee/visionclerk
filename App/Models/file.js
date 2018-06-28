@@ -7,17 +7,9 @@ var fileSchema = new mongoose.Schema({
   filePath: {type: String, required: true},
   size: {type: Number},
   date: {type: Date, required: true},
-  processedFile: {
-    type: {type:String},
-    contract: {
-      fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"Contract"},
-      extracted: {type: Boolean}
-    },
-    invoice: {
-      fileRef: {type: mongoose.Schema.Types.ObjectId, ref:"Invoice"},
-      extracted: {type: Boolean}
-    }
-  },
+  type: String,
+  contract: {type: mongoose.Schema.Types.ObjectId, ref:"Contract"},
+  invoice: {type: mongoose.Schema.Types.ObjectId, ref:"Invoice"},
   user: {type: mongoose.Schema.Types.ObjectId, ref:"User", required: true}
 });
 

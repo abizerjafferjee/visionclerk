@@ -1,5 +1,6 @@
 
-userApp.config(function($routeProvider, $locationProvider){
+userApp.config(function($routeProvider, $locationProvider, $compileProvider){
+  // $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/)
   $locationProvider.hashPrefix('');
   $locationProvider.html5Mode(true);
   $routeProvider
@@ -44,15 +45,27 @@ userApp.config(function($routeProvider, $locationProvider){
     access: {restricted: false}
   })
 
-  .when('/contract', {
+  .when('/data/portal', {
+    templateUrl: 'app/views/pages/data/portal.html',
+    controller: 'dataController',
+    access: {restricted: true}
+  })
+
+  .when('/data/contracts', {
     templateUrl: 'app/views/pages/contract.html',
     controller: 'contractFileController',
     access: {restricted: true}
   })
 
-  .when('/spend', {
+  .when('/data/invoices', {
     templateUrl: 'app/views/pages/invoice.html',
     controller: 'invoiceFileController',
+    access: {restricted: true}
+  })
+
+  .when('/data/spend', {
+    templateUrl: 'app/views/pages/data/spend.html',
+    controller: 'spendController',
     access: {restricted: true}
   })
 

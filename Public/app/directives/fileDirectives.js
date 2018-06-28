@@ -17,7 +17,6 @@ userApp.directive('fileModel', function ($parse) {
                 //Call apply on scope, it checks for value changes and reflect them on UI
                 scope.$apply(function () {
                     //set the model value
-                    console.log(element[0].files);
                     modelSetter(scope, element[0].files);
                 });
             });

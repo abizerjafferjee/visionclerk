@@ -1,0 +1,35 @@
+<div class="container-fluid m-0 p-2">
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Data Management</h1>
+          <p class="lead">Manage Spend and Contract Data</p>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <ul class="list-group">
+        <a href="data/portal"><li class="list-group-item">Data Portal</li></a>
+        <a href="data/invoices"><li class="list-group-item">Invoices</li></a>
+        <a href="data/contracts"><li class="list-group-item">Contracts</li></a>
+        <a href="data/spend"><li class="list-group-item">Spend</li></a>
+        <li class="list-group-item">Settings</li>
+      </ul>
+    </div>
+
+    <div class="col-md-8">
+      <table ng-table="filesTable" ng-hide="!showFilesTable" class="table table-condensed table-bordered table-striped" ng-init="getFiles()">
+        <tbody>
+          <tr ng-repeat="row in $data">
+            <td title="'file_name'" sortable="'originalName'" filter="{originalName: 'text'}">{{ row.originalName }}</td>
+            <td title="'type'" sortable="'date'">{{ row.type }}</td>
+            <td title="'date_uploaded'" sortable="'date'">{{ row.date }}</td>
+            <td><a href="" ng-click="deleteFile(row._id)"><i class="fas fa-trash"></i></a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+  </div>

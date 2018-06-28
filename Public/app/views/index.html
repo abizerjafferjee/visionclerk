@@ -54,6 +54,8 @@
     <!-- Angular Controllers -->
     <script src="app/controllers/authControllers.js"></script>
     <script src="app/controllers/accountControllers.js"></script>
+    <script src="app/controllers/dataControllers/dataController.js"></script>
+    <script src="app/controllers/dataControllers/spendController.js"></script>
     <script src="app/controllers/dataControllers/contractController.js"></script>
     <script src="app/controllers/dataControllers/invoiceController.js"></script>
     <script src="app/controllers/inventoryControllers/inventoryController.js"></script>
@@ -66,6 +68,8 @@
     <!-- Angular Services -->
     <script src="app/services/authServices.js"></script>
     <script src="app/services/fileServices.js"></script>
+    <script src="app/services/dataServices/dataService.js"></script>
+    <script src="app/services/dataServices/spendService.js"></script>
     <script src="app/services/accountServices.js"></script>
     <script src="app/services/inventoryServices/inventoryService.js"></script>
 
@@ -95,15 +99,18 @@
 
     <!-- SIDE NAVIGATION BEGIN -->
     <div id="mySidenav" class="sidenav bg-dark" ng-hide="!showUser">
-      <h3 id="sideBarHeader" class="text-center"><span><img src="Logo.png" id="sideNavLogo"></span>VisionClerk</h3>
+      <h3 id="sideBarHeader" class="text-center">
+        <!-- <span><img src="Logo.png" id="sideNavLogo"></span> -->
+        VisionClerk
+      </h3>
       <hr id="sideNavDivider">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="/" class="sideNavContent" onclick="closeNav()"><i class="fas fa-home" id="homeIcon"></i>Home<span style="float: right; color: white;"></span></a>
-      <a href="/categories" class="sideNavContent" onclick="closeNav()">Browse Categories<span style="float: right; color: white;"></span></a>
+      <a href="/" class="sideNavContent" onclick="closeNav()"><i class="fas fa-home sideNavIcon"></i>Home<span style="float: right; color: white;"></span></a>
+      <a href="/categories" class="sideNavContent" onclick="closeNav()"><i class="fas fa-shopping-cart sideNavIcon"></i>Browse Categories<span style="float: right; color: white;"></span></a>
 
     <div class="nav-item dropdown" ng-hide="!showUser">
       <a class="nav-link dropdown-toggle sideNavContent" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-chart-bar" id="analyticsIcon"></i>Analytics
+        <i class="fas fa-chart-bar sideNavIcon"></i>Analytics
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Category</a>
@@ -113,18 +120,20 @@
     </div>
 
     <div class="nav-item dropdown" ng-hide="!showUser">
-      <a class="nav-link dropdown-toggle sideNavContent" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-database" id="dataIcon"></i>Data
+      <a class="nav-link dropdown-toggle sideNavContent" id="navbarDropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-database sideNavIcon"></i>Data
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/contract" style="color: black;" onclick="closeNav()">Contracts</a>
-        <a class="dropdown-item" href="/spend" style="color: black;" onclick="closeNav()">Spend</a>
+        <a class="dropdown-item" href="/data/portal" style="color: black;" onclick="closeNav()">Portal</a>
+        <a class="dropdown-item" href="/data/spend" style="color: black;" onclick="closeNav()">Spend</a>
+        <a class="dropdown-item" href="/data/invoices" style="color: black;" onclick="closeNav()">Invoices</a>
+        <a class="dropdown-item" href="/data/contracts" style="color: black;" onclick="closeNav()">Contracts</a>
       </div>
     </div>
 
     <div class="nav-item dropdown" ng-hide="!showUser">
       <a class="nav-link dropdown-toggle sideNavContent" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{user}}
+        <i class="fas fa-user sideNavIcon"></i>{{user}}
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/profile" style="color: black;" onclick="closeNav()">Profile</a>
@@ -157,30 +166,9 @@
             <li class="nav-item"><a class="nav-link" href="/contact" ng-hide="showUser">Contact</a></li>
 
 
-            <!-- <li class="nav-item dropdown" ng-hide="!showUser">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Analytics
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Category</a>
-                <a class="dropdown-item" href="#">Vendor</a>
-                <a class="dropdown-item" href="#">Vendor Profiles</a>
-              </div>
-            </li>
-
-            <li class="nav-item dropdown" ng-hide="!showUser">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Data
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/contract">Contracts</a>
-                <a class="dropdown-item" href="/spend">Spend</a>
-              </div>
-            </li> -->
-
             <li class="nav-item dropdown" ng-hide="!showUser">
               <a class="nav-link dropdown-toggle" ng-hide="!showUser" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{user}}
+                <i class="fas fa-user sideNavIcon"></i> {{user}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/profile">Profile</a>
@@ -194,17 +182,8 @@
       </div>
     </nav>
 
-    <div style="background-color:#EBFAFF; min-height: 100vh; margin:0px;" ng-view></div>
+    <div style="background-color:#EBFAFF; min-height: 100vh; margin:0px;" onclick="closeNav()" ng-view></div>
 
-    <!-- FOOTER -->
-    <!--
-    <footer class="page-footer bg-dark m-0">
-      <div class="footer-copyright py-3 text-center" style="color: white;">
-          © 2018 VisionClerk. All Rights Reserved.
-      </div>
-    </footer>
--->
-<!-- Footer -->
 <footer class="page-footer font-small bg-dark pt-4 mt-4">
 
   <!-- Footer Links -->
@@ -215,7 +194,9 @@
 
       <!-- Grid column -->
       <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-        <h3 class="mb-4 font-weight-bold"><span><img src="Logo.png" id="sideNavLogo"></span>VisionClerk</h3>
+        <h3 class="mb-4 font-weight-bold">
+          <!-- <span><img src="Logo.png" id="sideNavLogo"></span> -->
+          VisionClerk</h3>
         <p></p>
       </div>
       <!-- Grid column -->

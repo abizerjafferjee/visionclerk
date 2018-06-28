@@ -123,7 +123,7 @@ userApp.service('invoiceFileService', function ($http, $q) {
       }
 
       var deffered = $q.defer();
-      $http.post('/invoice/upload', fileFormData, {
+      $http.post('/invoice/rossum/upload', fileFormData, {
           transformRequest: angular.identity,
           headers: {'Content-Type': undefined}
 
@@ -136,13 +136,14 @@ userApp.service('invoiceFileService', function ($http, $q) {
       return deffered.promise;
   };
 
-  this.processFiles = function () {
+  this.processInvoices = function () {
 
     var deffered = $q.defer();
-    $http.get('/invoice/process')
+    $http.get('/invoice/rossum/process')
     .then(function (response) {
-        deffered.resolve(response);
+      deffered.resolve(response);
     }, function(error) {
+
       deffered.reject();
     });
 
@@ -153,7 +154,7 @@ userApp.service('invoiceFileService', function ($http, $q) {
   this.getFiles = function() {
 
     var deffered = $q.defer();
-    $http.get('/invoice/files')
+    $http.get('/invoice/files/read')
       .then(function(response) {
         deffered.resolve(response);
       }, function(error) {
@@ -189,10 +190,10 @@ userApp.service('invoiceFileService', function ($http, $q) {
     return deffered.promise;
   };
 
-  this.editInvoice = function(newInvoice) {
+  this.updateInvoice = function(newInvoice) {
 
     var deffered = $q.defer();
-    $http.post('/invoice/edit', {invoice:newInvoice})
+    $http.post('/invoice/update', {invoice:newInvoice})
       .then(function(response) {
         deffered.resolve(response);
       }, function(error) {
@@ -220,7 +221,7 @@ userApp.service('invoiceFileService', function ($http, $q) {
   this.sendFeedback = function(invoiceId, field) {
 
     var deffered = $q.defer();
-    $http.post('/invoice/feedback', {id: invoiceId, field: field})
+    $http.post('/invoice/rossum/feedback', {id: invoiceId, field: field})
       .then(function(response) {
         deffered.resolve(response);
       }, function(error) {
