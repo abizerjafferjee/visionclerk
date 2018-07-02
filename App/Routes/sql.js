@@ -46,26 +46,121 @@ var sqlQueries = {
       csvStream.pause();
       dic.push(data);
 
-      console.log(data["DATE OF INVOICE"]);
-      var date_parts = data["DATE OF INVOICE"].split("-");
-      var post_date = new Date(date_parts[2], date_parts[1], date_parts[0]);
-      var amount = Number(data["VAT INCLUSIVE"]);
-      // console.log(amount);
-      var query = "INSERT INTO accounts_payable_all (invoice_num, invoice_amount, post_date, category, vendor_name) VALUES " +
-      "(?, ?, ?, ?, ?);";
-      connection.query(query, [data["INVOICE NO"], amount, post_date, data["DESCRIPTION OF GOODS"], data["SUPPLIER"]], function(error, results, fields) {
+      var supplier = data["SUPPLIER"].toLowerCase();
+      var currency = data["CURRENCY"].toLowerCase();
+      var category = data["CATEGORY"].toLowerCase();
+      var invoice_no = data["INVOICE_NO"];
+
+      var amount = data["AMOUNT"];
+      if (typeof(data["AMOUNT"]) == "string") {
+        if (isNaN(amount)) {
+          amount = Number(data["AMOUNT"].replace(/,/g, ""));
+        }
+      }
+
+      var post_date = data["POST_DATE"];
+      console.log(post_date);
+      if (post_date.includes("-")) {
+        var date_parts = data["POST_DATE"].split("-");
+        // post_date = new Date(date_parts[2], date_parts[1], date_parts[0]);
+        post_date = date_parts[2] + '/' + date_parts[1] + '/' + date_parts[0];
+      } else if (post_date.includes("/")) {
+        var date_parts = data["POST_DATE"].split("/");
+        // post_date = new Date(date_parts[2], date_parts[1], date_parts[0]);
+        post_date = date_parts[2] + '/' + date_parts[1] + '/' + date_parts[0];
+      }
+
+      // post_date = post_date.getFullYear() + '/' + post_date.getMonth() +'/' + post_date.getDate();
+
+      console.log(post_date);
+
+      if ([invoice_no, amount, post_date, category, supplier, currency].includes(NaN)) {
+        console.log([invoice_no, amount, post_date, category, supplier, currency]);
+      }
+
+      var query = "INSERT INTO accounts_payable_all (invoice_num, invoice_amount, post_date, category, vendor_name, currency) VALUES " +
+      "(?, ?, ?, ?, ?, ?);";
+      connection.query(query, [invoice_no, amount, post_date, category, supplier, currency], function(error, results, fields) {
         if (error) throw error;
-        // console.log(results);
       });
 
       csvStream.resume();
     })
     .on("end", function(data) {
-      console.log(dic);
+      console.log("done");
 
     });
 
+  },
+
+  duplicateSpend: function(callback) {
+    var query = "SELECT invoice_num, vendor_name, count(*) from accounts_payable_all group by invoice_num, vendor_name having count(*) > 1";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  },
+
+  allSpend: function (callback) {
+    var query = "select currency, sum(invoice_amount), extract(year from post_date) as year from accounts_payable_all group by extract(year from post_date), currency order by post_date;"
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  },
+
+  suppliersPerCategory: function (callback) {
+    var query = "select count(distinct vendor_name) as vendors, category from accounts_payable_all group by category order by count(distinct vendor_name) desc;"
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
   }
+
+  spendPerSupplier: function (callback) {
+    var query = "select sum(invoice_amount) as spend, vendor_name from accounts_payable_all group by vendor_name order by sum(invoice_amount) desc;"
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  }
+
+  spendDistributionPerSupplier: function (callback) {
+    var query = "select vendor_name, (A.amount/B.amount) * 100 as distribution from (select vendor_name, sum(invoice_amount) as amount from accounts_payable_all group by vendor_name) as A cross join" +
+                "(select sum(invoice_amount) as amount from accounts_payable_all) as B order by distribution desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  }
+
+  spendDistributionPerSupplier: function (callback) {
+    var query = "select vendor_name, (A.amount/B.amount) * 100 as distribution from (select vendor_name, sum(invoice_amount) as amount from accounts_payable_all group by vendor_name) as A cross join" +
+                "(select sum(invoice_amount) as amount from accounts_payable_all) as B order by distribution desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  }
+
+  transactionsPerSupplier: function (callback) {
+    var query = "select vendor_name, count(distinct invoice_num) as transactions from accounts_payable_all group by vendor_name order by transactions desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  }
+
+  transactionsDistributionPerSupplier: function (callback) {
+    var query = "select vendor_name, round((A.t/B.t) * 100, 2) as distribution from (select vendor_name, count(distinct invoice_amount) as t from accounts_payable_all group by vendor_name) as A" +
+    "cross join (select count(distinct invoice_amount) as t from accounts_payable_all) as B order by distribution desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  }
+
+
 };
 
 

@@ -46,6 +46,9 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.1.2/textAngular.min.js'></script>
 
+    <!-- DATA VISUALIZATION -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
 
     <!-- Angular config/Routes -->
     <script src="app/app.js"></script>
@@ -64,6 +67,7 @@
     <script src="app/controllers/inventoryControllers/consoleController.js"></script>
     <script src="app/controllers/inventoryControllers/updateCategoryController.js"></script>
     <script src="app/controllers/inventoryControllers/updateProductController.js"></script>
+    <script src="app/controllers/analyticsControllers/analyticsController.js"></script>
 
     <!-- Angular Services -->
     <script src="app/services/authServices.js"></script>
@@ -72,6 +76,8 @@
     <script src="app/services/dataServices/spendService.js"></script>
     <script src="app/services/accountServices.js"></script>
     <script src="app/services/inventoryServices/inventoryService.js"></script>
+    <script src="app/services/analyticsServices/analyticsService.js"></script>
+
 
     <!-- Angular Directives -->
     <script src="app/directives/fileDirectives.js"></script>
@@ -114,7 +120,7 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Category</a>
-        <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Vendor</a>
+        <a class="dropdown-item" href="/analytics/spend" style="color: black;" onclick="closeNav()">Spend</a>
         <a class="dropdown-item" href="#" style="color: black;" onclick="closeNav()">Vendor Profiles</a>
       </div>
     </div>
