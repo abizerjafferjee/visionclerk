@@ -100,6 +100,17 @@ userApp.service('inventoryService', function ($http, $q) {
         return deffered.promise;
     };
 
+    this.getProductsByCatId = function (category_id) {
+        var deffered = $q.defer();
+        $http.get('/inventory/products/category/'+category_id).then(function (response) {
+            deffered.resolve(response);
+        }, function(error) {
+          deffered.reject();
+        });
+
+        return deffered.promise;
+    };
+
     this.updateProduct = function (updatedProduct, product_id) {
       var deffered = $q.defer();
       $http.post('/inventory/updateProduct', {id: product_id, data: updatedProduct}).then(function (response){

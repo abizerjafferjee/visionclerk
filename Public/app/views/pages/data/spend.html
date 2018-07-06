@@ -1,0 +1,63 @@
+<div class="container-fluid m-0 p-2">
+
+  <div class="row m-1">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Spend Data</h1>
+          <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-2">
+    <div class="col-md-12">
+        <div class="card w-100" style="height:900px; overflow-y:auto;">
+          <!-- <h5 class="card-header">Spend Data</h5> -->
+          <div class="card-body">
+
+            <div class="d-flex">
+              <div class="mr-auto p-2">
+                <a href="#" ng-click="getSchema()" style="font-weight:bold;">Download schema</a>
+              </div>
+              <div class="p-2">
+                <form>
+                  <input type="file" file-model="invoices" name="invoices" class="form-control" id ="invoices" multiple/>
+                </form>
+              </div>
+              <div class="p-2">
+                  <button ng-click="uploadFiles()" class="btn btn-primary btn-sm">Upload</button>
+              </div>
+            </div>
+
+            <div class="d-flex bd-highlight mb-3" style="font-weight: bold;">
+              <div class="p-2 bd-highlight">
+                {{fileCount}} Files
+              </div>
+              <div class="p-2 bd-highlight">
+                Last Uploaded: {{lastUploaded}}
+              </div>
+              <div class="ml-auto p-2 bd-highlight"></div>
+            </div>
+
+            <div class="card">
+              <table style="" ng-table="filesTable" ng-hide="!showFilesTable" class="table" ng-init="getFiles()">
+                <tbody>
+                  <tr ng-repeat="row in $data">
+                    <td title="'Date Uploaded'" sortable="'date'">{{ extractDate(row.date) }}</td>
+                    <td title="'File Name'" sortable="'originalName'" filter="{originalName: 'text'}">{{ row.originalName }}</td>
+                    <td title="'Type'" sortable="'date'">{{ row.type }}</td>
+                    <td><a href="" ng-click="deleteFile(row._id)"><i class="fas fa-trash"></i></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

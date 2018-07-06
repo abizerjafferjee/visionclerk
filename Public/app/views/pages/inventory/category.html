@@ -1,6 +1,43 @@
-<h1>This is a category page</h1>
+<div class="container-fluid m-0 p-2">
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">{{categoryName}}</h1>
+          <p class="lead">{{industryName}}</p>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/categories">Categories</a></li>
+            <li class="breadcrumb-item active" aria-current="">{{categoryName}}</li>
+          </ol>
+      </div>
+  </div>
 
-<h4>Category Name: {{categoryName}}</h4>
-<h4>Industry Name: {{industryName}}</h4>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <p ng-bind-html="content"></p>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
 
-<p ng-bind-html="content"></p>
+  <div class="row pt-2 pb-2" style="background-color: white;">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <h3>A Few Products</h3>
+      {{ showMessage }}
+      <div class="row mt-2">
+        <div class="card w-75" ng-repeat="product in products" style="border-radius:0px;">
+          <div class="card-body">
+            <div class="media">
+              <img class="mr-3" src="{{product.logo}}" height="64" width="64" alt="Generic placeholder image">
+              <div class="media-body">
+                <a href="/products/{{product._id}}"><h5 class="mt-4">{{ product.company }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+</div>

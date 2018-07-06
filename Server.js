@@ -9,10 +9,15 @@ var passport = require('passport');
 var localStrategy = require('passport-local' ).Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var flash = require('express-flash');
+var mysql = require('mysql');
+var nodeMaria = require('node-mariadb');
 var port = process.env.PORT || 8080;
 
 // mongoose connect mongo
-mongoose.connect('mongodb://localhost/visionclerk_users');
+mongoose.connect('mongodb://localhost/visionclerk_users', function(err, db) {
+  if (err) throw err;
+  console.log("Connected to mongodb");
+});
 
 // configure passport
 passport.use(new localStrategy(function(username, password, done) {
@@ -47,10 +52,13 @@ var app = express();
 
 // require routes
 var authRoutes = require('./app/routes/auth.js');
+var dataRoutes = require('./app/routes/data.js');
 var contractRoutes = require('./app/routes/contract.js');
 var invoiceRoutes = require('./app/routes/invoice.js');
+var spendRoutes = require('./app/routes/spend.js');
 var accountRoutes = require('./app/routes/account.js');
 var inventoryRoutes = require('./app/routes/inventory.js');
+var analyticsRoutes = require('./app/routes/analytics.js');
 
 // middleware
 app.use(express.static(path.join(__dirname)));
@@ -76,10 +84,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 app.use('/user/', authRoutes);
+app.use('/data/', dataRoutes);
 app.use('/contract/', contractRoutes);
 app.use('/invoice/', invoiceRoutes);
+app.use('/spend/', spendRoutes);
 app.use(accountRoutes);
 app.use('/inventory/', inventoryRoutes);
+app.use('/analytics/', analyticsRoutes);
+
 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, '/Public/app/views/index.html'));

@@ -1,8 +1,10 @@
-userApp.controller('invoiceFileController', function($scope, invoiceFileService, accountsPayableFileService, NgTableParams) {
+userApp.controller('invoiceFileController', function($scope, invoiceFileService, accountsPayableFileService, NgTableParams, $interval) {
 
   $scope.invoiceTable = {};
   $scope.invoices = {};
   $scope.showMessage = false;
+  $scope.unprocessedInvoices = 0;
+  var promise;
 
   $scope.typeOfFileUploaded = function() {
     if (document.getElementById("invoiceRadio").checked == true) {
@@ -17,37 +19,30 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
   };
 
   $scope.uploadFiles = function () {
-    //console.log("Invoice true!");
+
       $scope.uploading = true;
+      $scope.uploadSuccess = false;
+      $scope.uploadFail = false;
+
       var files = $scope.invoices;
 
       invoiceFileService.uploadFilesToUrl(files)
         .then(function (response) {
           if (response.data.success) {
-            $scope.success = true;
             $scope.uploading = false;
-            $scope.showMessage = true;
-            $scope.message = response.data.message;
-            $scope.fileCount += response.data.files;
+            $scope.uploadSuccess = true;
+            $scope.uploadSuccessMessage = response.data.message;
+            $scope.invoiceCount += response.data.files;
             $scope.invoices = {};
 
-            var date = new Date();
-            var dt = date.getDate() + "/" + (date.getMonth()+1)  + "/" + date.getFullYear() + " @ "
-              + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-
-            $scope.lastUploaded = dt;
-
-            // processFiles();
-            $scope.displayFiles();
             $scope.getUnvalidatedInvoices();
             $scope.getInvoices();
 
           } else {
-            $scope.success = false;
-            $scope.showMessage = true;
             $scope.uploading = false;
-            $scope.message = response.data.message;
-            $scope.myFile = {};
+            $scope.uploadFail = true;
+            $scope.uploadFailMessage = response.data.message;
+            $scope.invoice = {};
           }
         }, function (error) {
           $scope.uploading = false;
@@ -56,146 +51,41 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
         });
   };
 
-  $scope.uploadFilesAccountsPayable = function () {
-      //console.log("Accounts Payable true!");
-      $scope.uploadingAccountsPayable = true;
-      var files = $scope.invoices;
-
-      accountsPayableFileService.uploadFilesToUrl(files)
-        .then(function (response) {
-          if (response.data.success) {
-            $scope.successAccountsPayable = true;
-            $scope.uploadingAccountsPayable = false;
-            $scope.showMessageAccountsPayable = true;
-            $scope.message = response.data.message;
-            $scope.fileCountAccountsPayable += response.data.files;
-            $scope.invoices = {};
-
-            var date = new Date();
-            var dt = date.getDate() + "/" + (date.getMonth()+1)  + "/" + date.getFullYear() + " @ "
-              + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-
-            $scope.lastUploadedAccountsPayable = dt;
-
-            // processFiles();
-            $scope.displayFilesAccountsPayable();
-            $scope.getUnvalidatedInvoices();
-            $scope.getInvoices();
-
-          } else {
-            $scope.successAccountsPayable = false;
-            $scope.showMessageAccountsPayable = true;
-            $scope.uploadingAccountsPayable = false;
-            $scope.message = response.data.message;
-            $scope.myFile = {};
-          }
-        }, function (error) {
-          $scope.uploadingAccountsPayable = false;
-          $scope.showMessageAccountsPayable = true;
-          $scope.message = 'An error has occurred';
-        });
-  };
-
-  $scope.processFiles = function() {
-
-    invoiceFileService.processFiles()
+  var processInvoices = function() {
+    console.log("processing invoices");
+    $scope.showProcessMessage = false;
+    invoiceFileService.processInvoices()
     .then(function(response) {
+      console.log(response);
       if (response.data.success) {
+        $scope.unprocessedInvoices = response.data.notProcessed;
+        $scope.getUnvalidatedInvoices();
+      } else {
         $scope.showProcessMessage = true;
-        $scope.processMessage = "processed";
-        $scope.getUnvalidatedInvoices();
+        $scope.processMessage = "Something went wrong. Please reload page";
       }
-
     });
-
   };
 
-  $scope.processFilesAccountsPayable = function() {
-
-    invoiceFileService.processFiles()
-    .then(function(response) {
-      if (response.data.success) {
-        $scope.showProcessMessageAccountsPayable = true;
-        $scope.processMessageAccountsPayable = "processed";
-        $scope.getUnvalidatedInvoices();
-      }
-
-    });
-
+  $scope.startInvoiceProcessing = function() {
+    // stops any running interval to avoid two intervals running at the same time
+    $scope.stopInvoiceProcessing();
+    promise = $interval(processInvoices, 12000);
   };
 
-  $scope.displayFiles = function() {
-    invoiceFileService.getFiles()
-      .then(function(response) {
-        if (response.data.length !== 0) {
-          $scope.showFilesTable = true;
-          $scope.allFiles = response.data;
-          $scope.table = $scope.allFiles;
-          $scope.fileCount = response.data.length;
-
-          $scope.filesTable = new NgTableParams({}, { dataset: response.data });
-
-          // set last uploaded date
-          var dt = new Date(response.data[0].date);
-          for (var i=0; i<response.data.length; i++) {
-            var nextDt = new Date(response.data[i].date);
-            if (dt < nextDt) {
-              dt = nextDt;
-            }
-          }
-          $scope.lastUploaded = dt.getDate() + "/" + (dt.getMonth()+1)  + "/" + dt.getFullYear() + " @ "
-            + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-        } else {
-          $scope.showFilesTable = false;
-          $scope.filesMessage = "No files to display";
-          $scope.fileCount = 0;
-        }
-
-      }, function(error) {
-        console.log(error);
-      });
-  };
-
-  $scope.displayFilesAccountsPayable = function() {
-    invoiceFileService.getFiles()
-      .then(function(response) {
-        if (response.data.length !== 0) {
-          $scope.showFilesTable = true;
-          $scope.allFiles = response.data;
-          $scope.table = $scope.allFiles;
-          $scope.fileCount = response.data.length;
-
-          $scope.filesTable = new NgTableParams({}, { dataset: response.data });
-
-          // set last uploaded date
-          var dt = new Date(response.data[0].date);
-          for (var i=0; i<response.data.length; i++) {
-            var nextDt = new Date(response.data[i].date);
-            if (dt < nextDt) {
-              dt = nextDt;
-            }
-          }
-          $scope.lastUploadedAccountsPayable = dt.getDate() + "/" + (dt.getMonth()+1)  + "/" + dt.getFullYear() + " @ "
-            + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-        } else {
-          $scope.showFilesTable = false;
-          $scope.filesMessage = "No files to display";
-          $scope.fileCountAccountsPayable = 0;
-        }
-
-      }, function(error) {
-        console.log(error);
-      });
+  $scope.stopInvoiceProcessing = function() {
+    $interval.cancel(promise);
   };
 
   $scope.getInvoices = function() {
     invoiceFileService.getInvoices()
     .then(function(response) {
+      $scope.startInvoiceProcessing();
+      $scope.invoiceCount = response.data.length;
       if (response.data.length !== 0) {
         $scope.showInvoices = true;
+        $scope.invoiceTable = new NgTableParams({}, { dataset: response.data });
         $scope.accountsPayable = response.data;
-        displayInvoices();
-
       } else {
         $scope.showInvoices = false;
         $scope.invoicesMessage = "No contracts to display";
@@ -204,42 +94,39 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
       $scope.showInvoices = false;
       $scope.invoicesMessage = "Something went wrong";
     });
-  }
-
-  function displayInvoices() {
-    $scope.invoiceTable = new NgTableParams({}, { dataset: $scope.invoices });
   };
 
   $scope.getUnvalidatedInvoices = function() {
     invoiceFileService.getUnvalidatedInvoices()
     .then(function(response) {
+      $scope.unvalidatedInvoiceCount = response.data.length;
       if (response.data.length !== 0) {
         $scope.showUnvalidatedInvoices = true;
-        $scope.unvalidatedInvoices = response.data;
-        displayUnvalidatedInvoices();
-
+        $scope.unvalidatedInvoiceTable = new NgTableParams({}, { dataset: response.data });
+        if ($scope.unprocessedInvoices == 0) {
+          $scope.stopInvoiceProcessing();
+        }
       } else {
         $scope.showUnvalidatedInvoices = false;
         $scope.unvalidatedInvoicesMessage = "All invoices validated";
+        if ($scope.unprocessedInvoices == 0) {
+          $scope.stopInvoiceProcessing();
+        }
       }
     }, function(error) {
       $scope.showUnvalidatedInvoices = false;
       $scope.unvalidatedInvoicesMessage = "All invoices validated";
     });
-  }
-
-  function displayUnvalidatedInvoices() {
-    $scope.unvalidatedInvoiceTable = new NgTableParams({}, { dataset: $scope.unvalidatedInvoices });
   };
 
-  $scope.saveInvoice = function(invoice) {
+  $scope.updateInvoice = function(invoice) {
     invoiceFileService.editInvoice(invoice)
       .then(function(response) {
         console.log(response);
       }, function(error) {
         console.log(error);
       });
-  }
+  };
 
   $scope.validateInvoice = function(invoiceId) {
     invoiceFileService.validateInvoice(invoiceId)
@@ -249,7 +136,7 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
       }, function(error) {
         console.log(error);
       });
-  }
+  };
 
 
   $scope.feedback = function(invoiceId, field) {
@@ -261,5 +148,91 @@ userApp.controller('invoiceFileController', function($scope, invoiceFileService,
       });
 
   };
+
+  // $scope.processFilesAccountsPayable = function() {
+  //
+  //   invoiceFileService.processFiles()
+  //   .then(function(response) {
+  //     if (response.data.success) {
+  //       $scope.showProcessMessageAccountsPayable = true;
+  //       $scope.processMessageAccountsPayable = "processed";
+  //       $scope.getUnvalidatedInvoices();
+  //     }
+  //   });
+  // };
+
+
+  // $scope.displayFilesAccountsPayable = function() {
+  //   invoiceFileService.getFiles()
+  //     .then(function(response) {
+  //       if (response.data.length !== 0) {
+  //         $scope.showFilesTable = true;
+  //         $scope.allFiles = response.data;
+  //         $scope.table = $scope.allFiles;
+  //         $scope.fileCount = response.data.length;
+  //
+  //         $scope.filesTable = new NgTableParams({}, { dataset: response.data });
+  //
+  //         // set last uploaded date
+  //         var dt = new Date(response.data[0].date);
+  //         for (var i=0; i<response.data.length; i++) {
+  //           var nextDt = new Date(response.data[i].date);
+  //           if (dt < nextDt) {
+  //             dt = nextDt;
+  //           }
+  //         }
+  //         $scope.lastUploadedAccountsPayable = dt.getDate() + "/" + (dt.getMonth()+1)  + "/" + dt.getFullYear() + " @ "
+  //           + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+  //
+  //       } else {
+  //         $scope.showFilesTable = false;
+  //         $scope.filesMessage = "No files to display";
+  //         $scope.fileCountAccountsPayable = 0;
+  //       }
+  //
+  //     }, function(error) {
+  //       console.log(error);
+  //     });
+  // };
+
+  // $scope.uploadFilesAccountsPayable = function () {
+  //     //console.log("Accounts Payable true!");
+  //     $scope.uploadingAccountsPayable = true;
+  //     var files = $scope.invoices;
+  //
+  //     accountsPayableFileService.uploadFilesToUrl(files)
+  //       .then(function (response) {
+  //         if (response.data.success) {
+  //           $scope.successAccountsPayable = true;
+  //           $scope.uploadingAccountsPayable = false;
+  //           $scope.showMessageAccountsPayable = true;
+  //           $scope.message = response.data.message;
+  //           $scope.fileCountAccountsPayable += response.data.files;
+  //           $scope.invoices = {};
+  //
+  //           var date = new Date();
+  //           var dt = date.getDate() + "/" + (date.getMonth()+1)  + "/" + date.getFullYear() + " @ "
+  //             + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+  //
+  //           $scope.lastUploadedAccountsPayable = dt;
+  //
+  //           // processFiles();
+  //           $scope.displayFilesAccountsPayable();
+  //           $scope.getUnvalidatedInvoices();
+  //           $scope.getInvoices();
+  //
+  //         } else {
+  //           $scope.successAccountsPayable = false;
+  //           $scope.showMessageAccountsPayable = true;
+  //           $scope.uploadingAccountsPayable = false;
+  //           $scope.message = response.data.message;
+  //           $scope.myFile = {};
+  //         }
+  //       }, function (error) {
+  //         $scope.uploadingAccountsPayable = false;
+  //         $scope.showMessageAccountsPayable = true;
+  //         $scope.message = 'An error has occurred';
+  //       });
+  // };
 
 });
