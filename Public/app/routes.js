@@ -138,6 +138,12 @@ userApp.config(function($routeProvider, $locationProvider, $compileProvider){
     controller: 'spendAnalyticsController'
   })
 
+  .when('/analytics/insights', {
+    templateUrl: 'app/views/pages/analytics/insights.html',
+    access: {restricted: true},
+    controller: 'insightsAnalyticsController'
+  })
+
   .otherwise({
     redirectTo: '/',
     access: {restricted: false}

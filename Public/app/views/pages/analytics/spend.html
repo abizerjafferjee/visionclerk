@@ -1,3 +1,87 @@
-<canvas id="myChart"></canvas>
-<canvas id="allSpend"></canvas>
-<canvas id="suppliersPerCategory"></canvas>
+<!-- <canvas id="allSpend"></canvas> -->
+<!-- <canvas id="suppliersPerCategory"></canvas> -->
+<div class="container-fluid m-0 p-2">
+
+  <div class="row m-1">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Supplier Analytics</h1>
+          <!-- <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p> -->
+          <div class="d-flex flex-nowrap m-1">
+            <div class="order-1 p-2"><b>Total Spend</b> {{ totalSpend }}</div>
+            <div class="order-2 p-2"><b>Total Transactions</b> {{totalTransactions}}</div>
+            <div class="order-3 p-2"><b>Total Suppliers</b> {{totalSuppliers}}</div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row card m-1">
+
+    <div class="row mt-2 mb-2" style="">
+      <div class="col-md-1"></div>
+      <div class="col-md-10 card">
+        <div id="spendSuppliersAndTransactionsOvertime"></div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    <div class="row mt-2 mb-2" style="">
+      <div class="col-md-1"></div>
+      <div class="col-md-10 card">
+        <div id="spendTransactionScatter"></div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    <div class="row mt-2 mb-2" style="">
+      <div class="col-md-1"></div>
+      <div class="col-md-10 card">
+        <div id="top80Spend"></div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    <div class="row mt-2 mb-2" style="">
+      <div class="col-md-1"></div>
+      <div class="col-md-10 card">
+        <div id="spendDistribution"></div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="row" style="">
+    <div class="col-md-6">
+      <canvas id="spendPerSupplier"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="spendDistributionPerSupplier"></canvas>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <canvas id="transactionsPerSupplier"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="transactionsDistributionPerSupplier"></canvas>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+    <div class="col-md-6">
+      <canvas id="transactionsOvertime"></canvas>
+    </div>
+    <div class="col-md-6">
+      <!-- <canvas id="suppliersOvertimePerCategory"></canvas> -->
+    </div>
+  </div>
+
+</div>
