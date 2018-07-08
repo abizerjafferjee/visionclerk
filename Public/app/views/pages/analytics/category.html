@@ -1,0 +1,34 @@
+<div class="container-fluid m-0 p-2">
+
+  <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold" style="display: block;">Category Analytics</h1>
+  <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p>
+
+  <div class="row m-1">
+          <div class="d-flex flex-nowrap m-1">
+            <div class="order-1 p-2"><b>Total Spend</b> {{ totalSpend }}</div>
+            <div class="order-2 p-2"><b>Total Transactions</b> {{totalTransactions}}</div>
+            <div class="order-3 p-2"><b>Total Suppliers</b> {{totalSuppliers}}</div>
+          </div>
+  </div>
+
+  <div class="row m-1">
+
+    <div class="col-md-6 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <div id="spendSuppliersAndTransactionsPerCategory"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <!-- <div id="spendTransactionScatter"></div> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

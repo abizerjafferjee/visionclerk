@@ -99,6 +99,53 @@ var sqlQueries = {
     });
   },
 
+  highSpendLastMonth: function(callback) {
+    var query = "set @one_number:=0; set @two_number:=0; select vendor_name, round(a1,2) as amount1, round(a2, 2) as amount2, round(ch,2) as high_ch, d1, max(d2) as last_d from " +
+    "(select tone.vendor_name, tone.d as d1, ttwo.d as d2, tone.a as a1, ttwo.a as a2, ((ttwo.a - tone.a)/tone.a)*100 as ch from " +
+    "(select vendor_name, d, a, (@one_number:=@one_number + 1) as num from (select vendor_name, extract(year from post_date) as d, sum(invoice_amount) as a from accounts_payable_all group by vendor_name, extract(year from post_date) order by vendor_name, extract(year_month from post_date)) as A) as tone " +
+    "join (select vendor_name, d, a, (@two_number:=@two_number + 1) as num from (select vendor_name, extract(year from post_date) as d, sum(invoice_amount) as a from accounts_payable_all group by vendor_name, extract(year from post_date) order by vendor_name, extract(year_month from post_date)) as A) as ttwo " +
+    "on tone.vendor_name = ttwo.vendor_name and tone.num = ttwo.num - 1 and tone.d < ttwo.d) as ftable where ch >= 100 group by vendor_name order by ch desc, a2 desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  },
+
+  highSpendLastYear: function(callback) {
+    var query = "set @one_number:=0; set @two_number:=0; select vendor_name, a1, a2, round(ch,2) as high_ch, d1, max(d2) as last_d from" +
+    "(select tone.vendor_name, tone.d as d1, ttwo.d as d2, tone.a as a1, ttwo.a as a2, ((ttwo.a - tone.a)/tone.a)*100 as ch from" +
+    "(select vendor_name, d, a, (@one_number:=@one_number + 1) as num from (select vendor_name, extract(year from post_date) as d, sum(invoice_amount) as a from accounts_payable_all group by vendor_name, extract(year from post_date) order by vendor_name, extract(year_month from post_date)) as A) as tone" +
+    "join (select vendor_name, d, a, (@two_number:=@two_number + 1) as num from (select vendor_name, extract(year from post_date) as d, sum(invoice_amount) as a from accounts_payable_all group by vendor_name, extract(year from post_date) order by vendor_name, extract(year_month from post_date)) as A) as ttwo" +
+    "on tone.vendor_name = ttwo.vendor_name and tone.num = ttwo.num - 1 and tone.d < ttwo.d) as ftable where ch >= 100 group by vendor_name order by ch desc, a2 desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  },
+
+  outlierTransactions: function(callback) {
+    var query = "select * from (select ttwo.vendor_name, post_date, invoice_num, invoice_amount, round(average, 2) as average, round(stdev, 2) as stdev, " +
+    "case when invoice_amount < (average - (2 * stdev)) then 'low amount' when invoice_amount > (average + (3 * stdev)) then 'high amount' else 'normal' end as outlier " +
+    "from accounts_payable_all join (select vendor_name, avg(invoice_amount) as average, stddev(invoice_amount) as stdev from accounts_payable_all group by vendor_name) as ttwo " +
+    "on accounts_payable_all.vendor_name = ttwo.vendor_name) as finaltable where outlier = 'high amount' or outlier = 'low amount' order by post_date desc, invoice_amount desc;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  },
+
+  outlierSuppliersPerCategory: function(callback) {
+    var query = "select vendor_name, category, amount, transactions, spendpertrans, average, stdev, " +
+    "case when spendpertrans < (average - (2 * stdev)) then 'inefficient' when spendpertrans > (average + (2 * stdev)) then 'outlier' else 'good' end as outlier " +
+    "from (select vendor_name, tabletwo.category, sum(invoice_amount) as amount, count(invoice_num) as transactions, sum(invoice_amount)/count(invoice_num) as spendpertrans, average, stdev from accounts_payable_all join " +
+    "(select category, avg(p) as average, stddev(p) as stdev from (select vendor_name, category, sum(invoice_amount) as amount, count(invoice_num) as transactions, round(sum(invoice_amount)/count(invoice_num),2) as p from accounts_payable_all group by vendor_name) as tableone group by category) as tabletwo " +
+    "on accounts_payable_all.category = tabletwo.category group by vendor_name) as tablethree;";
+    connection.query(query, function(error, results, fields) {
+      if (error) throw error;
+      callback(results);
+    });
+  },
+
   allSpend: function (callback) {
     var query = "select currency, sum(invoice_amount), extract(year from post_date) as year from accounts_payable_all group by extract(year from post_date), currency order by post_date;"
     connection.query(query, function(error, results, fields) {
@@ -108,25 +155,10 @@ var sqlQueries = {
   },
 
 
-  // Category sqlQueries
-  suppliersPerCategory: function (callback) {
-    var query = "select count(distinct vendor_name) as vendors, category from accounts_payable_all group by category order by count(distinct vendor_name) desc;"
-    connection.query(query, function(error, results, fields) {
-      if (error) throw error;
-      callback(results);
-    });
-  },
+  // CATEGORY
 
-  spendPerCategory: function (callback) {
-    var query = "select sum(invoice_amount) as spend, category from accounts_payable_all group by category order by spend desc;"
-    connection.query(query, function(error, results, fields) {
-      if (error) throw error;
-      callback(results);
-    });
-  },
-
-  transactionsPerCategory: function (callback) {
-    var query = "select category, count(distinct invoice_num) as transactions from accounts_payable_all group by category order by transactions desc;";
+  spendSuppliersAndTransactionsPerCategory: function (callback) {
+    var query = "select category, round(sum(invoice_amount), 2) as spend, count(invoice_num) as transactions, count(distinct vendor_name) as vendors from accounts_payable_all group by category order by spend desc;"
     connection.query(query, function(error, results, fields) {
       if (error) throw error;
       callback(results);
@@ -198,7 +230,10 @@ var sqlQueries = {
   },
 
   spendTransactionScatter: function (callback) {
-    var query = "select F.vendor_name, round(F.amount,2) as amount, F.transactions, case when F.fav < F.sav then 'true' else 'false' end as outlier from (select B.vendor_name, B.amount, B.transactions, round(B.amount/B.transactions, 2) as fav, round(C.av,2) as sav from (select vendor_name, sum(invoice_amount) as amount, count(invoice_num) as transactions, round(sum(invoice_amount)/count(invoice_num),2) as p from accounts_payable_all group by vendor_name) as B cross join (select avg(p) as av from (select vendor_name, sum(invoice_amount) as amount, count(invoice_num) as transactions, round(sum(invoice_amount)/count(invoice_num),2) as p from accounts_payable_all group by vendor_name) as A) as C) as F order by amount desc;";
+    var query = "select F.vendor_name, round(F.amount,2) as amount, F.transactions, F.fav, F.sav, case when F.fav < (0.25*F.sav) then 'inefficient' when F.fav > (1.75*F.sav) then 'outlier' else 'good' end as outlier " +
+    "from (select B.vendor_name, B.amount, B.transactions, round(B.amount/B.transactions, 2) as fav, round(C.av,2) as sav from " +
+    "(select vendor_name, sum(invoice_amount) as amount, count(invoice_num) as transactions, round(sum(invoice_amount)/count(invoice_num),2) as p from accounts_payable_all group by vendor_name) as B cross join " +
+    "(select avg(p) as av from (select vendor_name, sum(invoice_amount) as amount, count(invoice_num) as transactions, round(sum(invoice_amount)/count(invoice_num),2) as p from accounts_payable_all group by vendor_name) as A) as C) as F order by amount desc;";
     connection.query(query, function(error, results, fields) {
       if (error) throw error;
       callback(results);
@@ -234,15 +269,6 @@ var sqlQueries = {
   }
 
 };
-
-// set @one_number:=0;
-// set @two_number:=0;
-// select tone.vendor_name, tone.d, ttwo.d, tone.a, ttwo.a, (ttwo.a - tone.a)/tone.a from
-// (select vendor_name, d, a, (@one_number:=@one_number + 1) as num from (select vendor_name, extract(year_month from post_date) as d, sum(invoice_amount) as a from accounts_payable_all group by vendor_name, extract(year_month from post_date) order by vendor_name, extract(year_month from post_date)) as A) as tone
-// join (select vendor_name, d, a, (@two_number:=@two_number + 1) as num from (select vendor_name, extract(year_month from post_date) as d, sum(invoice_amount) as a from accounts_payable_all group by vendor_name, extract(year_month from post_date) order by vendor_name, extract(year_month from post_date)) as A) as ttwo
-// on tone.vendor_name = ttwo.vendor_name and tone.num = ttwo.num - 1;
-
-
 
 
 module.exports = sqlQueries;

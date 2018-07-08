@@ -1,4 +1,4 @@
-userApp.controller('spendAnalyticsController', function ($scope, spendAnalyticsService, NgTableParams) {
+userApp.controller('supplierAnalyticsController', function ($scope, spendAnalyticsService, NgTableParams) {
 
   //SUPPLIER
   $scope.spend = function() {
@@ -338,7 +338,33 @@ userApp.controller('spendAnalyticsController', function ($scope, spendAnalyticsS
 
 userApp.controller('insightsAnalyticsController', function ($scope, spendAnalyticsService, NgTableParams) {
 
-  //SUPPLIER
+  $scope.spend = function() {
+    spendAnalyticsService.totalSpend()
+    .then(function(response) {
+       $scope.totalSpend = response.data.data[0].amount;
+    })
+  };
+
+  $scope.spend();
+
+  $scope.transactions = function() {
+    spendAnalyticsService.transactions()
+    .then(function(response) {
+       $scope.totalTransactions = response.data.data[0].transactions;
+    })
+  };
+
+  $scope.transactions();
+
+  $scope.suppliers = function() {
+    spendAnalyticsService.suppliers()
+    .then(function(response) {
+      $scope.totalSuppliers = response.data.data[0].vendors;
+    })
+  };
+
+  $scope.suppliers();
+
   $scope.duplicateSpend = function() {
     spendAnalyticsService.duplicateSpend()
     .then(function(response) {
@@ -359,6 +385,51 @@ userApp.controller('insightsAnalyticsController', function ($scope, spendAnalyti
   };
 
   $scope.duplicateSpend();
+
+  $scope.highSpendLastMonth = function() {
+    spendAnalyticsService.highSpendLastMonth()
+    .then(function(response) {
+       var data = response.data.data[2];
+
+       var totalSpend = 0;
+       var numDiscovered = data.length;
+
+       for (var i=0; i<data.length; i++) {
+         totalSpend += data[i].amount2;
+       }
+       // console.log(totalSpend);
+       $scope.highGrowthAmount = Math.round(totalSpend);
+       $scope.highGrowthDiscovered = numDiscovered;
+    })
+  };
+
+  $scope.highSpendLastMonth();
+
+  $scope.outlierTransactions = function() {
+    spendAnalyticsService.outlierTransactions()
+    .then(function(response) {
+       var data = response.data.data;
+
+       var totalSpend = 0;
+       var numDiscovered = data.length;
+
+       for (var i=0; i<data.length; i++) {
+         totalSpend += data[i].invoice_amount;
+       }
+
+       $scope.outlierTransactionsAmount = Math.round(totalSpend);
+       $scope.outlierTransactionsDiscovered = numDiscovered;
+    })
+  };
+
+  $scope.outlierTransactions();
+
+
+});
+
+userApp.controller('categoryAnalyticsController', function ($scope, spendAnalyticsService, NgTableParams) {
+
+  //CATEGORY
 
   $scope.spend = function() {
     spendAnalyticsService.totalSpend()
@@ -387,5 +458,83 @@ userApp.controller('insightsAnalyticsController', function ($scope, spendAnalyti
   };
 
   $scope.suppliers();
+
+  $scope.spendSuppliersAndTransactionsPerCategory = function() {
+    spendAnalyticsService.spendSuppliersAndTransactionsPerCategory()
+    .then(function(response) {
+
+      var data = response.data.data;
+      console.log(data);
+
+      var suppliers = {
+        x: [],
+        y: [],
+        type: 'bar',
+        name: 'Suppliers',
+        marker: {
+          color: 'rgb(49,130,189)',
+          opacity: 0.7,
+        }
+      };
+
+      var transactions = {
+        x: [],
+        y: [],
+        type: 'bar',
+        name: 'Transactions',
+        marker: {
+          color: 'rgb(204,204,204)',
+          opacity: 0.5
+        }
+      };
+
+      var spend = {
+        x: [],
+        y: [],
+        type: 'line',
+        name: 'Spend',
+        yaxis: 'y2',
+        marker: {
+          color: 'rgb(0,204,204)',
+          opacity: 0.5,
+          size: 12
+        }
+      };
+
+      for (var i=0; i<data.length; i++) {
+        if (i < 10) {
+          suppliers.x.push(data[i].category);
+          transactions.x.push(data[i].category);
+          spend.x.push(data[i].category);
+          suppliers.y.push(data[i].vendors);
+          transactions.y.push(data[i].transactions);
+          spend.y.push(data[i].spend);
+        }
+      }
+
+      var vis = [suppliers, transactions, spend];
+
+      var layout = {
+        title: 'Spend, Suppliers and Transactions',
+        xaxis: {
+          title: 'Category',
+          tickangle: -45
+        },
+        yaxis2: {
+          title: 'Spend',
+          titlefont: {color: 'rgb(148, 103, 189)'},
+          tickfont: {color: 'rgb(148, 103, 189)'},
+          overlaying: 'y',
+          side: 'right'
+        },
+        barmode: 'group'
+      };
+
+      Plotly.newPlot('spendSuppliersAndTransactionsPerCategory', vis, layout);
+
+    });
+  };
+
+  $scope.spendSuppliersAndTransactionsPerCategory();
 
 });

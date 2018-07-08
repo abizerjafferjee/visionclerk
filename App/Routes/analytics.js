@@ -90,6 +90,34 @@ router.get('/duplicateSpend', function(req, res) {
   });
 });
 
+router.get('/highSpendLastMonth', function(req, res) {
+  sql.highSpendLastMonth(function(results) {
+    console.log(results);
+    res.json({success: true, data: results});
+  });
+});
+
+router.get('/highSpendLastYear', function(req, res) {
+  sql.highSpendLastYear(function(results) {
+    console.log(results);
+    res.json({success: true, data: results});
+  });
+});
+
+router.get('/outlierTransactions', function(req, res) {
+  sql.outlierTransactions(function(results) {
+    console.log(results);
+    res.json({success: true, data: results});
+  });
+});
+
+// CATEGORY
+router.get('/spendSuppliersAndTransactionsPerCategory', function(req, res) {
+  sql.spendSuppliersAndTransactionsPerCategory(function(results) {
+    console.log(results);
+    res.json({success: true, data: results});
+  });
+});
 
 
 module.exports = router;

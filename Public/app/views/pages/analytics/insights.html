@@ -15,22 +15,72 @@
     </div>
   </div>
 
-  <div class="row m-1 card">
+  <div class="row m-2">
 
-    <div class="row m-2">
-      <div class="col-md-3">
-        <div class="card">
-          <h4>Amount {{ duplicateSpendAmount }}</h4>
-          <h5>Duplicate Spend</h5>
-          <h5>{{ duplicatesDiscovered }} Discovered</h5>
-        </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ duplicateSpendAmount }}</h4>
+        <h5>Duplicate Spend</h5>
+        <h5><a href="/analytics/insights/duplicatespend">{{ duplicatesDiscovered }} Discovered</a></h5>
       </div>
-      <div class="col-md-3">
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ highGrowthAmount }}</h4>
+        <h5>High Growth</h5>
+        <h5><a href="/analytics/insights/highGrowthSpend">{{ highGrowthDiscovered }} Discovered</a></h5>
       </div>
-      <div class="col-md-3"></div>
-      <div class="col-md-3"></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ outlierTransactionsAmount }}</h4>
+        <h5>Outlier Transactions</h5>
+        <h5><a href="/analytics/insights/outlierTransactions">{{ outlierTransactionsDiscovered }} Discovered</h5>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ outlierTransactionsAmount }}</h4>
+        <h5>Maverick Spending</h5>
+        <h5><a href="/analytics/insights/outlierTransactions">{{ outlierTransactionsDiscovered }} Discovered</h5>
+      </div>
     </div>
 
   </div>
+
+  <div class="row m-2">
+
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ duplicateSpendAmount }}</h4>
+        <h5>Demand Aggregation</h5>
+        <h5><a href="/analytics/insights/duplicatespend">{{ duplicatesDiscovered }} Discovered</a></h5>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ highGrowthAmount }}</h4>
+        <h5>Fragmented Categories</h5>
+        <h5><a href="/analytics/insights/highGrowthSpend">{{ highGrowthDiscovered }} Discovered</a></h5>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ outlierTransactionsAmount }}</h4>
+        <h5>Subscriptions</h5>
+        <h5><a href="/analytics/insights/outlierTransactions">{{ outlierTransactionsDiscovered }} Discovered</h5>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <h4>Amount {{ outlierTransactionsAmount }}</h4>
+        <h5>Off-Contract Purchases</h5>
+        <h5><a href="/analytics/insights/outlierTransactions">{{ outlierTransactionsDiscovered }} Discovered</h5>
+      </div>
+    </div>
+
+  </div>
+
+
 
 </div>

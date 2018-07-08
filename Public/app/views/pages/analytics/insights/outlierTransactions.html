@@ -1,0 +1,27 @@
+<div class="container-fluid m-0 p-2">
+
+  <div class="row m-1">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Outliers</h1>
+          <!-- <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p> -->
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-1 card">
+    <table style="" ng-table="Table" class="table">
+      <tbody>
+        <tr ng-repeat="row in $data">
+          <td title="'Supplier'" sortable="'vendor_name'" filter="{vendor_name: 'text'}">{{ row.vendor_name }}</td>
+          <td title="'Invoice'" sortable="'invoice_num'">{{ row.invoice_num }}</td>
+          <td title="'Total Amount'" sortable="'invoice_amount'">{{ row.invoice_amount }}</td>
+          <td title="'Post Date'" sortable="'post_date'">{{ extractDate(row.post_date) }}</td>
+          <td title="'Outlier'" sortable="'outlier'">{{ row.outlier }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
