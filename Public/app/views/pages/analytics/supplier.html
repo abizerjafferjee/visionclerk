@@ -2,15 +2,23 @@
 <!-- <canvas id="suppliersPerCategory"></canvas> -->
 <div class="container-fluid m-0 p-2">
 
-  <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold" style="display: block;">Supplier Analytics</h1>
-  <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p>
+  <div class="row">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Supplier Analytics</h1>
+          <p class="lead">The visuals below show insights about the Suppliers your organization buys from. You can learn which are the most important Suppliers by amount of spend, number of suppliers and number of transactions. You can view an individual supplier by clicking on its name from the table at the bottom.</p>
+      </div>
 
-  <div class="row m-1">
-          <div class="d-flex flex-nowrap m-1">
-            <div class="order-1 p-2"><b>Total Spend</b> {{ totalSpend }}</div>
-            <div class="order-2 p-2"><b>Total Transactions</b> {{totalTransactions}}</div>
-            <div class="order-3 p-2"><b>Total Suppliers</b> {{totalSuppliers}}</div>
-          </div>
+      <!-- <div class="row m-1"> -->
+        <div class="d-flex flex-nowrap p-2">
+          <div class="order-1 p-2"><b>Total Spend</b> {{ totalSpend }}</div>
+          <div class="order-2 p-2"><b>Total Suppliers</b> {{totalSuppliers}}</div>
+          <div class="order-3 p-2"><b>Total Transactions</b> {{totalTransactions}}</div>
+          <!-- <div class="order-2 p-2"><b>Total Categories</b> {{totalCategories}}</div> -->
+        </div>
+      <!-- </div> -->
+
+    </div>
   </div>
 
   <div class="row m-1">
@@ -53,34 +61,18 @@
 
   </div>
 
-
-  <div class="row" style="">
-    <div class="col-md-6">
-      <canvas id="spendPerSupplier"></canvas>
-    </div>
-    <div class="col-md-6">
-      <canvas id="spendDistributionPerSupplier"></canvas>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <canvas id="transactionsPerSupplier"></canvas>
-    </div>
-    <div class="col-md-6">
-      <canvas id="transactionsDistributionPerSupplier"></canvas>
-    </div>
-  </div>
-
-
-
-  <div class="row">
-    <div class="col-md-6">
-      <canvas id="transactionsOvertime"></canvas>
-    </div>
-    <div class="col-md-6">
-      <!-- <canvas id="suppliersOvertimePerCategory"></canvas> -->
-    </div>
+  <div class="row m-1 card">
+    <div class="card-header">Suppliers</div>
+    <table ng-table="suppliersTable" class="table">
+      <tbody>
+        <tr ng-repeat="row in $data">
+          <td title="'Supplier'" sortable="'vendor_name'" filter="{vendor_name: 'text'}" style="color:blue;"><a href="/analytics/suppliers/{{row.vendor_name}}">{{ row.vendor_name }}</a></td>
+          <td title="'Category'" sortable="'category'">{{ row.category }}</td>
+          <td title="'Spend'" sortable="'spend'">{{ row.spend }}</td>
+          <td title="'Transactions'" sortable="'transactions'">{{ row.transactions }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 </div>

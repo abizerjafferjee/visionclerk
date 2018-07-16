@@ -43,7 +43,6 @@ userApp.controller('spendController', function($scope, spendService, NgTablePara
           $scope.showFilesTable = true;
           $scope.fileCount = response.data.length;
           $scope.filesTable = new NgTableParams({}, { dataset: response.data });
-
           // set last uploaded date
           var dt = new Date(response.data[0].date);
           for (var i=0; i<response.data.length; i++) {

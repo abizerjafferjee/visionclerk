@@ -161,8 +161,7 @@ var uploads = {
 };
 
 var helpers = {
-  uploads: uploads,
-
+  uploads: uploads
 }
 
 module.exports = helpers;

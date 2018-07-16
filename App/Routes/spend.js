@@ -29,11 +29,11 @@ router.post('/upload', function(req, res) {
             if (err) {
               filesProcessed -= 1;
             } else {
-              sql.readCSV(file.filePath);
+              sql.writeAPtoSQL(file);
               filesProcessed -= 1;
             }
             if (filesProcessed === 0) {
-              res.json({success: true, message: "file successfully uploaded"});
+              res.json({success: true, message: "Uploads Complete"});
             }
           });
         }
@@ -44,18 +44,34 @@ router.post('/upload', function(req, res) {
 
 router.get('/files/read', function(req, res) {
   File.find({user: req.user, type: "spend"}, function(err, files) {
-    res.send(files);
+    sql.infoPerSource(files, function(files, results) {
+      for (var i=0; i<files.length; i++) {
+        for (var j=0; j<results.length; j++) {
+          if (String(files[i]._id) === results[j].source_id) {
+
+            var file = {_id:files[i]._id, fileName: files[i].fileName, originalName: files[i].originalName, filePath: files[i].filePath,
+            size: files[i].size, date: files[i].date, type: files[i].type, user: files[i].user, currency: results[j].currency,
+            min_date: results[j].min_date, max_date: results[j].max_date, total: results[j].total, num_lines: results[j].num_lines};
+
+            files[i] = file;
+          }
+        }
+      }
+      res.send(files);
+    })
   });
 });
 
 router.delete('/files/delete/:id', function(req, res) {
-  File.findByIdAndRemove(req.params.id, function(err) {
-    if (err) {
-      res.json({success:false});
-    } else {
-      res.json({success: true});
-    }
-  });
+  sql.deleteBySource(req.params.id, function(results) {
+    File.findByIdAndRemove(req.params.id, function(err) {
+      if (err) {
+        res.json({success:false});
+      } else {
+        res.json({success: true});
+      }
+    });
+  })
 });
 
 router.get('/files/schema', function(req, res) {

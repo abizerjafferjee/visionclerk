@@ -1,0 +1,42 @@
+<div class="container-fluid m-0 p-2">
+
+  <div class="row m-1">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">{{ pageTitle }}</h1>
+          <!-- <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p> -->
+      </div>
+      <div class="d-flex flex-nowrap p-2">
+        <div class="order-1 p-2"><b>Total Suppliers</b> {{ suppliers }}</div>
+        <div class="order-2 p-2"><b>Total Spend</b> {{spend}}</div>
+        <div class="order-3 p-2"><b>Total Transactions</b> {{transactions}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-1">
+
+    <div class="col-md-12 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <div id="spendOvertimePerCategory"></div>
+          <!-- <div class='card-text'><a href="/analytics/category/categorytable">View Table</a></div> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row m-1 card">
+    <table style="" ng-table="categoryTable" class="table">
+      <tbody>
+        <tr ng-repeat="row in $data">
+          <td title="'Supplier'" sortable="'vendor_name'" filter="{vendor_name: 'text'}" style="color:blue;"><a href="/analytics/suppliers/{{row.vendor_name}}">{{ row.vendor_name }}</a></td>
+          <td title="'Spend'" sortable="'spend'">{{ row.spend }}</td>
+          <td title="'Transactions'" sortable="'transactions'">{{ row.transactions }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

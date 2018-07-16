@@ -52,13 +52,13 @@ userApp.config(function($routeProvider, $locationProvider, $compileProvider){
   })
 
   .when('/data/contracts', {
-    templateUrl: 'app/views/pages/contract.html',
+    templateUrl: 'app/views/pages/data/contract.html',
     controller: 'contractFileController',
     access: {restricted: true}
   })
 
   .when('/data/invoices', {
-    templateUrl: 'app/views/pages/invoice.html',
+    templateUrl: 'app/views/pages/data/invoice.html',
     controller: 'invoiceFileController',
     access: {restricted: true}
   })
@@ -166,6 +166,20 @@ userApp.config(function($routeProvider, $locationProvider, $compileProvider){
     templateUrl: 'app/views/pages/analytics/category.html',
     access: {restricted: true},
     controller: 'categoryAnalyticsController'
+  })
+
+  //category analytics pages
+  .when('/analytics/category/:categoryname', {
+    templateUrl: 'app/views/pages/analytics/categories/categorytable.html',
+    access: {restricted: true},
+    controller: 'categoryTableController'
+  })
+
+  //each supplier page
+  .when('/analytics/suppliers/:suppliername', {
+    templateUrl: 'app/views/pages/analytics/suppliers/supplier.html',
+    access: {restricted: true},
+    controller: 'supplierController'
   })
 
   .otherwise({
