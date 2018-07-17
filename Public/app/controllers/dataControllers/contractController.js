@@ -127,16 +127,16 @@ userApp.controller('contractFileController', function ($scope, contractFileServi
       var contractsDf = [];
       for (var i=0; i<$scope.contracts.length; i++) {
         var contract = {
-          id: $scope.contracts[i]._id,
-          organization: $scope.contracts[i].organization,
-          party: $scope.contracts[i].party,
-          item: $scope.contracts[i].item,
-          quantity: $scope.contracts[i].quantity,
-          identifier: $scope.contracts[i].identifier,
-          events: $scope.contracts[i].events,
-          other: $scope.contracts[i].other,
-          fileRef: $scope.contracts[i].originalFile.fileRef,
-          fileName: $scope.contracts[i].originalFile.fileName
+          contractor: $scope.contracts[i].contractor,
+          contracting_authority: $scope.contracts[i].contracting_authority,
+          start_date: $scope.contracts[i].start_date,
+          end_date: $scope.contracts[i].end_date,
+          dispatch_date: $scope.contracts[i].dispatch_date,
+          contract_end_date: $scope.contracts[i].contract_end_date,
+          contact_person: $scope.contracts[i].contact_person,
+          reference_number: $scope.contracts[i].reference_number,
+          title: $scope.contracts[i].title,
+          short_description: $scope.contracts[i].short_description
         };
         contractsDf.push(contract);
       }

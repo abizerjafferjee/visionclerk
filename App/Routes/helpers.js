@@ -85,7 +85,17 @@ var uploads = {
   contractUpload: contractUpload,
 
   createContractDoc: function(req, currentFile, entities) {
+    // console.log(entities);
+    for (var i=0; i<entities.length; i++) {
+      console.log(entities[i].type);
+      console.log(entities[i].text);
+      if ("disambiguation" in entities[i]) {
 
+        console.log(entities[i].disambiguation.subtype);
+        //console.log(entities[i].disambiguation.subtype);
+
+      }
+    }
     var contractDoc = {
       reference_number: '',
       title: '',
@@ -99,7 +109,7 @@ var uploads = {
       dispatch_date: '',
       contract_end_date: '',
       person: [],
-      contact_person: '',
+      contact_person: [],
       address: [],
       contractor_address: '',
       validated: false,
@@ -111,12 +121,66 @@ var uploads = {
     for (var i=0; i < entities.length; i++) {
       if (entities[i].type == 'organization') {
         contractDoc.organization.push(entities[i].text);
+        if ("disambiguation" in entities[i]) {
+          for (var j=0; j < entities[i].disambiguation.subtype.length; j++) {
+            if (entities[i].disambiguation.subtype[j] == 'contractor') {
+              contractDoc.contractor = entities[i].text;
+            }
+            else if (entities[i].disambiguation.subtype[j] == 'contracting_authority') {
+              contractDoc.contracting_authority = entities[i].text;
+            }
+          }
+        }
+
       } else if (entities[i].type == 'date') {
         contractDoc.date.push(entities[i].text);
+        if ("disambiguation" in entities[i]) {
+          for (var j=0; j < entities[i].disambiguation.subtype.length; j++) {
+            if (entities[i].disambiguation.subtype[j] == 'start_date') {
+              contractDoc.start_date = entities[i].text;
+            }
+            else if (entities[i].disambiguation.subtype[j] == 'end_date') {
+              contractDoc.end_date = entities[i].text;
+            }
+            else if (entities[i].disambiguation.subtype[j] == 'dispatch_date') {
+              contractDoc.dispatch_date = entities[i].text;
+            }
+            else if (entities[i].disambiguation.subtype[j] == 'contract_end_date') {
+              contractDoc.contract_end_date = entities[i].text;
+            }
+          }
+        }
+
+
       } else if (entities[i].type == 'person') {
         contractDoc.person.push(entities[i].text);
+        if ("disambiguation" in entities[i]) {
+          for (var j=0; j < entities[i].disambiguation.subtype.length; j++) {
+            if (entities[i].disambiguation.subtype[j] == 'contact_person') {
+              if (contractDoc.contact_person == '') {
+                contractDoc.contact_person = entities[i].text;
+              } else {
+                contractDoc.contact_person += ', ' + entities[i].text;
+              }
+              //contractDoc.contact_person.push(entities[i].text);
+            }
+          }
+        }
+
       } else if (entities[i].type == 'address') {
         contractDoc.address.push(entities[i].text);
+        if ("disambiguation" in entities[i]) {
+          for (var j=0; j < entities[i].disambiguation.subtype.length; j++) {
+            if (entities[i].disambiguation.subtype[j] == 'contractor_address') {
+              if (contractDoc.contractor_address == '') {
+                contractDoc.contractor_address = entities[i].text;
+              } else {
+                contractDoc.contractor_address += ', ' + entities[i].text;
+              }
+            }
+          }
+        }
+
       } else if (entities[i].type == 'title') {
         if (contractDoc.title == '') {
           contractDoc.title = entities[i].text;
@@ -126,8 +190,6 @@ var uploads = {
       } else if (entities[i].type == 'reference_number') {
         if (contractDoc.reference_number == '') {
           contractDoc.reference_number = entities[i].text;
-        } else {
-          contractDoc.reference_number += ', ' + entities[i].text;
         }
       } else if (entities[i].type == 'short_description') {
         if (contractDoc.short_description == '') {
@@ -137,7 +199,7 @@ var uploads = {
         }
       }
     }
-
+    //console.log(contractDoc);
     return contractDoc;
 
   },

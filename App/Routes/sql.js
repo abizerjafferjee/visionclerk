@@ -7,11 +7,11 @@ var DataFrame = require('pandas-js').DataFrame;
 
 // connect mariadb
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : '127.0.0.1',
   user     : 'root',
-  password : 'Qsaxzop15!',
-  database : 'visionclerk',
-  port: 8000,
+  password : '05211998',
+  database : 'VisionClerk',
+  port: 3306,
   multipleStatements: true
 });
 
@@ -27,6 +27,14 @@ var sqlQueries = {
     connection.query(query, [invoice.invoice_id, invoice.amount_total, invoice.date_due, invoice.date_issue, null, invoice.customer_id, invoice.sender_name, invoice.terms, invoice.currency], function(error, results, fields) {
       if (error) throw error;
       console.log(results);
+    });
+  },
+
+  writeContractToSQL: function(contract) {
+    var query = "INSERT INTO contracts (contractor, contracting_authority, reference_number, title, short_description, start_date, end_date, dispatch_date, contract_end_date, contact_person, contractor_address) VALUES " +
+    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    connection.query(query, [contract.contractor, contract.contracting_authority, contract.reference_number, contract.title, contract.short_description, contract.start_date, contract.end_date, contract.dispatch_date, contract.contract_end_date, contract.contact_person, contract.contractor_address], function(error, results, fields){
+      if (error) throw error;
     });
   },
 

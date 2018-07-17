@@ -1,19 +1,208 @@
 
 <div class="container-fluid m-0 p-2">
 
-  <div class="row">
+  <div class="row m-1">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Contract Data</h1>
+          <p class="lead">Manage contract data. Upon uploading contracts, our AI extracts the key entities and displays them in the table below.</p>
+      </div>
+    </div>
+  </div>
 
+  <div class="row m-2">
+    <div class="col-md-12">
+        <div class="card w-100" style="">
+
+          <div class="card-body">
+
+            <div class="d-flex">
+
+              <div class="mr-auto p-2">
+                <div class="d-flex bd-highlight mb-3" style="font-weight: bold;">
+                  <div class="p-2 bd-highlight"><h4>Upload Contracts</h4></div>
+                </div>
+              </div>
+
+              <div class="mr-auto p-2">
+                  <div class="p-2 bd-highlight"><h4>Contract Details</h4></div>
+                <p>{{ fileCount }} Documents</p>
+                <p>Last Upload: {{ lastUploaded }}</p>
+              </div>
+
+              <div class="p-2">
+                <form>
+                  <input type="file" file-model="myFiles" name="myFiles" class="form-control" id ="myFiles" multiple/>
+                </form>
+              </div>
+              <div class="p-2">
+                  <button ng-click="uploadFiles()" class="btn btn-primary btn-sm">Upload</button>
+              </div>
+            </div>
+
+            <div class="progress" ng-show="uploading">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+            </div>
+
+            <div ng-show="showMessage && success" class="alert alert-success alert-dismissible fade show" role="alert">{{message}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>
+            <div ng-show="showMessage && !success" class="alert alert-danger alert-dismissible fade show" role="alert">{{message}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div>
+
+            <h3 class="mt-3">Validate Contracts</h3>
+            <ul style="font-weight: bold;">
+              <li>Click view to view image of your invoice.</li>
+              <li>Validate the extractions for each column and make edits if necessary.</li>
+              <li>Click confirm on the right once changes are made</li>
+              <li>Click on the checkbox below each cell if it incorrect.</li>
+              <li>Click complete once you have verified the data.</li>
+            </ul>
+            <p ng-hide="showUnvalidatedContracts">{{ unvalidatedContractsMessage }}</p>
+            <div style="overflow-x:auto;">
+            <table ng-table="unvalidatedContractsTable" ng-hide="!showUnvalidatedContracts" class="table table-responsive-md table-condensed table-bordered table-striped" ng-init="getUnvalidatedContracts()">
+              <tbody>
+                <tr ng-repeat="row in $data">
+                  <td title="'Contractor'" ng-switch="row.isEditing" filter="{contractor: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.contractor }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.contractor" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+
+                  <td title="'Contracting Authority'" ng-switch="row.isEditing" filter="{contracting_authority: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.contracting_authority }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.contracting_authority" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Start Date'" ng-switch="row.isEditing" filter="{start_date: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.start_date }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.start_date" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'End Date'" ng-switch="row.isEditing" filter="{end_date: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.end_date }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.end_date" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Dispatch Date'" ng-switch="row.isEditing" filter="{dispatch_date: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.dispatch_date }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.dispatch_date" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Contract End Date'" ng-switch="row.isEditing" filter="{contract_end_date: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.contract_end_date }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.contract_end_date" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Contact Person'" ng-switch="row.isEditing" filter="{contact_person: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.contact_person }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.contact_person" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Contractor Address'" ng-switch="row.isEditing" filter="{contractor_address: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.contractor_address }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.contractor_address" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Reference Number'" ng-switch="row.isEditing" filter="{reference_number: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.reference_number }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.reference_number" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Title'" ng-switch="row.isEditing" filter="{title: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.title }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.title" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td title="'Short Description'" ng-switch="row.isEditing" filter="{short_description: 'text'}">
+                    <span ng-switch-default class="editable-text">{{ row.short_description }}</span>
+                    <div class="controls" ng-switch-when="true">
+                      <input type="text" ng-model="row.short_description" class="editable-input form-control input-sm" />
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" ng-click="save(row)" ng-if="row.isEditing">Confirm</button>
+                    <button class="btn btn-default btn-sm" ng-click="getUnvalidatedContracts()" ng-if="row.isEditing">Remove</button>
+                    <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing">Edit</button>
+                    <button class="btn btn-danger btn-sm" ng-click="deleteContract(row._id)" ng-if="!row.isEditing"><i class="fas fa-trash"></i></a></button>
+                  </td>
+                  <td ng-click="">View</td>
+                  <td ng-click="validateContract(row._id)">Verify</td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+            <h3 class="mt-3">All Contracts</h3>
+              <p ng-hide="showContracts">{{ contractsMessage }}</p>
+              <div style="overflow-x:auto;">
+              <table ng-table="contractsTable" ng-hide="!showContracts" class="table table-condensed table-bordered table-striped" ng-init="getContracts()">
+                <tbody>
+                  <tr ng-repeat="row in $data">
+                    <td title="'Contractor'" filter="{contractor: 'text'}">{{ row.contractor }}</td>
+                    <td title="'Contracting Authority'" filter="{contracting_authority: 'text'}">{{ row.contracting_authority }}</td>
+                    <td title="'Start Date'" filter="{start_date: 'text'}">{{ row.start_date }}</td>
+                    <td title="'End Date'" filter="{end_date: 'text'}">{{ row.end_date }}</td>
+                    <td title="'Dispatch Date'" filter="{dispatch_date: 'text'}">{{ row.dispatch_date }}</td>
+                    <td title="'Contract End Date'" filter="{contract_end_date: 'text'}">{{ row.contract_end_date }}</td>
+                    <td title="'Contact Person'" filter="{contact_person: 'text'}">{{ row.contact_person }}</td>
+                    <td title="'Reference Number'" filter="{reference_number: 'text'}">{{ row.reference_number }}</td>
+                    <td title="'Title'" filter="{title: 'text'}">{{ row.title }}</td>
+                    <td title="'Short Description'" filter="{short_description: 'text'}">{{ row.short_description }}</td>
+                    <td><a href="" ng-click="deleteContract(row.id)"><i class="fas fa-trash"></i></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="mt-3">Contract Analytics</h3>
+            <p>Opportunities and stuff</p>
+
+            <h3 class="mt-3">All Files</h3>
+            <p ng-hide="showFiles">{{ filesMessage }}</p>
+            <table ng-table="filesTable" ng-hide="!showFiles" class="table table-condensed table-bordered table-striped" ng-init="getFiles()">
+              <tbody>
+                <tr ng-repeat="row in $data">
+                  <td title="'File Name'" sortable="'originalName'" filter="{fileName: 'text'}">{{ row.fileName }}</td>
+                  <td title="'Date Uploaded'" sortable="'date'" filter="{date: 'text'}">{{ row.date }}</td>
+                  <td title="'Processed'" filter="{processed: 'text'}">{{ row.processed }}</td>
+                  <td><a href="" ng-click="deleteFile(row.id)"><i class="fas fa-trash"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-1">
+<!--
     <div class="col-md-8">
 
       <div class="card w-100" style="height:400px; overflow-y:auto;">
-        <h5 class="card-header">Contract Data</h5>
+        <h2 class="card-header blue-text">Contract Data</h2>
         <div class="card-body">
           <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-8">
               <div class="card-title"><h4>Upload Contracts</h4></div>
               <ul>
-                <li>PDF files are accepted.</li>
+                <li>PDF files are accepted</li>
               </ul>
               <div class="progress" ng-show="uploading">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
@@ -21,9 +210,9 @@
 
               <form>
                   <div class="form-group">
-                      <!-- <label for="myFileField">Upload</label> -->
-                      <input type="file" file-model="myFiles" name="myFiles" class="form-control w-75" id ="myFiles" multiple/>
-                      <button ng-click="uploadFiles()" class="btn btn-primary m-1">Upload</button>
+                       <label for="myFileField">Upload</label>
+                      <input type="file" file-model="myFiles" name="myFiles" class="form-control" id ="myFiles" multiple/>
+                      <button ng-click="uploadFiles()" class="btn btn-primary m-3">Upload</button>
                   </div>
               </form>
 
@@ -46,6 +235,7 @@
               <p>Last Upload: {{ lastUploaded }}</p>
             </div>
 
+
             <div class="col-md-4">
             </div>
 
@@ -54,10 +244,11 @@
       </div>
 
     </div>
-
+-->
+<!--
     <div class="col-md-4">
       <div class="card w-100" style="height:400px; overflow-y:auto;">
-        <h5 class="card-header">All Files</h5>
+        <h2 class="card-header blue-text">All Files</h2>
           <div class="card-body">
             <p ng-hide="showFiles">{{ filesMessage }}</p>
             <table ng-table="filesTable" ng-hide="!showFiles" class="table table-condensed table-bordered table-striped" ng-init="getFiles()">
@@ -74,16 +265,16 @@
         </h5>
       </div>
     </div>
-
+-->
   </div>
-
+<!--
   <div class="row">
 
     <div class="col-md-12 col-sm-12 mt-2">
       <div class="card">
-        <h5 class="card-header">Validate Contracts</h5>
+        <h2 class="card-header blue-text">Validate Contracts</h2>
         <div class="card-body m-0">
-          <ul>
+          <ul style="font-weight: bold;">
             <li>Click view to view image of your invoice.</li>
             <li>Validate the extractions for each column and make edits if necessary.</li>
             <li>Click confirm on the right once changes are made</li>
@@ -91,50 +282,75 @@
             <li>Click complete once you have verified the data.</li>
           </ul>
           <p ng-hide="showUnvalidatedContracts">{{ unvalidatedContractsMessage }}</p>
-          <table ng-table="unvalidatedContractsTable" ng-hide="!showUnvalidatedContracts" class="table table-condensed table-bordered table-striped" ng-init="getUnvalidatedContracts()">
+          <div style="overflow-x:auto;">
+          <table ng-table="unvalidatedContractsTable" ng-hide="!showUnvalidatedContracts" class="table table-responsive-md table-condensed table-bordered table-striped" ng-init="getUnvalidatedContracts()">
             <tbody>
               <tr ng-repeat="row in $data">
-                <td title="'file_name'" filter="{fileName: 'text'}">{{ row.originalFile.fileName }}</td>
-                <td title="'organization'" ng-switch="row.isEditing" filter="{organization: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.organization }}</span>
+                <td title="'Contractor'" ng-switch="row.isEditing" filter="{contractor: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.contractor }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.organization" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.contractor" class="editable-input form-control input-sm" />
                   </div>
                 </td>
-                <td title="'party'" ng-switch="row.isEditing" filter="{party: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.party }}</span>
+
+                <td title="'Contracting Authority'" ng-switch="row.isEditing" filter="{contracting_authority: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.contracting_authority }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.party" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.contracting_authority" class="editable-input form-control input-sm" />
                   </div>
                 </td>
-                <td title="'item'" ng-switch="row.isEditing" filter="{item: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.item }}</span>
+                <td title="'Start Date'" ng-switch="row.isEditing" filter="{start_date: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.start_date }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.item" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.start_date" class="editable-input form-control input-sm" />
                   </div>
                 </td>
-                <td title="'quantity'" ng-switch="row.isEditing" filter="{quantity: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.quantity }}</span>
+                <td title="'End Date'" ng-switch="row.isEditing" filter="{end_date: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.end_date }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.quantity" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.end_date" class="editable-input form-control input-sm" />
                   </div>
                 </td>
-                <td title="'identifier'" ng-switch="row.isEditing" filter="{identifier: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.identifier }}</span>
+                <td title="'Dispatch Date'" ng-switch="row.isEditing" filter="{dispatch_date: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.dispatch_date }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.identifier" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.dispatch_date" class="editable-input form-control input-sm" />
                   </div>
                 </td>
-                <td title="'events'" ng-switch="row.isEditing" filter="{events: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.events }}</span>
+                <td title="'Contract End Date'" ng-switch="row.isEditing" filter="{contract_end_date: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.contract_end_date }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.events" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.contract_end_date" class="editable-input form-control input-sm" />
                   </div>
                 </td>
-                <td title="'other'" ng-switch="row.isEditing" filter="{other: 'text'}">
-                  <span ng-switch-default class="editable-text">{{ row.other }}</span>
+                <td title="'Contact Person'" ng-switch="row.isEditing" filter="{contact_person: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.contact_person }}</span>
                   <div class="controls" ng-switch-when="true">
-                    <input type="text" ng-model="row.other" class="editable-input form-control input-sm" />
+                    <input type="text" ng-model="row.contact_person" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'Contractor Address'" ng-switch="row.isEditing" filter="{contractor_address: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.contractor_address }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.contractor_address" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'Reference Number'" ng-switch="row.isEditing" filter="{reference_number: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.reference_number }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.reference_number" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'Title'" ng-switch="row.isEditing" filter="{title: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.title }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.title" class="editable-input form-control input-sm" />
+                  </div>
+                </td>
+                <td title="'Short Description'" ng-switch="row.isEditing" filter="{short_description: 'text'}">
+                  <span ng-switch-default class="editable-text">{{ row.short_description }}</span>
+                  <div class="controls" ng-switch-when="true">
+                    <input type="text" ng-model="row.short_description" class="editable-input form-control input-sm" />
                   </div>
                 </td>
                 <td>
@@ -150,46 +366,54 @@
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-12 col-sm-12 mt-2">
-      <div class="card">
-        <h5 class="card-header">All Contracts</h5>
-        <div class="card-body m-0">
-          <p ng-hide="showContracts">{{ contractsMessage }}</p>
-          <table ng-table="contractsTable" ng-hide="!showContracts" class="table table-condensed table-bordered table-striped" ng-init="getContracts()">
-            <tbody>
-              <tr ng-repeat="row in $data">
-                <td title="'organization'" filter="{organization: 'text'}">{{ row.organization }}</td>
-                <td title="'party'" filter="{party: 'text'}">{{ row.party }}</td>
-                <td title="'item'" filter="{item: 'text'}">{{ row.item }}</td>
-                <td title="'quantity'" filter="{quantity: 'text'}">{{ row.quantity }}</td>
-                <td title="'identifier'" filter="{identifier: 'text'}">{{ row.identifier }}</td>
-                <td title="'events'" filter="{events: 'text'}">{{ row.events }}</td>
-                <td title="'other'" filter="{other: 'text'}">{{ row.other }}</td>
-                <td title="'fileName'" filter="{fileName: 'text'}">{{ row.fileName }}</td>
-                <td><a href="" ng-click="deleteContract(row.id)"><i class="fas fa-trash"></i></a></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
 
   </div>
+-->
 
+<!--
+  <div class="row">
+
+    <div class="col-md-12 col-sm-12 mt-2">
+      <div class="card">
+        <h2 class="card-header blue-text">All Contracts</h2>
+        <div class="card-body m-0">
+          <p ng-hide="showContracts">{{ contractsMessage }}</p>
+          <div style="overflow-x:auto;">
+          <table ng-table="contractsTable" ng-hide="!showContracts" class="table table-condensed table-bordered table-striped" ng-init="getContracts()">
+            <tbody>
+              <tr ng-repeat="row in $data">
+                <td title="'Contractor'" filter="{contractor: 'text'}">{{ row.contractor }}</td>
+                <td title="'Contracting Authority'" filter="{contracting_authority: 'text'}">{{ row.contracting_authority }}</td>
+                <td title="'Start Date'" filter="{start_date: 'text'}">{{ row.start_date }}</td>
+                <td title="'End Date'" filter="{end_date: 'text'}">{{ row.end_date }}</td>
+                <td title="'Dispatch Date'" filter="{dispatch_date: 'text'}">{{ row.dispatch_date }}</td>
+                <td title="'Contract End Date'" filter="{contract_end_date: 'text'}">{{ row.contract_end_date }}</td>
+                <td title="'Contact Person'" filter="{contact_person: 'text'}">{{ row.contact_person }}</td>
+                <td title="'Reference Number'" filter="{reference_number: 'text'}">{{ row.reference_number }}</td>
+                <td title="'Title'" filter="{title: 'text'}">{{ row.title }}</td>
+                <td title="'Short Description'" filter="{short_description: 'text'}">{{ row.short_description }}</td>
+                <td><a href="" ng-click="deleteContract(row.id)"><i class="fas fa-trash"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+-->
+<!--
   <div class="row">
     <div class="col-md-12 col-sm-12 mt-2">
       <div class="card">
-        <h5 class="card-header">Contract Analytics</h5>
+        <h2 class="card-header blue-text">Contract Analytics</h2>
         Opportunities and stuff
       </div>
     </div>
   </div>
-
+-->
 </div>

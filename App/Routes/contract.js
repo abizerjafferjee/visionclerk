@@ -9,6 +9,7 @@ var NaturalLanguageUnderstanding = require('watson-developer-cloud/natural-langu
 var fs = require('fs');
 var pdf = require('pdf-parse');
 var helpers = require('../Routes/helpers.js');
+var sql = require('../Routes/sql.js');
 
 // Watson NLU configurations
 var nlu = new NaturalLanguageUnderstanding({
@@ -70,7 +71,7 @@ router.post('/upload', function(req, res) {
                   'text': fileText,
                   'features': {
                     'entities': {
-                      'model': '10:6f5dc2d7-5dd3-44b2-bd49-924c903df3e8'
+                      'model': '10:c5970b88-7d27-492e-9d42-ed58a9d916e9'
                     }
                   }
                 };
@@ -80,11 +81,14 @@ router.post('/upload', function(req, res) {
                     filesProcessed -= 1;
                   } else {
                     var contractDoc = helpers.uploads.createContractDoc(req, currentFile, response.entities);
-                    // create Contract Record
+                    // create Contract Record and stores to mongodb
                     Contract.create(contractDoc, function(err, extract) {
                       if (err) {
                         filesProcessed -= 1;
                       } else {
+                        // Insert into SQL database
+                        sql.writeContractToSQL(contractDoc);
+
                         // update file
                         File.findById(extract.fileRef, function(err, file) {
                           if (err) {

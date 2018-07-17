@@ -15,7 +15,7 @@ var contractSchema = new mongoose.Schema({
   dispatch_date: {type: String},
   contract_end_date: {type: String},
   person: [String],
-  contact_person: {type:String},
+  contact_person: {type: String},
   address: [String],
   contractor_address: {type: String},
   validated: {type: Boolean},
