@@ -1,0 +1,80 @@
+<div class="container-fluid m-0 px-3">
+
+  <div class="row">
+    <div class="card w-100">
+      <div class="card-body">
+          <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold">Category Analytics</h1>
+          <p class="lead">The visuals below show insights about the categories your organization buys in. You can learn which are the most important categories by amount of spend, number of suppliers and number of transactions. You can view an individual categories by clicking on its link from the table at the bottom.</p>
+      </div>
+
+      <!-- <div class="row m-1"> -->
+        <div class="d-flex flex-nowrap p-2">
+          <div class="order-1 p-2"><b>Total Spend</b> {{ totalSpend }}</div>
+          <div class="order-2 p-2"><b>Total Categories</b> {{totalCategories}}</div>
+          <div class="order-3 p-2"><b>Total Suppliers</b> {{totalSuppliers}}</div>
+          <div class="order-4 p-2"><b>Total Transactions</b> {{totalTransactions}}</div>
+        </div>
+      <!-- </div> -->
+
+    </div>
+  </div>
+
+  <!-- <h1 class="h1-reponsive mb-4 mt-2 blue-text font-bold" style="display: block;">Category Analytics</h1> -->
+  <!-- <p class="lead">Manage transactional spend data. Transactional data is analyzed by vendor and by category and matched with existing vendor contracts which are uploaded on the contracts page.</p> -->
+
+  <div class="row m-1">
+
+    <div class="col-md-6 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <div id="spendSuppliersAndTransactionsPerCategory"></div>
+          <!-- <div class='card-text'><a href="/analytics/category/categorytable">View Table</a></div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <div id="highGrowthCategories"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row m-1">
+
+    <div class="col-md-6 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <div id="top80Spend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mt-2 mb-2" style="">
+      <div class="card">
+        <div class="card-body">
+          <div id="spendDistribution"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row m-1 card">
+    <div class="card-header">Categories</div>
+    <table style="" ng-table="categoryTable" class="table">
+      <tbody>
+        <tr ng-repeat="row in $data">
+          <td title="'Category'" sortable="'category'" filter="{category: 'text'}" style="color:blue;"><a href="/analytics/category/{{row.category}}">{{ row.category }}</a></td>
+          <td title="'Spend'" sortable="'spend'">{{ row.spend }}</td>
+          <td title="'Transactions'" sortable="'spend'">{{ row.transactions }}</td>
+          <td title="'Vendors'" sortable="'vendors'">{{ row.vendors }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

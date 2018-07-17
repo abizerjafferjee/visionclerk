@@ -52,13 +52,13 @@ userApp.config(function($routeProvider, $locationProvider, $compileProvider){
   })
 
   .when('/data/contracts', {
-    templateUrl: 'app/views/pages/contract.html',
+    templateUrl: 'app/views/pages/data/contract.html',
     controller: 'contractFileController',
     access: {restricted: true}
   })
 
   .when('/data/invoices', {
-    templateUrl: 'app/views/pages/invoice.html',
+    templateUrl: 'app/views/pages/data/invoice.html',
     controller: 'invoiceFileController',
     access: {restricted: true}
   })
@@ -132,16 +132,54 @@ userApp.config(function($routeProvider, $locationProvider, $compileProvider){
     access: {restricted: true}
   })
 
-  .when('/analytics/spend', {
-    templateUrl: 'app/views/pages/analytics/spend.html',
+  .when('/analytics/supplier', {
+    templateUrl: 'app/views/pages/analytics/supplier.html',
     access: {restricted: true},
-    controller: 'spendAnalyticsController'
+    controller: 'supplierAnalyticsController'
   })
 
   .when('/analytics/insights', {
     templateUrl: 'app/views/pages/analytics/insights.html',
     access: {restricted: true},
     controller: 'insightsAnalyticsController'
+  })
+
+  .when('/analytics/insights/duplicatespend', {
+    templateUrl: 'app/views/pages/analytics/insights/duplicateSpend.html',
+    access: {restricted: true},
+    controller: 'duplicateSpendController'
+  })
+
+  .when('/analytics/insights/highGrowthSpend', {
+    templateUrl: 'app/views/pages/analytics/insights/highgrowth.html',
+    access: {restricted: true},
+    controller: 'highGrowthController'
+  })
+
+  .when('/analytics/insights/outlierTransactions', {
+    templateUrl: 'app/views/pages/analytics/insights/outlierTransactions.html',
+    access: {restricted: true},
+    controller: 'outlierTransactionsController'
+  })
+
+  .when('/analytics/category', {
+    templateUrl: 'app/views/pages/analytics/category.html',
+    access: {restricted: true},
+    controller: 'categoryAnalyticsController'
+  })
+
+  //category analytics pages
+  .when('/analytics/category/:categoryname', {
+    templateUrl: 'app/views/pages/analytics/categories/categorytable.html',
+    access: {restricted: true},
+    controller: 'categoryTableController'
+  })
+
+  //each supplier page
+  .when('/analytics/suppliers/:suppliername', {
+    templateUrl: 'app/views/pages/analytics/suppliers/supplier.html',
+    access: {restricted: true},
+    controller: 'supplierController'
   })
 
   .otherwise({

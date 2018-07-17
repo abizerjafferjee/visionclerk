@@ -45,7 +45,12 @@
                   <tr ng-repeat="row in $data">
                     <td title="'Date Uploaded'" sortable="'date'">{{ extractDate(row.date) }}</td>
                     <td title="'File Name'" sortable="'originalName'" filter="{originalName: 'text'}">{{ row.originalName }}</td>
-                    <td title="'Type'" sortable="'date'">{{ row.type }}</td>
+                    <td title="'Type'" sortable="'type'">{{ row.type }}</td>
+                    <td title="'Currency'" sortable="'currency'">{{ row.currency }}</td>
+                    <td title="'Total Amount'" sortable="'total'">{{ row.total }}</td>
+                    <td title="'Rows'" sortable="'num_lines'">{{ row.num_lines }}</td>
+                    <td title="'From'" sortable="'min_date'">{{ extractDate(row.min_date) }}</td>
+                    <td title="'To'" sortable="'max_date'">{{ extractDate(row.max_date) }}</td>
                     <td><a href="" ng-click="deleteFile(row._id)"><i class="fas fa-trash"></i></a></td>
                   </tr>
                 </tbody>

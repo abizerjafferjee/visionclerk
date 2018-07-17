@@ -9,9 +9,9 @@ table {
   overflow-x: auto;
 }
 
-.ng-table-pager {
+/* .ng-table-pager {
     display: none;
-}
+} */
 
 .reset {
   float: right;
