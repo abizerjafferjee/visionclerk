@@ -31,8 +31,7 @@ var sqlQueries = {
   },
 
   writeContractToSQL: function(contract) {
-    var query = "INSERT INTO contracts (contractor, contracting_authority, reference_number, title, short_description, start_date, end_date, dispatch_date, contract_end_date, contact_person, contractor_address) VALUES " +
-    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    var query = "INSERT INTO contracts (contractor, contracting_authority, reference_number, title, short_description, start_date, end_date, dispatch_date, contract_end_date, contact_person, contractor_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     connection.query(query, [contract.contractor, contract.contracting_authority, contract.reference_number, contract.title, contract.short_description, contract.start_date, contract.end_date, contract.dispatch_date, contract.contract_end_date, contract.contact_person, contract.contractor_address], function(error, results, fields){
       if (error) throw error;
     });

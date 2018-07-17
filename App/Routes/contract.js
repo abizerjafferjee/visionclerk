@@ -86,9 +86,6 @@ router.post('/upload', function(req, res) {
                       if (err) {
                         filesProcessed -= 1;
                       } else {
-                        // Insert into SQL database
-                        sql.writeContractToSQL(contractDoc);
-
                         // update file
                         File.findById(extract.fileRef, function(err, file) {
                           if (err) {
@@ -155,6 +152,9 @@ router.post('/validate', function(req, res) {
       res.json({success: false});
     } else {
       console.log(newContract);
+      //console.log(newContract.contractor);
+      // Insert into SQL database
+      sql.writeContractToSQL(newContract);
       res.json({success: true});
     }
   });
